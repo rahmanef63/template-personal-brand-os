@@ -10,7 +10,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "convex:dev": "convex dev",
-    "convex:codegen": "convex dev --once"
+    "convex:codegen": "convex dev --once",
+    "build:vercel": "convex deploy --cmd 'next build'"
   },
   "dependencies": {
     "@auth/core": "^0.37.4",

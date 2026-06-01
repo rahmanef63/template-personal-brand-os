@@ -36,6 +36,7 @@
     "provider": "convex-auth"
   },
   "convex": {
-    "self_hosted": true
+    "self_hosted": false,
+    "cloud": true
   }
 }
