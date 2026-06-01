@@ -20,6 +20,7 @@ import type * as posts from "../posts.js";
 import type * as resources from "../resources.js";
 import type * as seed from "../seed.js";
 import type * as services from "../services.js";
+import type * as storeExtra from "../storeExtra.js";
 import type * as subscribers from "../subscribers.js";
 
 import type {
@@ -41,6 +42,7 @@ declare const fullApi: ApiFromModules<{
   resources: typeof resources;
   seed: typeof seed;
   services: typeof services;
+  storeExtra: typeof storeExtra;
   subscribers: typeof subscribers;
 }>;
 
