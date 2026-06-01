@@ -1,0 +1,14 @@
+node_modules
+.next
+.turbo
+out
+dist
+.env*.local
+.env
+*.tsbuildinfo
+next-env.d.ts
+# convex/_generated is COMMITTED in self-hosted setups (Dokploy etc) so the
+# Docker build can typecheck without running codegen inside the container.
+# If you deploy via Convex Cloud, you can re-add the ignore line.
+.vercel
+.DS_Store

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://rahmanef63.github.io/resource-site/rr.schema.json",
+  "version": 1,
+  "framework": "next-16",
+  "style": "shadcn-new-york",
+  "rsc": true,
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "app/globals.css"
+  },
+  "aliases": {
+    "components": "@/components",
+    "ui": "@/components/ui",
+    "shared": "@/components/templates/_shared",
+    "templates": "@/components/templates",
+    "slices": "@/components/templates/{template}/slices",
+    "features": "@/features",
+    "convex": "@/convex",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "layout": {
+    "kind": "vertical-slice",
+    "publicRoute": "app/(public)",
+    "adminRoute": "app/(admin)",
+    "sliceRoot": "components/templates"
+  },
+  "template": {
+    "slug": "personal-brand-os",
+    "version": "main"
+  },
+  "features": [],
+  "slices": [],
+  "skills": [],
+  "auth": {
+    "provider": "convex-auth"
+  },
+  "convex": {
+    "self_hosted": true
+  }
+}
