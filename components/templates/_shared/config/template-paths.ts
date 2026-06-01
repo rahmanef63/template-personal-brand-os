@@ -42,12 +42,12 @@ export type TemplatePaths = {
 };
 
 export function buildTemplatePaths(slug: string): TemplatePaths {
-  const previewRoot = `/preview/${slug}`;
+  const previewRoot = ""; // standalone: served at root, not /preview/<slug> sandbox
   const dashboardBase = `${previewRoot}/dashboard`;
   return {
     templateSlug: slug,
     previewRoot,
-    publicBase: `${previewRoot}/public`,
+    publicBase: previewRoot || "",
     dashboardBase,
     adminPanelBase: `${dashboardBase}/admin`,
     workspaceBase: `${dashboardBase}/workspace`,
