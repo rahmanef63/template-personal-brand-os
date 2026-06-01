@@ -33,10 +33,13 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => setMounted(true), []);
   if (!convex) return <>{children}</>;
-  // SSR / static prerender: a plain ConvexProvider supplies the client so
-  // useQuery resolves to `undefined` (loading) instead of throwing
-  // "Could not find Convex client" and failing the build's prerender.
-  // ConvexAuthProvider mounts client-side only (it errs during prerender).
-  if (!mounted) return <ConvexProvider client={convex}>{children}</ConvexProvider>;
-  return <ConvexAuthProvider client={convex}>{children}</ConvexAuthProvider>;
+  // Outer ConvexProvider ALWAYS supplies the client, so `useQuery` can never
+  // throw "Could not find Convex client" — during SSR/prerender, during the
+  // mount transition, or under the auth provider. ConvexAuthProvider nests
+  // client-side only (it errors during static prerender).
+  return (
+    <ConvexProvider client={convex}>
+      {mounted ? <ConvexAuthProvider client={convex}>{children}</ConvexAuthProvider> : children}
+    </ConvexProvider>
+  );
 }
