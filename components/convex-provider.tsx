@@ -10,7 +10,7 @@
 // work even when the client hasn't established its WS yet.
 
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
-import { ConvexReactClient } from "convex/react";
+import { ConvexReactClient, ConvexProvider } from "convex/react";
 import { ConvexHttpClient } from "convex/browser";
 import { useEffect, useState, type ReactNode } from "react";
 
@@ -32,6 +32,11 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => setMounted(true), []);
-  if (!mounted || !convex) return <>{children}</>;
+  if (!convex) return <>{children}</>;
+  // SSR / static prerender: a plain ConvexProvider supplies the client so
+  // useQuery resolves to `undefined` (loading) instead of throwing
+  // "Could not find Convex client" and failing the build's prerender.
+  // ConvexAuthProvider mounts client-side only (it errs during prerender).
+  if (!mounted) return <ConvexProvider client={convex}>{children}</ConvexProvider>;
   return <ConvexAuthProvider client={convex}>{children}</ConvexAuthProvider>;
 }

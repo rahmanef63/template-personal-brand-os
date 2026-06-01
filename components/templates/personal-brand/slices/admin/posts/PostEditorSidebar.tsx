@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { PostStatus } from "../../../shared/types";
 import { COVERS, TAGS } from "./post-editor-data";
+import { ConvexImageUpload } from "@/components/templates/_shared/ui/convex-image-upload";
 
 export type PostEditorSidebarProps = {
   title: string;
@@ -76,6 +77,9 @@ export function PostEditorSidebar(props: PostEditorSidebarProps) {
                       style={{ backgroundImage: `url(${c})`, backgroundSize: "cover", backgroundPosition: "center" }}
                     />
                   ))}
+                </div>
+                <div className="mt-1">
+                  <ConvexImageUpload onUploaded={setCover} label="Upload cover" />
                 </div>
               </div>
             </TabsContent>

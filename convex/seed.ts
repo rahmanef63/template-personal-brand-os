@@ -16,9 +16,9 @@ export const run = mutation({
     }
 
     const posts = [
-      { slug: "designing-with-intent", title: "Designing With Intent", excerpt: "How constraints sharpen creative work.", tag: "Design", cover: "/window.svg" },
-      { slug: "building-a-personal-brand", title: "Building a Personal Brand That Lasts", excerpt: "Consistency beats virality over time.", tag: "Strategy", cover: "/globe.svg" },
-      { slug: "shipping-side-projects", title: "Shipping Side Projects", excerpt: "A pragmatic loop for finishing things.", tag: "Build", cover: "/file.svg" },
+      { slug: "designing-with-intent", title: "Designing With Intent", excerpt: "How constraints sharpen creative work.", tag: "Design", cover: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1400&q=70" },
+      { slug: "building-a-personal-brand", title: "Building a Personal Brand That Lasts", excerpt: "Consistency beats virality over time.", tag: "Strategy", cover: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1400&q=70" },
+      { slug: "shipping-side-projects", title: "Shipping Side Projects", excerpt: "A pragmatic loop for finishing things.", tag: "Build", cover: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1400&q=70" },
     ];
     for (let i = 0; i < posts.length; i++) {
       await ctx.db.insert("posts", {
@@ -40,7 +40,11 @@ export const run = mutation({
     for (let i = 0; i < portfolio.length; i++) {
       await ctx.db.insert("portfolio", {
         ...portfolio[i],
-        cover: "/window.svg",
+        cover: [
+          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=70",
+          "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1400&q=70",
+          "https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=1400&q=70",
+        ][i],
         problem: "Demo problem statement.",
         approach: "Demo approach.",
         result: "Demo outcome.",
@@ -63,6 +67,20 @@ export const run = mutation({
     ];
     for (const r of resources) await ctx.db.insert("resources", r);
 
-    return { posts: posts.length, portfolio: portfolio.length, services: services.length, resources: resources.length };
+    // landing sections — the public home composes from these (HomePage reads
+    // useLandingSections → filter enabled → sort order). Without them home is blank.
+    for (const row of await ctx.db.query("landingSections").take(1000)) await ctx.db.delete(row._id);
+    const landing = [
+      { id: "ls-hero", order: 10, kind: "hero", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.", subtitle: "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.", enabled: true, config: '{"badge":"2026 mentorship cohort open"}' },
+      { id: "ls-stats", order: 20, kind: "stats", title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
+      { id: "ls-blog", order: 30, kind: "blog", title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
+      { id: "ls-portfolio", order: 40, kind: "portfolio", title: "Karya pilihan", subtitle: "Proyek yang menggambarkan cara saya bekerja.", enabled: true },
+      { id: "ls-services", order: 50, kind: "services", title: "Layanan", subtitle: "Tiga jalur kerja sama.", enabled: true },
+      { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true },
+      { id: "ls-newsletter", order: 70, kind: "newsletter", title: "Newsletter", subtitle: "Sekali sebulan, kabar produk + sumber bacaan.", enabled: true },
+    ];
+    for (const s of landing) await ctx.db.insert("landingSections", { sectionId: s.id, data: s });
+
+    return { posts: posts.length, portfolio: portfolio.length, services: services.length, resources: resources.length, landing: landing.length };
   },
 });

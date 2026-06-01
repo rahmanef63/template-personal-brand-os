@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as chat from "../chat.js";
 import type * as comments from "../comments.js";
+import type * as files from "../files.js";
 import type * as http from "../http.js";
 import type * as landing from "../landing.js";
 import type * as leads from "../leads.js";
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   chat: typeof chat;
   comments: typeof comments;
+  files: typeof files;
   http: typeof http;
   landing: typeof landing;
   leads: typeof leads;
