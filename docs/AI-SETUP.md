@@ -46,21 +46,31 @@ Langkah yang harus kamu pandu (jangan lewat, satu per satu):
    - Pandu ganti "Build Command" jadi:  npx convex deploy --cmd 'npm run build'
    - Suruh klik Deploy, tunggu sampai hijau, lalu kasih aku link websitenya.
 
-4. JADI ADMIN (tanpa ribet)
-   - Suruh aku buka  <link-website>/admin
-   - Karena website masih baru, aku TINGGAL klik "Daftar sebagai pemilik" lalu isi
-     nama + email + password. Akun pertama otomatis jadi pemilik. TIDAK perlu kode
-     atau kunci apa pun.
-   - Setelah masuk dashboard, suruh aku klik tombol "Isi konten contoh" biar
-     website langsung ada isinya. (Bisa aku ganti nanti.)
+4. KUNCI LOGIN (env Convex — WAJIB, beda tempat dari Vercel!)
+   - INGATKAN aku: env Vercel (langkah 3) cuma buat frontend. Login butuh env di
+     CONVEX, di-set terpisah. Clone/Deploy button TIDAK bisa isi ini.
+   - Suruh aku jalanin sekali di komputer (folder project):
+       npx @convex-dev/auth
+     Ini auto-set JWT_PRIVATE_KEY + JWKS + SITE_URL di Convex. Tanpa ini login error.
+   - (Opsional, biar admin otomatis) suruh aku set juga di Convex:
+       npx convex env set ADMIN_EMAIL  email-aku@contoh.com
+       npx convex env set ADMIN_PASSWORD  "password-kuat-aku"
+     Kalau ini diset, owner dibuat otomatis — aku tinggal login.
 
-5. KEAMANAN
+5. JADI ADMIN
+   - Suruh aku buka  <link-website>/admin
+   - Kalau aku set ADMIN_EMAIL/PASSWORD: tinggal login pakai itu.
+   - Kalau tidak: klik "Daftar sebagai pemilik", isi nama + email + password. Akun
+     pertama otomatis jadi pemilik, tanpa kunci.
+   - Setelah masuk dashboard, suruh aku klik "Isi konten contoh" biar website ada isinya.
+
+6. KEAMANAN
    - Jelaskan: setelah aku jadi pemilik, pendaftaran admin OTOMATIS tertutup — orang
      lain tidak bisa bikin akun admin di website-ku. Aman.
    - Kalau aku mau menambah admin lain nanti, jelaskan aku bisa set "ADMIN_SIGNUP_KEY"
      di Convex sebagai kunci undangan.
 
-6. SELESAI
+7. SELESAI
    - Konfirmasi website live + aku sudah bisa login admin + ganti konten.
    - Kasih aku ringkasan: alamat website, alamat /admin, dan email yang aku pakai.
 

@@ -79,20 +79,44 @@ Selesai. Website live, kamu admin-nya.
 
 ---
 
-## Env lengkap (ringkas)
+## Env — ADA DUA TEMPAT (penting!)
 
-| Variabel | Di mana | Wajib? | Fungsi |
-|----------|---------|--------|--------|
-| `NEXT_PUBLIC_CONVEX_URL` | Vercel | ✅ | alamat DB (`.convex.cloud`) |
-| `CONVEX_DEPLOY_KEY` | Vercel | ✅ | deploy fungsi+schema saat build |
-| `JWT_PRIVATE_KEY` | Convex | ✅ | tanda tangan login — set via `npx @convex-dev/auth` |
-| `JWKS` | Convex | ✅ | verifikasi login — idem |
-| `SITE_URL` | Convex | ✅ | redirect auth — idem |
-| `ADMIN_SIGNUP_KEY` | Convex | – | kunci undangan admin |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Convex | – | admin otomatis |
-| `NEXT_PUBLIC_DEMO` | Vercel | – | (demo saja) tombol "Deploy your own" |
+Env disetel di **dua dashboard berbeda**. Salah tempat = gak kebaca.
 
-`.convex.site` & `.convex.cloud` URL = otomatis dari Convex, tidak perlu di-set.
+**1. Vercel** (Settings → Environment Variables) — soal frontend + build:
+
+| Variabel | Wajib? | Fungsi |
+|----------|--------|--------|
+| `NEXT_PUBLIC_CONVEX_URL` | ✅ | alamat DB (`.convex.cloud`) |
+| `CONVEX_DEPLOY_KEY` | ✅ | deploy fungsi+schema saat build |
+| `NEXT_PUBLIC_DEMO` | – | (demo saja) tombol "Deploy your own" |
+
+**2. Convex** (Dashboard → project → Settings → Environment Variables) — soal auth + admin:
+
+| Variabel | Wajib? | Fungsi |
+|----------|--------|--------|
+| `JWT_PRIVATE_KEY` | ✅ | tanda tangan login — set via `npx @convex-dev/auth` |
+| `JWKS` | ✅ | verifikasi login — idem |
+| `SITE_URL` | ✅ | redirect auth — idem |
+| `ADMIN_SIGNUP_KEY` | – | kunci undangan admin |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | – | admin otomatis dibuat dari env |
+
+> ⚠️ **Tombol "Deploy your own" / clone URL HANYA isi env Vercel** (cloud URL +
+> deploy key). Env Convex (auth keys + admin) **TIDAK bisa** lewat clone URL —
+> harus kamu set manual di **Convex dashboard**. (Fungsi Convex baca `process.env`
+> dari deployment Convex, bukan dari Vercel — beda mesin.)
+>
+> `.convex.site` & `.convex.cloud` URL = otomatis dari Convex, tidak perlu di-set.
+
+### Cara cepat set env Convex
+```bash
+# di folder project, sekali jalan:
+npx @convex-dev/auth                       # set JWT_PRIVATE_KEY + JWKS + SITE_URL
+npx convex env set ADMIN_EMAIL you@mail.com
+npx convex env set ADMIN_PASSWORD "rahasia-kuat"
+# (opsional) npx convex env set ADMIN_SIGNUP_KEY "kunci-undangan"
+```
+Atau pakai UI: Convex Dashboard → project → Settings → Environment Variables.
 
 ## Kalau error
 
