@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
 import { type ReactNode } from "react";
-import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { StoreProvider } from "@/components/templates/personal-brand/shared/store";
 import { SiteLoader } from "@/components/site-loader";
 import { DemoRibbon } from "@/components/demo-ribbon";
+import { PublicChrome } from "@/components/public-chrome";
 import { ChatFab } from "@/components/templates/personal-brand/shared/ui/chat-fab";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
-import {
-  FOOTER_COLUMNS,
-  FOOTER_TAGLINE,
-  PUBLIC_CTA,
-  PUBLIC_NAV,
-} from "@/components/templates/personal-brand/shared/nav-config";
 
 const c = DEFAULT_SITE_CONFIG;
 
@@ -39,18 +32,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <StoreProvider>
       <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
-      <SiteShell
-        brand={DEFAULT_SITE_CONFIG}
-        homeHref="/"
-        navItems={PUBLIC_NAV}
-        cta={PUBLIC_CTA}
-        navExtras={<ThemeToggle />}
-        footerColumns={FOOTER_COLUMNS}
-        footerTagline={FOOTER_TAGLINE}
-        copyrightHolder={DEFAULT_SITE_CONFIG.brandName}
-      >
-        {children}
-      </SiteShell>
+      <PublicChrome>{children}</PublicChrome>
       <ChatFab />
       <DemoRibbon />
     </StoreProvider>
