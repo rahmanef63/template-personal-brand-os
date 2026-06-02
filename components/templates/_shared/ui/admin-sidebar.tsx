@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -16,13 +15,12 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import {
   LeafNavItem,
   ParentNavItem,
   isPathActive,
 } from "./admin-nav-items";
+import { NavUser } from "./nav-user";
 import type {
   AdminNavGroup,
   AdminNavItem,
@@ -96,28 +94,6 @@ function BrandHeader({ brand, appLabel, homeHref }: Pick<SidebarProps, "brand" |
   );
 }
 
-function UserFooter({ user }: { user: User }) {
-  return (
-    <Button
-      variant="ghost"
-      type="button"
-      className={cn(
-        "flex h-auto w-full items-center justify-start gap-2 rounded-md px-2 py-2 text-left",
-        "hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring",
-      )}
-    >
-      <div className="grid size-8 shrink-0 place-items-center rounded-full bg-muted text-xs font-medium">
-        {user.initials}
-      </div>
-      <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
-        <p className="truncate text-xs font-medium">{user.name}</p>
-        <p className="truncate text-[10px] text-muted-foreground">{user.role}</p>
-      </div>
-      <ChevronDown className="size-3.5 shrink-0 text-muted-foreground group-data-[collapsible=icon]:hidden" />
-    </Button>
-  );
-}
-
 /**
  * Template admin sidebar. Wraps shadcn `Sidebar` primitive — inherits
  * cmd/ctrl+B toggle, cookie-persisted open state, and auto-built mobile
@@ -147,7 +123,7 @@ export function AdminSidebar(props: SidebarProps) {
       </SidebarContent>
       <SidebarSeparator />
       <SidebarFooter>
-        <UserFooter user={props.user} />
+        <NavUser user={props.user} homeHref={props.homeHref} />
       </SidebarFooter>
     </Sidebar>
   );
