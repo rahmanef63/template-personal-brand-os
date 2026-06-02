@@ -1,12 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { useConvexAuth } from "convex/react";
+import { useConvexAuth, useQuery } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { api } from "@/convex/_generated/api";
 
 function Spinner() {
   return (
@@ -36,6 +37,11 @@ function AdminGateInner({ children }: { children: React.ReactNode }) {
 
 function LoginForm() {
   const { signIn } = useAuthActions();
+  const setup = useQuery(api.setup.status);
+  // Default to first-claim copy when nobody owns the site yet.
+  const ownerClaimed = setup?.ownerClaimed ?? true;
+  const signupOpen = setup?.signupOpen ?? false;
+  const keyRequired = setup?.signupKeyRequired ?? false;
   const [flow, setFlow] = React.useState<"signIn" | "signUp">("signIn");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -43,6 +49,12 @@ function LoginForm() {
   const [signupKey, setSignupKey] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+
+  // Fresh site (no owner yet) → land on the claim form by default.
+  const [touched, setTouched] = React.useState(false);
+  React.useEffect(() => {
+    if (!touched && setup && !setup.ownerClaimed) setFlow("signUp");
+  }, [setup, touched]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -73,18 +85,24 @@ function LoginForm() {
             {flow === "signIn" ? "Masuk dashboard" : "Buat akun admin"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {flow === "signIn" ? "Kelola konten situ kamu." : "Akun pertama jadi pemilik."}
+            {flow === "signIn"
+              ? "Kelola konten situs kamu."
+              : ownerClaimed
+                ? "Masukkan setup key untuk menambah admin."
+                : "Kamu pengunjung pertama — daftar untuk jadi pemilik situs ini."}
           </p>
           <form onSubmit={submit} className="mt-6 space-y-3">
             {flow === "signUp" && (
               <>
                 <Input placeholder="Nama" value={name} onChange={(e) => setName(e.target.value)} />
-                <Input
-                  placeholder="Setup key"
-                  value={signupKey}
-                  onChange={(e) => setSignupKey(e.target.value)}
-                  required
-                />
+                {keyRequired && (
+                  <Input
+                    placeholder="Setup key"
+                    value={signupKey}
+                    onChange={(e) => setSignupKey(e.target.value)}
+                    required
+                  />
+                )}
               </>
             )}
             <Input
@@ -106,16 +124,23 @@ function LoginForm() {
               {busy ? <Loader2 className="size-4 animate-spin" /> : flow === "signIn" ? "Masuk" : "Daftar"}
             </Button>
           </form>
-          <button
-            type="button"
-            onClick={() => {
-              setFlow(flow === "signIn" ? "signUp" : "signIn");
-              setError(null);
-            }}
-            className="mt-4 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            {flow === "signIn" ? "Belum punya akun? Daftar" : "Sudah punya akun? Masuk"}
-          </button>
+          {signupOpen && (
+            <button
+              type="button"
+              onClick={() => {
+                setTouched(true);
+                setFlow(flow === "signIn" ? "signUp" : "signIn");
+                setError(null);
+              }}
+              className="mt-4 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              {flow === "signIn"
+                ? ownerClaimed
+                  ? "Punya setup key? Tambah admin"
+                  : "Daftar sebagai pemilik"
+                : "Sudah punya akun? Masuk"}
+            </button>
+          )}
         </CardContent>
       </Card>
     </div>

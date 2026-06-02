@@ -15,6 +15,10 @@ Stack: Next.js 16 + Convex (database) + Vercel (hosting). Semua punya paket grat
 
 Tidak perlu bisa coding.
 
+> 🤖 **Paling gampang:** ikuti [`docs/AI-SETUP.md`](AI-SETUP.md) — salin satu prompt
+> ke ChatGPT/Claude, dia tuntun kamu klik demi klik. Panduan manual di bawah kalau
+> mau lakukan sendiri.
+
 ---
 
 ## 2. Deploy (sekali setup, ±15 menit)
@@ -42,30 +46,25 @@ Tidak perlu bisa coding.
 > ⚠️ Pastikan `NEXT_PUBLIC_CONVEX_URL` **tidak ada spasi / enter** di ujungnya.
 > URL yang kotor (ada `\n`) bikin homepage gagal load.
 
-### d. Kunci pendaftaran admin (PENTING — keamanan)
-Di Convex Dashboard → project kamu → **Settings → Environment Variables**, tambah:
-
-| Nama | Nilai |
-|------|-------|
-| `ADMIN_SIGNUP_KEY` | kata sandi rahasia bebas (misal `kunci-rahasia-saya-2026`) |
-
-Ini kunci yang harus dimasukkan saat **bikin akun admin pertama**. Tanpa kunci ini,
-**tidak ada** orang asing yang bisa daftar jadi admin. (Lihat bagian Keamanan.)
-
-### e. Isi data contoh (sekali saja)
-Di komputer (atau Convex Dashboard → Functions), jalankan:
-```
-npx convex run seed:run
-```
-Ini ngisi contoh tulisan, portfolio, layanan, dan halaman depan biar website tidak kosong.
-
-### f. Buat akun admin kamu
+### d. Jadi admin (TANPA kode, tanpa kunci)
 1. Buka `https://websitemu.vercel.app/admin`
-2. Klik **"Belum punya akun? Daftar"**
-3. Isi: Nama, **Setup key** (= `ADMIN_SIGNUP_KEY` yang kamu set tadi), Email, Password.
-4. Selesai → masuk dashboard.
+2. Karena website masih baru, klik **"Daftar sebagai pemilik"**.
+3. Isi Nama + Email + Password. **Akun pertama otomatis jadi pemilik** — tidak perlu
+   kunci apa pun.
+4. Begitu kamu jadi pemilik, **pendaftaran admin otomatis tertutup** — orang lain
+   tidak bisa bikin akun admin lagi. (Detail di bagian Keamanan.)
+
+### e. Isi data contoh (1 klik)
+Di dashboard, kalau website masih kosong akan muncul tombol **"Isi konten contoh"**.
+Klik → langsung terisi tulisan, portfolio, layanan, dan halaman depan. Tidak perlu
+terminal / command apa pun. (Semua bisa kamu ganti nanti.)
 
 Selesai. Website live, kamu admin-nya.
+
+> **Opsional — kunci undangan.** Kalau kamu mau lebih ketat ATAU mau menambah admin
+> lain nanti, set `ADMIN_SIGNUP_KEY` (kata sandi bebas) di Convex → Settings →
+> Environment Variables. Setelah diset, pendaftaran admin minta kunci itu. Kunci ini
+> berfungsi sebagai "pass undangan" yang bisa kamu kasih ke orang lain.
 
 ---
 
@@ -86,9 +85,17 @@ Semua perubahan langsung tersimpan di database kamu — tidak perlu deploy ulang
 ## 4. Keamanan & akses admin (baca ini)
 
 **Q: Kalau website ku publish, apa orang iseng bisa bikin akun admin sendiri?**
-Tidak. Pendaftaran admin **dikunci server-side** oleh `ADMIN_SIGNUP_KEY`. Form daftar
-minta "Setup key"; kalau salah → ditolak (`Pendaftaran admin ditutup`). Kunci itu
-cuma ada di environment Convex kamu (privat) — pengunjung tidak pernah lihat.
+Tidak. Aturannya (server-side, tidak bisa diakali dari browser):
+- **Akun pertama** di website baru = pemilik. Kamu daftar duluan begitu selesai
+  deploy → kamu pemiliknya.
+- Setelah pemilik ada, **pendaftaran admin otomatis TERTUTUP**. Pengunjung yang coba
+  daftar ditolak (`Pendaftaran admin sudah ditutup`).
+- (Opsional) kalau kamu set `ADMIN_SIGNUP_KEY`, bahkan pendaftaran pertama pun butuh
+  kunci itu — dan kamu bisa buka lagi kapan saja untuk mengundang admin baru.
+
+> Tips: langsung daftar jadi pemilik tepat setelah deploy (jeda beberapa detik
+> sebelum kamu klaim, secara teori orang lain bisa duluan). Kalau mau 100% aman dari
+> awal, set `ADMIN_SIGNUP_KEY` dulu sebelum buka `/admin`.
 
 **Q: Jadi alurnya gimana kalau aku mau kasih website ini ke orang lain?**
 Dua model:
