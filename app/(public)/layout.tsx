@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { StoreProvider } from "@/components/templates/personal-brand/shared/store";
@@ -36,22 +36,20 @@ export const metadata: Metadata = {
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
-    <Suspense fallback={null}>
-      <StoreProvider>
-        <SiteShell
-          brand={DEFAULT_SITE_CONFIG}
-          homeHref={PUBLIC_BASE}
-          navItems={PUBLIC_NAV}
-          cta={PUBLIC_CTA}
-          navExtras={<ThemeToggle />}
-          footerColumns={FOOTER_COLUMNS}
-          footerTagline={FOOTER_TAGLINE}
-          copyrightHolder={DEFAULT_SITE_CONFIG.brandName}
-        >
-          {children}
-        </SiteShell>
-        <ChatFab />
-      </StoreProvider>
-    </Suspense>
+    <StoreProvider>
+      <SiteShell
+        brand={DEFAULT_SITE_CONFIG}
+        homeHref={PUBLIC_BASE}
+        navItems={PUBLIC_NAV}
+        cta={PUBLIC_CTA}
+        navExtras={<ThemeToggle />}
+        footerColumns={FOOTER_COLUMNS}
+        footerTagline={FOOTER_TAGLINE}
+        copyrightHolder={DEFAULT_SITE_CONFIG.brandName}
+      >
+        {children}
+      </SiteShell>
+      <ChatFab />
+    </StoreProvider>
   );
 }

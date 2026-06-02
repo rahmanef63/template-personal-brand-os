@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Hanken_Grotesk, Fraunces } from "next/font/google";
 import { ConvexClientProvider } from "@/components/convex-provider";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -27,12 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${sans.variable} ${display.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Suspense fallback={null}>
-            <ConvexClientProvider>
-              <BrandHead />
-              {children}
-            </ConvexClientProvider>
-          </Suspense>
+          <ConvexClientProvider>
+            <BrandHead />
+            {children}
+          </ConvexClientProvider>
           <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>
