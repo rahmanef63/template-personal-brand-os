@@ -46,8 +46,9 @@ Tidak perlu bisa coding.
    |------|-------|
    | `NEXT_PUBLIC_CONVEX_URL` | `https://NAMA.convex.cloud` (dari Convex) |
    | `CONVEX_DEPLOY_KEY` | deploy key production dari Convex |
-3. **Build Command** ganti jadi: `npx convex deploy --cmd 'npm run build'`
-   (ini otomatis push database + build web sekaligus).
+3. **Build Command** — TIDAK perlu diubah. Repo sudah punya `vercel.json` yang
+   otomatis jalanin `convex deploy` saat build KALAU `CONVEX_DEPLOY_KEY` ada. Jadi
+   cukup pastikan env di atas terisi.
 4. Klik **Deploy**. Tunggu sampai hijau.
 
 > ⚠️ Pastikan `NEXT_PUBLIC_CONVEX_URL` **tidak ada spasi / enter** di ujungnya.
@@ -121,9 +122,9 @@ Atau pakai UI: Convex Dashboard → project → Settings → Environment Variabl
 ## Kalau error
 
 - **`[CONVEX Q(settings:get)] Server Error`** → fungsi/schema Convex belum ter-deploy.
-  Pastikan **Build Command** = `npx convex deploy --cmd 'npm run build'` DAN
-  `CONVEX_DEPLOY_KEY` ada di Vercel, lalu **Redeploy**. (Build biasa `next build`
-  tidak push backend → tabel/fungsi hilang → error ini.)
+  Pastikan **`CONVEX_DEPLOY_KEY` ada di Vercel**, lalu **Redeploy**. (`vercel.json`
+  otomatis jalanin `convex deploy` saat build kalau key ada; tanpa key → backend
+  tidak ke-push → tabel/fungsi hilang → error ini.)
 - **Login/daftar `Server Error`** → kunci auth belum ada. Jalankan `npx @convex-dev/auth`.
 - **`/favicon.ico 404`** → aman, diabaikan; favicon asli kamu di-set dari admin.
 

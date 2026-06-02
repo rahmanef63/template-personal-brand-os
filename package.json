@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "convex:dev": "convex dev",
     "convex:codegen": "convex dev --once",
-    "build:vercel": "convex deploy --cmd 'next build'"
+    "build:vercel": "convex deploy --cmd 'next build'",
+    "build:auto": "if [ -n \"$CONVEX_DEPLOY_KEY\" ]; then convex deploy --cmd 'next build'; else next build; fi"
   },
   "dependencies": {
     "@auth/core": "^0.37.4",
