@@ -1,6 +1,8 @@
 # personal-brand-os
 
-Scaffolded with [`rahman-resources`](https://www.npmjs.com/package/rahman-resources) — Next 16 + React 19 + Convex (self-hosted) + Tailwind 4 + shadcn/ui.
+Scaffolded with [`rahman-resources`](https://www.npmjs.com/package/rahman-resources) — Next 16 + React 19 + Convex + Tailwind 4 + shadcn/ui.
+
+> 📖 **Panduan lengkap (non-teknis): [`docs/USER-GUIDE.md`](docs/USER-GUIDE.md)** — deploy, panel admin, keamanan login admin, update, backup.
 
 ## Setup
 
