@@ -17,8 +17,11 @@ import { useEffect, useState, type ReactNode } from "react";
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const [convex] = useState(() => {
-    const url = process.env.NEXT_PUBLIC_CONVEX_URL;
-    if (!url) return null;
+    // Always construct a client so `useQuery` ALWAYS has a ConvexProvider above
+    // it and can never throw "Could not find Convex client". If the env var is
+    // missing (misconfig), fall back to a non-connecting placeholder — queries
+    // stay in the loading state instead of crashing the page.
+    const url = process.env.NEXT_PUBLIC_CONVEX_URL || "https://placeholder.convex.cloud";
     const client = new ConvexReactClient(url);
     const http = new ConvexHttpClient(url);
     const orig = client.action.bind(client);
@@ -32,7 +35,6 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => setMounted(true), []);
-  if (!convex) return <>{children}</>;
   // Outer ConvexProvider ALWAYS supplies the client, so `useQuery` can never
   // throw "Could not find Convex client" — during SSR/prerender, during the
   // mount transition, or under the auth provider. ConvexAuthProvider nests
