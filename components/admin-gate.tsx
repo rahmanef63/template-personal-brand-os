@@ -40,6 +40,7 @@ function LoginForm() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [name, setName] = React.useState("");
+  const [signupKey, setSignupKey] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -48,12 +49,12 @@ function LoginForm() {
     setBusy(true);
     setError(null);
     try {
-      await signIn("password", { email, password, name, flow });
+      await signIn("password", { email, password, name, signupKey, flow });
     } catch (err) {
       setError(
         flow === "signIn"
           ? "Email atau password salah."
-          : "Gagal mendaftar — coba email lain atau password lebih kuat.",
+          : "Gagal mendaftar — setup key salah, atau email sudah dipakai / password kurang kuat.",
       );
     } finally {
       setBusy(false);
@@ -76,7 +77,15 @@ function LoginForm() {
           </p>
           <form onSubmit={submit} className="mt-6 space-y-3">
             {flow === "signUp" && (
-              <Input placeholder="Nama" value={name} onChange={(e) => setName(e.target.value)} />
+              <>
+                <Input placeholder="Nama" value={name} onChange={(e) => setName(e.target.value)} />
+                <Input
+                  placeholder="Setup key"
+                  value={signupKey}
+                  onChange={(e) => setSignupKey(e.target.value)}
+                  required
+                />
+              </>
             )}
             <Input
               type="email"
