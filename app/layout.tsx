@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Hanken_Grotesk, Fraunces } from "next/font/google";
 import { ConvexClientProvider } from "@/components/convex-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -24,10 +25,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${sans.variable} ${display.variable} font-sans antialiased`}>
-        <Suspense fallback={null}>
-          <ConvexClientProvider>{children}</ConvexClientProvider>
-        </Suspense>
-        <Toaster position="bottom-right" />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <Suspense fallback={null}>
+            <ConvexClientProvider>{children}</ConvexClientProvider>
+          </Suspense>
+          <Toaster position="bottom-right" />
+        </ThemeProvider>
       </body>
     </html>
   );
