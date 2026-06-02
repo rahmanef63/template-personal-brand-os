@@ -133,3 +133,79 @@ a, button {
 @media (prefers-reduced-motion: no-preference) {
   .reveal { animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--d, 0s); }
 }
+
+/* ============================================================
+   Motion & interaction polish — smoother easing, hover lift,
+   tactile press, animated link underline, distinct sidebar active.
+   Un-layered so it wins over Tailwind utility defaults.
+   ============================================================ */
+
+/* Nicer easing on the base interactive transition (set in the block above). */
+a, button { transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Cards wrapped in a link feel alive: lift + shadow + brand-tinted border. */
+  a [data-slot="card"] {
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.28s ease, border-color 0.28s ease;
+    will-change: transform;
+  }
+  a:hover [data-slot="card"] {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+    border-color: color-mix(in oklch, var(--brand) 38%, var(--border));
+  }
+
+  /* Tactile press on buttons / clickables. */
+  button:active,
+  [role="button"]:active,
+  a [data-slot="card"]:active {
+    transform: scale(0.985);
+  }
+}
+
+/* Animated underline for inline + nav text links (opt-in via .link-underline). */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1.5px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* Sidebar nav: smooth state changes (default only transitions size). */
+[data-slot="sidebar-menu-button"],
+[data-slot="sidebar-menu-sub-button"] {
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    font-weight 0.2s ease;
+}
+
+/* DISTINCT active item: brand tint + brand text + left accent bar. */
+[data-slot="sidebar-menu-button"][data-active="true"],
+[data-slot="sidebar-menu-sub-button"][data-active="true"] {
+  background: color-mix(in oklch, var(--brand) 14%, transparent);
+  color: var(--brand);
+  font-weight: 600;
+  box-shadow: inset 2px 0 0 0 var(--brand);
+}
+[data-slot="sidebar-menu-button"][data-active="true"] svg,
+[data-slot="sidebar-menu-sub-button"][data-active="true"] svg {
+  color: var(--brand);
+  opacity: 1;
+}
+[data-slot="sidebar-menu-button"][data-active="true"]:hover,
+[data-slot="sidebar-menu-sub-button"][data-active="true"]:hover {
+  background: color-mix(in oklch, var(--brand) 20%, transparent);
+  color: var(--brand);
+}
