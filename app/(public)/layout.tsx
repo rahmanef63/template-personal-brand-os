@@ -4,6 +4,7 @@ import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { StoreProvider } from "@/components/templates/personal-brand/shared/store";
 import { SiteLoader } from "@/components/site-loader";
+import { DemoRibbon } from "@/components/demo-ribbon";
 import { ChatFab } from "@/components/templates/personal-brand/shared/ui/chat-fab";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
 import {
@@ -51,6 +52,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         {children}
       </SiteShell>
       <ChatFab />
+      <DemoRibbon />
     </StoreProvider>
   );
 }
