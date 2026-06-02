@@ -3,12 +3,12 @@ import { type ReactNode } from "react";
 import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { StoreProvider } from "@/components/templates/personal-brand/shared/store";
+import { SiteLoader } from "@/components/site-loader";
 import { ChatFab } from "@/components/templates/personal-brand/shared/ui/chat-fab";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
 import {
   FOOTER_COLUMNS,
   FOOTER_TAGLINE,
-  PUBLIC_BASE,
   PUBLIC_CTA,
   PUBLIC_NAV,
 } from "@/components/templates/personal-brand/shared/nav-config";
@@ -37,9 +37,10 @@ export const metadata: Metadata = {
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <StoreProvider>
+      <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
       <SiteShell
         brand={DEFAULT_SITE_CONFIG}
-        homeHref={PUBLIC_BASE}
+        homeHref="/"
         navItems={PUBLIC_NAV}
         cta={PUBLIC_CTA}
         navExtras={<ThemeToggle />}

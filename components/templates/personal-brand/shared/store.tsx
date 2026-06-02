@@ -27,7 +27,7 @@ import type { Action, State } from "./types";
 // On read we map `_id` -> `id`. On upsert we pass `id` only when it's a known
 // Convex id (existing row); a fresh nid -> insert.
 
-type Ctx = { state: State; dispatch: (a: Action) => void; ready: boolean };
+type Ctx = { state: State; dispatch: (a: Action) => void; ready: boolean; progress: number };
 const StoreCtx = React.createContext<Ctx | null>(null);
 
 const withId = <T,>(rows: ReadonlyArray<Record<string, unknown>> | undefined): T[] =>
@@ -56,6 +56,14 @@ function Provider({ children }: { children: React.ReactNode }) {
     chatRows !== undefined &&
     pageRows !== undefined &&
     landingRows !== undefined;
+
+  // 0–100 load progress for the splash loader.
+  const progress = Math.round(
+    ([posts, portfolio, services, resources, leads, comments, subscribers, chatRows, pageRows, landingRows]
+      .filter((q) => q !== undefined).length /
+      10) *
+      100,
+  );
 
   const state = React.useMemo<State>(
     () => ({
@@ -307,7 +315,10 @@ function Provider({ children }: { children: React.ReactNode }) {
     [knownIds, state.pages], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  const value = React.useMemo<Ctx>(() => ({ state, dispatch, ready }), [state, dispatch, ready]);
+  const value = React.useMemo<Ctx>(
+    () => ({ state, dispatch, ready, progress }),
+    [state, dispatch, ready, progress],
+  );
   return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>;
 }
 
