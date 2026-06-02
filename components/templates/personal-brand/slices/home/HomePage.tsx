@@ -1,6 +1,9 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
+import { Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   useLandingSections,
   usePortfolio,
@@ -37,6 +40,27 @@ export function HomePage() {
   );
 
   if (!mounted) return null;
+
+  // Fresh/unseeded site: no landing sections yet → guide instead of a blank page.
+  if (ordered.length === 0) {
+    return (
+      <div className="mx-auto grid min-h-[60vh] max-w-md place-items-center px-6 text-center">
+        <div>
+          <div className="mx-auto mb-4 grid size-12 place-items-center rounded-xl bg-brand/10 text-brand">
+            <Sparkles className="size-6" />
+          </div>
+          <h1 className="text-2xl font-semibold tracking-tight">Situs sedang disiapkan</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Belum ada konten. Kalau kamu pemiliknya, masuk ke dashboard dan klik
+            "Isi konten contoh" untuk mulai.
+          </p>
+          <Button asChild className="mt-6">
+            <Link href="/admin">Masuk admin</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
