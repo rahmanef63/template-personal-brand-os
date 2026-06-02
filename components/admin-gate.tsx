@@ -90,10 +90,15 @@ function LoginForm() {
     try {
       await signIn("password", { email, password, name, signupKey, flow });
     } catch (err) {
+      // Surface our server-thrown ConvexError message when present (e.g. wrong
+      // setup key / signup closed); otherwise a clear, non-misleading fallback.
+      const data = (err as { data?: unknown })?.data;
+      const serverMsg = typeof data === "string" ? data : null;
       setError(
-        flow === "signIn"
-          ? "Email atau password salah."
-          : "Gagal mendaftar — setup key salah, atau email sudah dipakai / password kurang kuat.",
+        serverMsg ??
+          (flow === "signIn"
+            ? "Email atau password salah."
+            : "Gagal mendaftar. Pastikan email valid + password minimal 8 karakter."),
       );
     } finally {
       setBusy(false);
