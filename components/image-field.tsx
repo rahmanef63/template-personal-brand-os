@@ -3,17 +3,12 @@
 import * as React from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import {
-  ImagePickerButton,
-  unsplashSearchVia,
-  type ImageValue,
-} from "@/components/image-picker";
+import { ImagePickerButton, type ImageValue } from "@/components/image-picker";
 
 // Project adapter for the portable image-picker slice: ONE button → dialog
-// (gallery · upload · link · Unsplash). Upload backend = Convex files; Unsplash
-// = the /api/unsplash route. Drop-in for the old ConvexImageUpload — same
-// `onUploaded(url)` callback, so callers store a plain URL string.
-const searchUnsplash = unsplashSearchVia("/api/unsplash");
+// (gallery · upload · link · Unsplash). Upload backend = Convex files. Unsplash
+// uses the bundled curated set (no API key needed). Drop-in for the old
+// ConvexImageUpload — same `onUploaded(url)` callback (stores a plain URL).
 
 export function ImageField({
   label = "Pilih gambar",
@@ -47,7 +42,6 @@ export function ImageField({
       size="sm"
       className="w-full gap-1"
       onUpload={onUpload}
-      searchUnsplash={searchUnsplash}
       onChange={(img: ImageValue) => onUploaded(img.value)}
     />
   );
