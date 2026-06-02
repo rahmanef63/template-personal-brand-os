@@ -31,6 +31,13 @@ Tidak perlu bisa coding.
 1. Di convex.dev → **Create Project** → kasih nama (misal `website-saya`).
 2. Convex kasih kamu **Deploy Key** (production). Simpan.
 3. Convex juga kasih URL deployment, bentuknya `https://NAMA.convex.cloud`.
+4. **Kunci login (WAJIB)** — jalankan sekali di komputer (di folder project):
+   ```
+   npx @convex-dev/auth
+   ```
+   Ini otomatis set `JWT_PRIVATE_KEY` + `JWKS` + `SITE_URL` di deployment Convex
+   kamu. **Tanpa ini, login/daftar admin error** (`Server Error`). URL `.convex.site`
+   dan `.convex.cloud` di-set otomatis oleh Convex — tidak perlu kamu isi manual.
 
 ### c. Hubungkan ke Vercel
 1. Di vercel.com → **Add New → Project** → pilih repo GitHub kamu.
@@ -65,6 +72,36 @@ Selesai. Website live, kamu admin-nya.
 > lain nanti, set `ADMIN_SIGNUP_KEY` (kata sandi bebas) di Convex → Settings →
 > Environment Variables. Setelah diset, pendaftaran admin minta kunci itu. Kunci ini
 > berfungsi sebagai "pass undangan" yang bisa kamu kasih ke orang lain.
+
+> **Opsional — admin otomatis dari env.** Set `ADMIN_EMAIL` + `ADMIN_PASSWORD` di
+> Convex → Environment Variables. Saat pertama buka `/admin`, akun owner dibuat
+> otomatis dari env itu — kamu tinggal login. (Diabaikan kalau owner sudah ada.)
+
+---
+
+## Env lengkap (ringkas)
+
+| Variabel | Di mana | Wajib? | Fungsi |
+|----------|---------|--------|--------|
+| `NEXT_PUBLIC_CONVEX_URL` | Vercel | ✅ | alamat DB (`.convex.cloud`) |
+| `CONVEX_DEPLOY_KEY` | Vercel | ✅ | deploy fungsi+schema saat build |
+| `JWT_PRIVATE_KEY` | Convex | ✅ | tanda tangan login — set via `npx @convex-dev/auth` |
+| `JWKS` | Convex | ✅ | verifikasi login — idem |
+| `SITE_URL` | Convex | ✅ | redirect auth — idem |
+| `ADMIN_SIGNUP_KEY` | Convex | – | kunci undangan admin |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Convex | – | admin otomatis |
+| `NEXT_PUBLIC_DEMO` | Vercel | – | (demo saja) tombol "Deploy your own" |
+
+`.convex.site` & `.convex.cloud` URL = otomatis dari Convex, tidak perlu di-set.
+
+## Kalau error
+
+- **`[CONVEX Q(settings:get)] Server Error`** → fungsi/schema Convex belum ter-deploy.
+  Pastikan **Build Command** = `npx convex deploy --cmd 'npm run build'` DAN
+  `CONVEX_DEPLOY_KEY` ada di Vercel, lalu **Redeploy**. (Build biasa `next build`
+  tidak push backend → tabel/fungsi hilang → error ini.)
+- **Login/daftar `Server Error`** → kunci auth belum ada. Jalankan `npx @convex-dev/auth`.
+- **`/favicon.ico 404`** → aman, diabaikan; favicon asli kamu di-set dari admin.
 
 ---
 

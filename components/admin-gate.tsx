@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useConvexAuth, useQuery } from "convex/react";
+import { useAction, useConvexAuth, useQuery } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -64,6 +64,25 @@ function LoginForm() {
     if (!touched && setup && !setup.ownerClaimed) setFlow("signUp");
   }, [setup, touched]);
 
+  // Zero-touch admin: if the deployer set ADMIN_EMAIL/ADMIN_PASSWORD in Convex env,
+  // create the owner automatically on first visit, then prompt sign-in.
+  const bootstrap = useAction(api.setup.bootstrapAdmin);
+  const tried = React.useRef(false);
+  const [envNote, setEnvNote] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (tried.current || !setup || setup.ownerClaimed) return;
+    tried.current = true;
+    bootstrap()
+      .then((r) => {
+        if (r?.ok) {
+          setFlow("signIn");
+          if (r.email) setEmail(r.email);
+          setEnvNote("Akun admin dibuat dari env — masuk dengan password kamu.");
+        }
+      })
+      .catch(() => {});
+  }, [setup, bootstrap]);
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -99,6 +118,9 @@ function LoginForm() {
                 ? "Masukkan setup key untuk menambah admin."
                 : "Kamu pengunjung pertama — daftar untuk jadi pemilik situs ini."}
           </p>
+          {envNote && (
+            <p className="mt-3 rounded-md bg-brand/10 px-3 py-2 text-xs text-brand">{envNote}</p>
+          )}
           <form onSubmit={submit} className="mt-6 space-y-3">
             {flow === "signUp" && (
               <>
