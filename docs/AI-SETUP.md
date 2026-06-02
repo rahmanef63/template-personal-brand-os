@@ -46,13 +46,11 @@ Langkah yang harus kamu pandu (jangan lewat, satu per satu):
    - Pandu ganti "Build Command" jadi:  npx convex deploy --cmd 'npm run build'
    - Suruh klik Deploy, tunggu sampai hijau, lalu kasih aku link websitenya.
 
-4. KUNCI LOGIN (env Convex — WAJIB, beda tempat dari Vercel!)
-   - INGATKAN aku: env Vercel (langkah 3) cuma buat frontend. Login butuh env di
-     CONVEX, di-set terpisah. Clone/Deploy button TIDAK bisa isi ini.
-   - Suruh aku jalanin sekali di komputer (folder project):
-       npx @convex-dev/auth
-     Ini auto-set JWT_PRIVATE_KEY + JWKS + SITE_URL di Convex. Tanpa ini login error.
-   - (Opsional, biar admin otomatis) suruh aku set juga di Convex:
+4. KUNCI LOGIN — OTOMATIS (tidak perlu apa-apa)
+   - Jelaskan: kunci login (JWT/JWKS/SITE_URL) di Convex di-set OTOMATIS saat build
+     (selama CONVEX_DEPLOY_KEY ada di Vercel). Aku tidak perlu jalanin apa pun.
+   - (Opsional, biar admin otomatis) suruh aku set di Convex Dashboard → Settings →
+     Environment Variables, atau via CLI:
        npx convex env set ADMIN_EMAIL  email-aku@contoh.com
        npx convex env set ADMIN_PASSWORD  "password-kuat-aku"
      Kalau ini diset, owner dibuat otomatis — aku tinggal login.

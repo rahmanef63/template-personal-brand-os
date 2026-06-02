@@ -1,42 +1,132 @@
-# personal-brand-os
+<div align="center">
 
-Scaffolded with [`rahman-resources`](https://www.npmjs.com/package/rahman-resources) — Next 16 + React 19 + Convex + Tailwind 4 + shadcn/ui.
+# Personal Brand OS
 
-> 📖 **Panduan lengkap (non-teknis): [`docs/USER-GUIDE.md`](docs/USER-GUIDE.md)** — deploy, panel admin, keamanan login admin, update, backup.
-> 🤖 **Bantuan AI klik-demi-klik: [`docs/AI-SETUP.md`](docs/AI-SETUP.md)** — salin 1 prompt ke ChatGPT/Claude, dituntun sampai live.
+**A 100% headless personal-brand website you fully own.**
+Clone it to your own Vercel + Convex, sign in, and run everything — blog, portfolio,
+services, leads, newsletter — from one admin dashboard. No code required.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rahmanef63/template-personal-brand-os)
 
-## Setup
+![Next.js 16](https://img.shields.io/badge/Next.js-16-black)
+![React 19](https://img.shields.io/badge/React-19-149eca)
+![Convex](https://img.shields.io/badge/Convex-cloud-orange)
+![Tailwind 4](https://img.shields.io/badge/Tailwind-4-38bdf8)
+![License: MIT](https://img.shields.io/badge/License-MIT-green)
+
+[**Live demo**](https://personal-brand-os-ten.vercel.app) ·
+[**Panduan (ID)**](docs/USER-GUIDE.md) ·
+[**Setup dibantu AI**](docs/AI-SETUP.md)
+
+</div>
+
+---
+
+## What is this?
+
+A **clone-to-own** website template. Deploy it to **your** infrastructure and you get a
+full personal-brand site whose content lives in **your** Convex database — managed entirely
+from the admin panel. The frontend is stateless, so updates never touch your data.
+
+- 🧑‍💻 **For visitors** — a fast, SEO-ready public site (blog, portfolio, services, resources).
+- 🛠️ **For you** — an admin dashboard to edit everything, with zero coding.
+- 🔒 **Yours** — your repo, your Vercel, your Convex. No vendor lock-in.
+
+## ✨ Features
+
+- **Headless CMS on Convex** — posts, portfolio, services, resources, pages, landing
+  sections, leads, comments, subscribers, chat. Realtime, edited from `/admin`.
+- **Zero-touch setup** — deploy → open `/admin` → claim owner → one-click sample content.
+  No env editing, no terminal. Auth keys auto-provision at build.
+- **Branding from the dashboard** — site name, tagline, logo, **favicon**, brand colour,
+  light/dark/system theme. All stored in Convex and applied across the site at runtime.
+- **One-button image picker** everywhere — gallery · upload · paste-URL · curated Unsplash.
+- **Secure admin** — keyless first-owner claim, then signup auto-closes; optional invite
+  key (`ADMIN_SIGNUP_KEY`) or auto-admin from env (`ADMIN_EMAIL` / `ADMIN_PASSWORD`).
+- **Production Next.js** — SSR metadata, true HTTP 404s, error/loading boundaries,
+  branded not-found, a splash loader until data is ready.
+- **Demo / clone stages** — a "Deploy your own" button shows on the demo only.
+
+## 🚀 Quick start (non-coder)
+
+1. Click **[Deploy with Vercel](https://vercel.com/new/clone?repository-url=https://github.com/rahmanef63/template-personal-brand-os)** → connect GitHub → add the **Convex** integration → Deploy.
+2. Open `https://your-site.vercel.app/admin` → **"Daftar sebagai pemilik"** (first account = owner).
+3. In the dashboard, click **"Isi konten contoh"** to fill the site. Done.
+
+Need hand-holding? Open [`docs/AI-SETUP.md`](docs/AI-SETUP.md) — copy one prompt into
+ChatGPT/Claude and it walks you through every click. Full manual: [`docs/USER-GUIDE.md`](docs/USER-GUIDE.md).
+
+## 💻 Local development
 
 ```bash
 npm install --legacy-peer-deps
-cp .env.example .env.local           # fill NEXT_PUBLIC_CONVEX_URL etc.
-npx convex dev --once                 # generates convex/_generated
-npm run dev
+cp .env.example .env.local        # set NEXT_PUBLIC_CONVEX_URL
+npx convex dev --once             # generates convex/_generated
+npm run dev                       # http://localhost:3000
 ```
 
-## Add a layout / recipe / feature
+## 🔐 Environment — two places
 
-```bash
-npx rahman-resources list
-npx rahman-resources info <slug>
-npx rahman-resources add personal-brand-os .   # full-app template (T1)
-npx rahman-resources add ai-sdk-openrouter .   # feature (npm install)
+Variables live in **two** dashboards. The Deploy/clone button only fills the Vercel ones;
+set the Convex ones in the Convex dashboard (or let the build do it).
+
+| Variable | Where | Required | Purpose |
+|----------|-------|----------|---------|
+| `NEXT_PUBLIC_CONVEX_URL` | Vercel | ✅ | Convex deployment URL (`.convex.cloud`) |
+| `CONVEX_DEPLOY_KEY` | Vercel | ✅ | deploys functions + schema at build |
+| `JWT_PRIVATE_KEY` / `JWKS` / `SITE_URL` | Convex | ✅ | login signing — **auto-set at build** (or `npx @convex-dev/auth`) |
+| `ADMIN_SIGNUP_KEY` | Convex | – | invite key for extra admins |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Convex | – | auto-create the owner on first load |
+| `NEXT_PUBLIC_DEMO` | Vercel | – | demo only — shows the "Deploy your own" button |
+
+> `vercel.json` runs `convex deploy` automatically when `CONVEX_DEPLOY_KEY` is present —
+> no manual build-command change needed.
+
+## 🧱 Tech stack
+
+| Layer | Tech |
+|-------|------|
+| Framework | Next.js 16 (App Router) |
+| UI | React 19 · Tailwind CSS 4 · shadcn/ui |
+| Backend / DB | Convex (Cloud) — realtime |
+| Auth | `@convex-dev/auth` (Password) |
+| Theme | next-themes (light / dark / system) |
+| Images | `image-picker` slice (gallery · upload · link · Unsplash) |
+
+## 🗂️ Project structure
+
+```
+app/
+  (public)/        public site — home, blog, portfolio, services, … (+ loading/error/404)
+  dashboard/admin/ admin CMS (gated)
+  icon.tsx         default favicon
+components/
+  image-picker/    portable one-button image chooser
+  image-field.tsx  Convex-wired adapter
+  onboarding/      setup wizard
+  public-chrome.tsx nav/footer with branding from siteSettings
+  admin-gate.tsx · site-loader.tsx · brand-head.tsx · demo-ribbon.tsx
+convex/
+  schema.ts        auth + content + siteSettings
+  auth.ts setup.ts settings.ts files.ts seed.ts  …function modules
+scripts/setup-auth.mjs   build-time JWT key provisioning
+docs/                    USER-GUIDE.md · AI-SETUP.md
 ```
 
-## Hard rules
+## 🗺️ Roadmap
 
-- **NO Clerk.** Auth = `@convex-dev/auth`.
-- **shadcn primitives only** — no raw `<dialog>`, `<input type=date|file>`.
-- Use `proxy.ts` (not `middleware.ts`) on Next 16.
-- `convex/_generated` MUST be committed before deploy.
+- [ ] Extract a shared **headless-core** package (cheap new templates + an update channel)
+- [ ] One-click **"Update available"** in admin (no code)
+- [ ] One-click **backup / restore** (export & import your data)
+- [ ] Role tiers (owner / editor / viewer)
+- [ ] More templates on the same core
 
-## Stack
+## 🤝 Contributing
 
-| | |
-|---|---|
-| Framework | Next.js 16 (App Router + cacheComponents) |
-| UI | React 19 + Tailwind 4 + shadcn |
-| Backend | Convex (self-hosted compatible) |
-| Auth | `@convex-dev/auth` (Password provider by default) |
+See [`CONTRIBUTING.md`](CONTRIBUTING.md). Issues and PRs welcome.
+
+## 📄 License
+
+[MIT](LICENSE) © Rahman ([rahmanef.com](https://rahmanef.com))
+
+<div align="center"><sub>Built with <a href="https://resource.rahmanef.com">rahman-resources</a>.</sub></div>

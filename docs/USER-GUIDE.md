@@ -31,13 +31,10 @@ Tidak perlu bisa coding.
 1. Di convex.dev → **Create Project** → kasih nama (misal `website-saya`).
 2. Convex kasih kamu **Deploy Key** (production). Simpan.
 3. Convex juga kasih URL deployment, bentuknya `https://NAMA.convex.cloud`.
-4. **Kunci login (WAJIB)** — jalankan sekali di komputer (di folder project):
-   ```
-   npx @convex-dev/auth
-   ```
-   Ini otomatis set `JWT_PRIVATE_KEY` + `JWKS` + `SITE_URL` di deployment Convex
-   kamu. **Tanpa ini, login/daftar admin error** (`Server Error`). URL `.convex.site`
-   dan `.convex.cloud` di-set otomatis oleh Convex — tidak perlu kamu isi manual.
+4. **Kunci login — OTOMATIS.** Saat deploy, build otomatis bikin & set
+   `JWT_PRIVATE_KEY` + `JWKS` + `SITE_URL` di Convex (`scripts/setup-auth.mjs`).
+   Kamu **tidak perlu** jalanin apa pun. URL `.convex.site` / `.convex.cloud` juga
+   otomatis dari Convex. _(Fallback manual kalau perlu: `npx @convex-dev/auth`.)_
 
 ### c. Hubungkan ke Vercel
 1. Di vercel.com → **Add New → Project** → pilih repo GitHub kamu.
@@ -96,9 +93,9 @@ Env disetel di **dua dashboard berbeda**. Salah tempat = gak kebaca.
 
 | Variabel | Wajib? | Fungsi |
 |----------|--------|--------|
-| `JWT_PRIVATE_KEY` | ✅ | tanda tangan login — set via `npx @convex-dev/auth` |
-| `JWKS` | ✅ | verifikasi login — idem |
-| `SITE_URL` | ✅ | redirect auth — idem |
+| `JWT_PRIVATE_KEY` | ✅ | tanda tangan login — **auto-set saat build** |
+| `JWKS` | ✅ | verifikasi login — **auto-set saat build** |
+| `SITE_URL` | ✅ | redirect auth — **auto-set saat build** |
 | `ADMIN_SIGNUP_KEY` | – | kunci undangan admin |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | – | admin otomatis dibuat dari env |
 
@@ -109,15 +106,14 @@ Env disetel di **dua dashboard berbeda**. Salah tempat = gak kebaca.
 >
 > `.convex.site` & `.convex.cloud` URL = otomatis dari Convex, tidak perlu di-set.
 
-### Cara cepat set env Convex
+### Set env Convex (opsional — admin otomatis)
+Kunci login (JWT/JWKS/SITE_URL) **auto** saat build. Yang opsional cuma admin:
 ```bash
-# di folder project, sekali jalan:
-npx @convex-dev/auth                       # set JWT_PRIVATE_KEY + JWKS + SITE_URL
+# di folder project (atau lewat Convex Dashboard → Settings → Environment Variables):
 npx convex env set ADMIN_EMAIL you@mail.com
 npx convex env set ADMIN_PASSWORD "rahasia-kuat"
 # (opsional) npx convex env set ADMIN_SIGNUP_KEY "kunci-undangan"
 ```
-Atau pakai UI: Convex Dashboard → project → Settings → Environment Variables.
 
 ## Kalau error
 
@@ -125,7 +121,9 @@ Atau pakai UI: Convex Dashboard → project → Settings → Environment Variabl
   Pastikan **`CONVEX_DEPLOY_KEY` ada di Vercel**, lalu **Redeploy**. (`vercel.json`
   otomatis jalanin `convex deploy` saat build kalau key ada; tanpa key → backend
   tidak ke-push → tabel/fungsi hilang → error ini.)
-- **Login/daftar `Server Error`** → kunci auth belum ada. Jalankan `npx @convex-dev/auth`.
+- **Login/daftar `Server Error`** → kunci auth belum ke-set. Biasanya auto saat build;
+  kalau masih error, **Redeploy** (pastikan `CONVEX_DEPLOY_KEY` ada). Fallback manual:
+  `npx @convex-dev/auth`.
 - **`/favicon.ico 404`** → aman, diabaikan; favicon asli kamu di-set dari admin.
 
 ---
