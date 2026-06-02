@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
+import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 
 function Spinner() {
   return (
@@ -30,8 +31,15 @@ export function AdminGate({ children }: { children: React.ReactNode }) {
 
 function AdminGateInner({ children }: { children: React.ReactNode }) {
   const { isLoading, isAuthenticated } = useConvexAuth();
+  const status = useQuery(api.setup.status);
+  const [onboardDone, setOnboardDone] = React.useState(false);
   if (isLoading) return <Spinner />;
   if (!isAuthenticated) return <LoginForm />;
+  // Wait for setup state before deciding wizard vs dashboard (avoid a flash).
+  if (status === undefined) return <Spinner />;
+  if (!status.onboarded && !onboardDone) {
+    return <OnboardingWizard onDone={() => setOnboardDone(true)} />;
+  }
   return <>{children}</>;
 }
 

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { Hanken_Grotesk, Fraunces } from "next/font/google";
 import { ConvexClientProvider } from "@/components/convex-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { BrandHead } from "@/components/brand-head";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -27,7 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${sans.variable} ${display.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Suspense fallback={null}>
-            <ConvexClientProvider>{children}</ConvexClientProvider>
+            <ConvexClientProvider>
+              <BrandHead />
+              {children}
+            </ConvexClientProvider>
           </Suspense>
           <Toaster position="bottom-right" />
         </ThemeProvider>

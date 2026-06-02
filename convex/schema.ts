@@ -117,4 +117,21 @@ export default defineSchema({
     sectionId: v.string(),
     data: v.any(),
   }).index("by_sectionId", ["sectionId"]),
+
+  // Singleton site config — everything the owner sets via the onboarding wizard
+  // and admin Settings. One row. Favicon/logo are Convex storage ids.
+  siteSettings: defineTable({
+    siteName: v.optional(v.string()),
+    tagline: v.optional(v.string()),
+    ownerName: v.optional(v.string()),
+    contactEmail: v.optional(v.string()),
+    brandColor: v.optional(v.string()),
+    themeDefault: v.optional(v.string()), // "light" | "dark" | "system"
+    logoUrl: v.optional(v.string()),
+    faviconUrl: v.optional(v.string()),
+    socials: v.optional(v.string()), // JSON string
+    seoDescription: v.optional(v.string()),
+    analyticsId: v.optional(v.string()),
+    onboardedAt: v.optional(v.number()),
+  }),
 });
