@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ConvexImageUpload } from "@/components/templates/_shared/ui/convex-image-upload";
+import { ImageField } from "@/components/image-field";
 
 type Fields = {
   siteName: string;
@@ -124,11 +124,11 @@ export function OnboardingWizard({ onDone }: { onDone: () => void }) {
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Logo">
                   {f.logoUrl ? <img src={f.logoUrl} alt="logo" className="mb-2 h-10 rounded object-contain" /> : null}
-                  <ConvexImageUpload label="Upload logo" onUploaded={(u) => set("logoUrl", u)} />
+                  <ImageField label="Upload logo" onUploaded={(u) => set("logoUrl", u)} />
                 </Field>
                 <Field label="Favicon">
                   {f.faviconUrl ? <img src={f.faviconUrl} alt="favicon" className="mb-2 size-8 rounded object-contain" /> : null}
-                  <ConvexImageUpload label="Upload favicon" onUploaded={(u) => set("faviconUrl", u)} />
+                  <ImageField label="Upload favicon" onUploaded={(u) => set("faviconUrl", u)} />
                 </Field>
               </div>
               <Field label="Warna brand">

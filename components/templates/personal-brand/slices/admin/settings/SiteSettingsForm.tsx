@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { ConvexImageUpload } from "@/components/templates/_shared/ui/convex-image-upload";
+import { ImageField } from "@/components/image-field";
 
 type Form = {
   siteName: string;
@@ -121,11 +121,11 @@ export function SiteSettingsForm() {
           </Field>
           <Field label="Logo">
             {f.logoUrl ? <img src={f.logoUrl} alt="logo" className="mb-2 h-9 rounded object-contain" /> : null}
-            <ConvexImageUpload label="Ganti logo" onUploaded={(u) => set("logoUrl", u)} />
+            <ImageField label="Ganti logo" onUploaded={(u) => set("logoUrl", u)} />
           </Field>
           <Field label="Favicon">
             {f.faviconUrl ? <img src={f.faviconUrl} alt="favicon" className="mb-2 size-8 rounded object-contain" /> : null}
-            <ConvexImageUpload label="Ganti favicon" onUploaded={(u) => set("faviconUrl", u)} />
+            <ImageField label="Ganti favicon" onUploaded={(u) => set("faviconUrl", u)} />
           </Field>
         </div>
         <div className="flex justify-end">

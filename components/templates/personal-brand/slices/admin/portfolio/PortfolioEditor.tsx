@@ -15,7 +15,7 @@ import { nid, slugify, useStore } from "../../../shared/store";
 import type { PortfolioItem } from "../../../shared/types";
 import { ADMIN_BASE } from "../../../shared/nav-config";
 import { PUBLIC_BASE } from "../../../shared/nav-config";
-import { ConvexImageUpload } from "@/components/templates/_shared/ui/convex-image-upload";
+import { ImageField } from "@/components/image-field";
 
 const COVERS = [
   "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1600&q=70",
@@ -147,7 +147,7 @@ export function PortfolioEditor({ id }: { id: string | null }) {
                 ))}
               </div>
               <div className="mt-2">
-                <ConvexImageUpload onUploaded={setCover} label="Upload cover" />
+                <ImageField onUploaded={setCover} label="Upload cover" />
               </div>
             </CardContent>
           </Card>
