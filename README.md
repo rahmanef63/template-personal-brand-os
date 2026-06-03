@@ -43,9 +43,16 @@ from the admin panel. The frontend is stateless, so updates never touch your dat
 - **One-button image picker** everywhere — gallery · upload · paste-URL · curated Unsplash.
 - **Secure admin** — keyless first-owner claim, then signup auto-closes; optional invite
   key (`ADMIN_SIGNUP_KEY`) or auto-admin from env (`ADMIN_EMAIL` / `ADMIN_PASSWORD`).
+- **`/setup` health page** — a plain-language checklist of what's done and what's left,
+  each step linking to its fix. No log-reading.
+- **In-app updates** — admin sees current vs latest version and rebuilds in one click.
+- **Backup & restore** — download / re-import all your content as JSON, no terminal.
+- **Real team & roles** — dashboard shows the actual signed-in admin; first account is
+  owner, invited admins are editors.
 - **Production Next.js** — SSR metadata, true HTTP 404s, error/loading boundaries,
   branded not-found, a splash loader until data is ready.
 - **Demo / clone stages** — a "Deploy your own" button shows on the demo only.
+- **Tested clones** — `npm run smoke` checks a clone can deploy (local, no CI cost).
 
 ## 🚀 Quick start (non-coder)
 
@@ -115,11 +122,14 @@ docs/                    USER-GUIDE.md · AI-SETUP.md
 
 ## 🗺️ Roadmap
 
-- [ ] Extract a shared **headless-core** package (cheap new templates + an update channel)
-- [ ] One-click **"Update available"** in admin (no code)
-- [ ] One-click **backup / restore** (export & import your data)
-- [ ] Role tiers (owner / editor / viewer)
-- [ ] More templates on the same core
+- [x] **headless-core** module + version manifest (`lib/headless-core/`)
+- [x] One-click **"Update available"** in admin
+- [x] One-click **backup / restore**
+- [x] Roles (owner / editor) — derived, surfaced in dashboard + Team settings
+- [x] **`/setup`** health page + clone **smoke-test**
+- [ ] Roll the core across the other 7 templates (see [`docs/CORE-ADOPTION.md`](docs/CORE-ADOPTION.md))
+- [ ] Viewer role tier + per-action RBAC
+- [ ] Optional Resend "forgot password" flow
 
 ## 🤝 Contributing
 
