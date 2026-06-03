@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as backup from "../backup.js";
 import type * as chat from "../chat.js";
 import type * as comments from "../comments.js";
 import type * as files from "../files.js";
@@ -25,6 +26,7 @@ import type * as settings from "../settings.js";
 import type * as setup from "../setup.js";
 import type * as storeExtra from "../storeExtra.js";
 import type * as subscribers from "../subscribers.js";
+import type * as update from "../update.js";
 
 import type {
   ApiFromModules,
@@ -34,6 +36,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  backup: typeof backup;
   chat: typeof chat;
   comments: typeof comments;
   files: typeof files;
@@ -50,6 +53,7 @@ declare const fullApi: ApiFromModules<{
   setup: typeof setup;
   storeExtra: typeof storeExtra;
   subscribers: typeof subscribers;
+  update: typeof update;
 }>;
 
 /**

@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { DEFAULT_SITE_CONFIG } from "../../../shared/site-config";
 import { SiteSettingsForm } from "./SiteSettingsForm";
+import { UpdateCard } from "@/components/admin/update-card";
+import { BackupCard } from "@/components/admin/backup-card";
 
 export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
   const TITLES = {
@@ -68,7 +70,13 @@ export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
           </CardContent>
         </Card>
       )}
-      {section === "site" && <SiteSettingsForm />}
+      {section === "site" && (
+        <>
+          <SiteSettingsForm />
+          <UpdateCard />
+          <BackupCard />
+        </>
+      )}
       <p className="text-[11px] text-muted-foreground">
         <Wand2 className="mr-1 inline size-3" /> Per-feature model picker, system prompt edit, cost dashboard — di Convex `ai_config` table.
       </p>
