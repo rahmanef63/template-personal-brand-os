@@ -12,7 +12,8 @@
     "convex:dev": "convex dev",
     "convex:codegen": "convex dev --once",
     "build:vercel": "convex deploy --cmd 'next build'",
-    "build:auto": "if [ -n \"$CONVEX_DEPLOY_KEY\" ]; then node scripts/setup-auth.mjs && convex deploy --cmd 'next build'; else next build; fi"
+    "build:auto": "if [ -n \"$CONVEX_DEPLOY_KEY\" ]; then node scripts/setup-auth.mjs && convex deploy --cmd 'next build'; else next build; fi",
+    "smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
     "@auth/core": "^0.37.4",
