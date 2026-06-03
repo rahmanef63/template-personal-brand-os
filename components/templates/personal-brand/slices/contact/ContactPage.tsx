@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { useQuery } from "convex/react";
 import { ArrowRight, Calendar, Mail, MessageCircle } from "lucide-react";
+import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,6 +13,8 @@ import { nid, useStore } from "../../shared/store";
 
 export function ContactPage() {
   const { dispatch } = useStore();
+  const s = useQuery(api.settings.get);
+  const contactEmail = s?.contactEmail || "hi@lorem.dev";
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [topic, setTopic] = React.useState("");
@@ -50,7 +54,10 @@ export function ContactPage() {
           Drop pesan — biasanya bales dalam 24 jam kerja. Untuk konsultasi cepat, langsung book office hours.
         </p>
         <div className="mt-6 space-y-3 text-sm text-muted-foreground">
-          <p className="flex items-center gap-2"><Mail className="size-4" /> hi@lorem.dev</p>
+          <p className="flex items-center gap-2">
+            <Mail className="size-4" />
+            <a href={`mailto:${contactEmail}`} className="hover:text-foreground">{contactEmail}</a>
+          </p>
           <p className="flex items-center gap-2"><MessageCircle className="size-4" /> +62 812 3456 7890 (WA)</p>
           <p className="flex items-center gap-2"><Calendar className="size-4" /> cal.com/lorem</p>
         </div>

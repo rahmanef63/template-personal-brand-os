@@ -3,9 +3,12 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useQuery } from "convex/react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
 const TIMELINE = [
@@ -27,6 +30,9 @@ const MENTIONS = [
 ];
 
 export function AboutPage() {
+  const s = useQuery(api.settings.get);
+  const ownerName = s?.ownerName || DEFAULT_SITE_CONFIG.ownerName;
+  const intro = s?.seoDescription || s?.tagline;
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <header className="grid gap-10 md:grid-cols-[1fr_2fr]">
@@ -42,12 +48,11 @@ export function AboutPage() {
         <div>
           <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">About</p>
           <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl">
-            Lorem Dolor — strategist, builder, mentor.
+            {ownerName} — strategist, builder, mentor.
           </h1>
           <p className="mt-4 text-muted-foreground">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus
-            et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget,
-            tempor sit amet, ante.
+            {intro ||
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante."}
           </p>
           <p className="mt-3 text-muted-foreground">
             Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper

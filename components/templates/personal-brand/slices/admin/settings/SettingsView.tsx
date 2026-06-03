@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { Wand2 } from "lucide-react";
+import { useQuery } from "convex/react";
+import { Wand2, Loader2 } from "lucide-react";
+import { api } from "@/convex/_generated/api";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { DEFAULT_SITE_CONFIG } from "../../../shared/site-config";
 import { SiteSettingsForm } from "./SiteSettingsForm";
 import { UpdateCard } from "@/components/admin/update-card";
 import { BackupCard } from "@/components/admin/backup-card";
@@ -22,6 +23,8 @@ export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
         <p className="text-sm text-muted-foreground">
           {section === "site"
             ? "Identitas situs — tersimpan di Convex, dipakai di seluruh situs."
+            : section === "team"
+            ? "Admin yang bisa mengelola situs ini. Akun pertama = pemilik."
             : "Demo placeholder — di production, wired ke Convex `ai_config` / `workspaces`."}
         </p>
       </div>
@@ -37,39 +40,7 @@ export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
           </CardContent>
         </Card>
       )}
-      {section === "team" && (
-        <Card className="border-border/60">
-          <CardContent className="p-6 text-sm">
-            <p className="text-muted-foreground">3 members:</p>
-            <ul className="mt-3 space-y-2">
-              <li className="flex items-center gap-3">
-                <div className="grid size-8 place-items-center rounded-full bg-muted text-xs">{DEFAULT_SITE_CONFIG.ownerInitials}</div>
-                <div className="flex-1">
-                  <p className="font-medium">{DEFAULT_SITE_CONFIG.ownerName}</p>
-                  <p className="text-xs text-muted-foreground">{DEFAULT_SITE_CONFIG.email}</p>
-                </div>
-                <Badge variant="outline">{DEFAULT_SITE_CONFIG.ownerRole}</Badge>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="grid size-8 place-items-center rounded-full bg-muted text-xs">EM</div>
-                <div className="flex-1">
-                  <p className="font-medium">Editor M.</p>
-                  <p className="text-xs text-muted-foreground">editor@dev</p>
-                </div>
-                <Badge variant="outline">editor</Badge>
-              </li>
-              <li className="flex items-center gap-3">
-                <div className="grid size-8 place-items-center rounded-full bg-muted text-xs">RA</div>
-                <div className="flex-1">
-                  <p className="font-medium">Reviewer A.</p>
-                  <p className="text-xs text-muted-foreground">reviewer@dev</p>
-                </div>
-                <Badge variant="outline">reviewer</Badge>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
-      )}
+      {section === "team" && <TeamList />}
       {section === "site" && (
         <>
           <SiteSettingsForm />
@@ -77,10 +48,48 @@ export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
           <BackupCard />
         </>
       )}
-      <p className="text-[11px] text-muted-foreground">
-        <Wand2 className="mr-1 inline size-3" /> Per-feature model picker, system prompt edit, cost dashboard — di Convex `ai_config` table.
-      </p>
+      {section === "ai" && (
+        <p className="text-[11px] text-muted-foreground">
+          <Wand2 className="mr-1 inline size-3" /> Per-feature model picker, system prompt edit, cost dashboard — di Convex `ai_config` table.
+        </p>
+      )}
     </div>
+  );
+}
+
+function TeamList() {
+  const admins = useQuery(api.users.listAdmins);
+  return (
+    <Card className="border-border/60">
+      <CardContent className="p-6 text-sm">
+        {admins === undefined ? (
+          <div className="grid h-20 place-items-center">
+            <Loader2 className="size-5 animate-spin text-muted-foreground" />
+          </div>
+        ) : admins.length === 0 ? (
+          <p className="text-muted-foreground">Belum ada admin. Daftar sebagai pemilik di /admin.</p>
+        ) : (
+          <>
+            <p className="text-muted-foreground">{admins.length} admin:</p>
+            <ul className="mt-3 space-y-2">
+              {admins.map((a) => (
+                <li key={a._id} className="flex items-center gap-3">
+                  <div className="grid size-8 place-items-center rounded-full bg-muted text-xs">{a.initials}</div>
+                  <div className="flex-1">
+                    <p className="font-medium">{a.name || a.email || "Admin"}</p>
+                    {a.email && <p className="text-xs text-muted-foreground">{a.email}</p>}
+                  </div>
+                  <Badge variant={a.role === "owner" ? "default" : "outline"}>{a.role}</Badge>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-xs text-muted-foreground">
+              Tambah admin lain: set <code>ADMIN_SIGNUP_KEY</code> di Convex env, bagikan kunci itu.
+            </p>
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
