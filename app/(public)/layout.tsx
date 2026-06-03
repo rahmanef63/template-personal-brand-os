@@ -4,7 +4,7 @@ import { StoreProvider } from "@/components/templates/personal-brand/shared/stor
 import { SiteLoader } from "@/components/site-loader";
 import { DemoRibbon } from "@/components/demo-ribbon";
 import { PublicChrome } from "@/components/public-chrome";
-import { ChatFab } from "@/components/templates/personal-brand/shared/ui/chat-fab";
+import { AiChatFab } from "@/components/ai-chat-fab";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
 
 const c = DEFAULT_SITE_CONFIG;
@@ -33,7 +33,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
     <StoreProvider>
       <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
       <PublicChrome>{children}</PublicChrome>
-      <ChatFab />
+      <AiChatFab brand={DEFAULT_SITE_CONFIG.brandName} />
       <DemoRibbon />
     </StoreProvider>
   );

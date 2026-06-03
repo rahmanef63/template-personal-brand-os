@@ -12,6 +12,7 @@ import type * as auth from "../auth.js";
 import type * as backup from "../backup.js";
 import type * as chat from "../chat.js";
 import type * as comments from "../comments.js";
+import type * as features_aiChat_action from "../features/aiChat/action.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
 import type * as landing from "../landing.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   backup: typeof backup;
   chat: typeof chat;
   comments: typeof comments;
+  "features/aiChat/action": typeof features_aiChat_action;
   files: typeof files;
   http: typeof http;
   landing: typeof landing;
