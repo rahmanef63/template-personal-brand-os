@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useMutation, useQuery } from "convex/react";
 import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,10 @@ export function SetupBanner() {
           <p className="text-sm font-medium">Situs kamu masih kosong</p>
           <p className="text-xs text-muted-foreground">
             Isi dengan konten contoh (blog, portfolio, layanan, halaman depan) biar
-            langsung kelihatan. Bisa kamu ganti kapan saja.
+            langsung kelihatan. Bisa kamu ganti kapan saja.{" "}
+            <Link href="/setup" className="text-brand underline underline-offset-2">
+              Cek status setup
+            </Link>
           </p>
         </div>
       </div>
