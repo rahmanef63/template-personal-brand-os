@@ -1,0 +1,38 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "notion-shell",
+  "version": "0.23.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Notion Shell \u2014 page + block editor primitives (pure, no sidebar/database)",
+  "description": "Portable Notion-style PAGE EDITOR primitives. NotionPage (cover + header + body shell), NotionHeader (icon + title), NotionBlock (single-block renderer dispatching via prop registry, live inline-markdown decorator, hover actions menu, built-in code + equation blocks), SlashMenu (searchable block-type picker w/ keyboard nav), BlockActionsMenu (turn-into / duplicate / delete popover), InsertBlockButton (\"+\" trigger w/ SlashMenu popover), SortableBlockList (block reorder), InlineFormatToolbar + BlockColorPicker + MentionTypeahead + PageLayoutSection (colour + layout). The tree-nav SIDEBAR was split out into the `notion-sidebar` slice; embedded DATABASES live in the `notion-database` slice. Domain types (Database / Property / PropertyValue / DbView / DatabaseViewConfig / etc.) remain here as the single source of truth \u2014 Page references them via rowOfDatabaseId + rowProps. Pure / props-driven \u2014 host owns data + change handlers. Compose notion-sidebar + notion-shell + notion-database for the full Notion-clone OS.",
+  "namespace": "@/features/notion-shell",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/notion-shell",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [
+      "@dnd-kit/core",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities",
+      "katex@^0.16.45",
+      "highlight.js@^11.11.1"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "checkbox",
+      "dropdown-menu",
+      "popover"
+    ],
+    "env": [],
+    "peers": [],
+    "sharedFiles": [
+      "lib/shared/error.ts",
+      "lib/shared/features/defineFeature.ts"
+    ]
+  }
+}

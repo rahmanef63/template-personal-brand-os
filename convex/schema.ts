@@ -1,12 +1,14 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { notionTables } from "./features/notion/_schema";
 
 // Personal Brand OS — full schema (Convex Cloud target).
 // authTables = @convex-dev/auth. Content tables mirror the localStorage shape
 // the frontend store used, so the Convex-backed store adapter maps 1:1.
 export default defineSchema({
   ...authTables,
+  ...notionTables,
 
   posts: defineTable({
     slug: v.string(),

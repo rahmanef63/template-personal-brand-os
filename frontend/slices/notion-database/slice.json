@@ -1,0 +1,46 @@
+{
+  "$schema": "https://resource.rahmanef.com/slice-schema.json",
+  "slug": "notion-database",
+  "version": "0.17.0",
+  "category": "ui",
+  "kind": "ui",
+  "title": "Notion Database",
+  "description": "Drop-in Notion-style database surface. 11 views (table, board, list, gallery, calendar, feed, chart, dashboard, form, map, timeline), 18 property/cell types, and a per-type column-header config menu (number format, date ranges, select, relation, rollup, formula) plus filter / sort / group / calculate, row peek, row multi-select, table cell selection + drag-to-fill (merged from database-cell-selection in v0.16), and CSV + JSON import-export. Pure and props-driven. Domain types live in notion-shell (install as the peer).",
+  "namespace": "@/features/notion-database",
+  "registers": [],
+  "audit": [],
+  "frontend": {
+    "slicePath": "frontend/slices/notion-database",
+    "configExport": ""
+  },
+  "deps": {
+    "npm": [
+      "recharts@^3",
+      "@dnd-kit/core@^6"
+    ],
+    "shadcn": [
+      "button",
+      "input",
+      "checkbox",
+      "dropdown-menu",
+      "popover",
+      "select",
+      "sheet",
+      "dialog",
+      "toggle-group",
+      "tooltip",
+      "separator"
+    ],
+    "env": [],
+    "peers": [
+      {
+        "slug": "notion-shell",
+        "range": "^0.7",
+        "reason": "Domain types live in notion-shell. v0.7 extends Database with `locked` flag for the DatabaseMenu lock-toggle action."
+      }
+    ],
+    "sharedFiles": [
+      "components/shared/ui/FilePicker.tsx"
+    ]
+  }
+}

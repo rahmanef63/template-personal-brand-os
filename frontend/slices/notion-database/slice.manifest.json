@@ -1,0 +1,10 @@
+{
+  "name": "notion-database",
+  "description": "Portable Notion-style database surface. NotionDatabase + NotionProperty + ViewTabs + ViewOptions + ColumnHeaderMenu + 6 views (Table/Board/List/Gallery/Calendar/Feed) + 10 property-cell types + filter/sort/search helpers. Optional companion to notion-shell — install separately when you want embedded databases.",
+  "deps": {
+    "shared": [],
+    "slices": ["notion-shell"],
+    "convex": []
+  },
+  "notes": "CI-wave (2026-05-21) — extracted from notion-shell. Domain types (Database / Property / PropertyValue / DbView / DatabaseViewConfig / DatabaseFilter / DatabaseSort) live in notion-shell; notion-database re-exports them. notion-shell is now pure shell — install both for full Notion-clone behavior, install only notion-shell for sidebar + page editor without the database surface."
+}

@@ -1,0 +1,10 @@
+{
+  "name": "notion-shell",
+  "description": "Portable Notion-style wrapper primitives (Page / Header / Sidebar / Block / Database / Property / SlashMenu / BlockActionsMenu / InsertBlockButton / ViewTabs / ViewOptions / ColumnHeaderMenu) + 6 views (Table / Board / List / Gallery / Calendar / Feed) + 10 property cells. Pure / props-driven; live inline-markdown decorator; pair with notion-blocks for editor primitives.",
+  "deps": {
+    "shared": [],
+    "slices": [],
+    "convex": []
+  },
+  "notes": "Lifted from notion-page-clone/frontend/shared/components/notion + frontend/slices/editor + frontend/slices/databases. v0.4.0 adds SortableBlockList (@dnd-kit-based drag reorder), PageActionsMenu (header dropdown for duplicate/trash/cover), ImageRenderer + EmbedRenderer specialised renderers, and cover prop on NotionPage. Host provides `renderIcon` + `renderIconPicker` props (pair with @/features/icon-picker for full Lucide support). NotionBlock dispatches via `blockRenderers` prop (host owns the registry) and includes a live inline-markdown decorator (caret-preserving, IME-safe), hover actions menu (turn-into / duplicate / delete), and optional drag-handle slot. NotionDatabase dispatches the view via VIEW_REGISTRY (overridable per host)."
+}

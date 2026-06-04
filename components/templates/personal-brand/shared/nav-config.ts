@@ -10,6 +10,7 @@ import {
   BookOpen,
   Bot,
   Briefcase,
+  Database,
   FileText,
   Inbox,
   LayoutDashboard,
@@ -17,6 +18,7 @@ import {
   LineChart,
   Mail,
   MessageSquare,
+  NotebookPen,
   Newspaper,
   Settings,
   Sparkles,
@@ -113,6 +115,8 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
     { id: "comments",  label: "Comments",  href: `${ADMIN_BASE}/comments`,    icon: MessageSquare,   count: pendingComments || null },
     { id: "chatbot",   label: "Chatbot",   href: `${ADMIN_BASE}/chatbot`,     icon: Bot,             count: flaggedChats || null },
     { id: "analytics", label: "Analytics", href: `${ADMIN_BASE}/analytics`,   icon: LineChart,       count: null },
+    { id: "notes",     label: "Notes",     href: `${ADMIN_BASE}/notes`,       icon: NotebookPen,     count: null },
+    { id: "database",  label: "Database",  href: `${ADMIN_BASE}/database`,    icon: Database,        count: null },
   ];
 }
 

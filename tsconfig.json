@@ -47,6 +47,9 @@
   ],
   "exclude": [
     "node_modules",
-    "convex-templates"
+    "convex-templates",
+    "**/slice.contract.ts",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }
