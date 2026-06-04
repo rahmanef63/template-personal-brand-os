@@ -4,7 +4,7 @@ import { type ReactNode } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { ThemePresetSwitcher } from "@/features/theme-presets";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
 import {
   FOOTER_COLUMNS,
@@ -34,7 +34,7 @@ export function PublicChrome({ children }: { children: ReactNode }) {
       homeHref="/"
       navItems={PUBLIC_NAV}
       cta={PUBLIC_CTA}
-      navExtras={<ThemeToggle />}
+      navExtras={<ThemePresetSwitcher />}
       footerColumns={FOOTER_COLUMNS}
       footerTagline={tagline}
       copyrightHolder={brand.brandName}
