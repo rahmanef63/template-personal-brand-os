@@ -17,8 +17,26 @@ const display = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: { default: "personal-brand-os", template: "%s — personal-brand-os" },
-  description: "Built with rahman-resources kitab.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
+  ),
+  title: { default: "Personal Brand OS", template: "%s — Personal Brand OS" },
+  description:
+    "Personal site OS — blog + portfolio, testimonials, FAQ + pricing, newsletter + leads, own admin dashboard. Free website template, clone-to-own.",
+  openGraph: {
+    title: "Personal Brand OS",
+    description:
+      "Personal site OS — blog + portfolio, testimonials, FAQ + pricing, newsletter + leads, own admin dashboard. Free website template, clone-to-own.",
+    type: "website",
+    siteName: "Personal Brand OS",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Personal Brand OS",
+    description:
+      "Personal site OS — blog + portfolio, testimonials, FAQ + pricing, newsletter + leads, own admin dashboard. Free website template, clone-to-own.",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
