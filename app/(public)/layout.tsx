@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: `${c.brandName} — ${c.tagline}`,
     description: c.description,
     url: SITE_URL,
-    images: ["/opengraph-image.jpg"],
+    images: [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "Personal Brand OS" }],
     locale: c.defaultLocale,
   },
   twitter: { card: "summary_large_image", site: c.twitter, creator: c.twitter },
