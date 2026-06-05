@@ -13,6 +13,15 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
   providers: [
     Password({
       profile(params) {
+        // Guard BEFORE any account row is created: without the JWT signing
+        // key no sign-in can ever succeed, and a half-created first account
+        // would permanently burn the owner slot (seen in the wild when a
+        // deploy key lacked WriteEnvironmentVariables).
+        if (!process.env.JWT_PRIVATE_KEY) {
+          throw new ConvexError(
+            "Kunci login belum terpasang di backend. Buka /setup di situs ini untuk panduan perbaikannya.",
+          );
+        }
         const required = process.env.ADMIN_SIGNUP_KEY;
         if (params.flow === "signUp" && required && params.signupKey !== required) {
           throw new ConvexError("Setup key salah.");
