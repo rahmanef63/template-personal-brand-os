@@ -16,7 +16,7 @@ export const CLONE_URL =
   process.env.NEXT_PUBLIC_CLONE_URL ||
   `https://vercel.com/new/clone?repository-url=${REPO}` +
     `&env=NEXT_PUBLIC_CONVEX_URL,CONVEX_DEPLOY_KEY` +
-    `&envDescription=${encodeURIComponent("Convex deployment URL + production deploy key (lihat panduan)")}` +
+    `&envDescription=${encodeURIComponent("Convex URL + production deploy key — key WAJIB punya capability deploy + env:view + env:write (atau full access)")}` +
     `&envLink=${encodeURIComponent(`${REPO}/blob/main/docs/USER-GUIDE.md`)}` +
     `&project-name=my-brand-site&repository-name=my-brand-site`;
 

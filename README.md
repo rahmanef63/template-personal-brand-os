@@ -80,7 +80,7 @@ set the Convex ones in the Convex dashboard (or let the build do it).
 | Variable | Where | Required | Purpose |
 |----------|-------|----------|---------|
 | `NEXT_PUBLIC_CONVEX_URL` | Vercel | ✅ | Convex deployment URL (`.convex.cloud`) |
-| `CONVEX_DEPLOY_KEY` | Vercel | ✅ | deploys functions + schema at build |
+| `CONVEX_DEPLOY_KEY` | Vercel | ✅ | deploys functions + schema at build — needs capabilities `deploy` + `env:view` + `env:write` (or full access) |
 | `JWT_PRIVATE_KEY` / `JWKS` / `SITE_URL` | Convex | ✅ | login signing — **auto-set at build** (or `npx @convex-dev/auth`) |
 | `ADMIN_SIGNUP_KEY` | Convex | – | invite key for extra admins |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Convex | – | auto-create the owner on first load |
