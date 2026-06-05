@@ -129,6 +129,7 @@ export default defineSchema({
     contactEmail: v.optional(v.string()),
     brandColor: v.optional(v.string()),
     themeDefault: v.optional(v.string()), // "light" | "dark" | "system"
+    themePreset: v.optional(v.string()), // tweakcn preset name (site-wide default)
     logoUrl: v.optional(v.string()),
     faviconUrl: v.optional(v.string()),
     socials: v.optional(v.string()), // JSON string

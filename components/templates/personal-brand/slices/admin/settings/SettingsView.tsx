@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { SiteSettingsForm } from "./SiteSettingsForm";
 import { UpdateCard } from "@/components/admin/update-card";
 import { BackupCard } from "@/components/admin/backup-card";
+import { ThemeCard } from "@/components/admin/theme-card";
 
 export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
   const TITLES = {
@@ -44,6 +45,7 @@ export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
       {section === "site" && (
         <>
           <SiteSettingsForm />
+          <ThemeCard />
           <UpdateCard />
           <BackupCard />
         </>

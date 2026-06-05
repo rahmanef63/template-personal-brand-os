@@ -13,6 +13,7 @@ import {
   StatsStrip,
   TestimonialsGrid,
 } from "./HomeSections";
+import { FaqList, PricingTiers, parseFaqItems } from "./FaqPricingSections";
 import type {
   Service,
   PortfolioItem,
@@ -88,10 +89,30 @@ export function renderLanding(section: LandingSection, deps: Deps) {
         </LandingSectionShell>
       );
 
-    case "features":
     case "pricing":
-    case "changelog":
+      return (
+        <LandingSectionShell
+          section={section}
+          defaultClassName="border-y border-border/40 bg-muted/10 py-14"
+        >
+          <SectionHead title={section.title} subtitle={section.subtitle} kicker="Pricing" />
+          <PricingTiers services={deps.services} />
+        </LandingSectionShell>
+      );
+
     case "faq":
+      return (
+        <LandingSectionShell
+          section={section}
+          defaultClassName="border-y border-border/40 bg-muted/10 py-14"
+        >
+          <SectionHead title={section.title} subtitle={section.subtitle} kicker="FAQ" />
+          <FaqList items={parseFaqItems(section.config)} />
+        </LandingSectionShell>
+      );
+
+    case "features":
+    case "changelog":
     case "custom":
       return (
         <LandingSectionShell
@@ -115,5 +136,15 @@ export function renderLanding(section: LandingSection, deps: Deps) {
     default:
       return null;
   }
+}
+
+function SectionHead({ title, subtitle, kicker }: { title: string; subtitle?: string; kicker: string }) {
+  return (
+    <div className="mx-auto mb-8 max-w-3xl px-6 text-center">
+      <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">{kicker}</p>
+      <h2 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h2>
+      {subtitle ? <p className="mt-3 text-sm text-muted-foreground">{subtitle}</p> : null}
+    </div>
+  );
 }
 

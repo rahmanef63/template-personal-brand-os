@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ImageField } from "@/components/image-field";
+import { useThemePreset } from "@/features/theme-presets";
 
 type Fields = {
   siteName: string;
@@ -18,6 +19,7 @@ type Fields = {
   contactEmail: string;
   brandColor: string;
   themeDefault: string;
+  themePreset: string;
   logoUrl: string;
   faviconUrl: string;
   analyticsId: string;
@@ -34,6 +36,7 @@ export function OnboardingWizard({ onDone }: { onDone: () => void }) {
   const upsert = useMutation(api.settings.upsert);
   const seedSample = useMutation(api.seed.seedSample);
   const status = useQuery(api.setup.status);
+  const { registry, preview } = useThemePreset();
   const [step, setStep] = React.useState(0);
   const [busy, setBusy] = React.useState(false);
   const [seeded, setSeeded] = React.useState(false);
@@ -44,6 +47,7 @@ export function OnboardingWizard({ onDone }: { onDone: () => void }) {
     contactEmail: "",
     brandColor: "#c4583a",
     themeDefault: "system",
+    themePreset: "",
     logoUrl: "",
     faviconUrl: "",
     analyticsId: "",
@@ -61,6 +65,7 @@ export function OnboardingWizard({ onDone }: { onDone: () => void }) {
         contactEmail: f.contactEmail || undefined,
         brandColor: f.brandColor || undefined,
         themeDefault: f.themeDefault || undefined,
+        themePreset: f.themePreset || undefined,
         logoUrl: f.logoUrl || undefined,
         faviconUrl: f.faviconUrl || undefined,
         analyticsId: f.analyticsId || undefined,
@@ -145,6 +150,21 @@ export function OnboardingWizard({ onDone }: { onDone: () => void }) {
                     </Button>
                   ))}
                 </div>
+              </Field>
+              <Field label="Preset warna situs">
+                <select
+                  value={f.themePreset}
+                  onChange={(e) => {
+                    set("themePreset", e.target.value);
+                    void preview(e.target.value || null);
+                  }}
+                  className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                >
+                  <option value="">Bawaan template (cosmic-night)</option>
+                  {(registry?.items ?? []).map((p) => (
+                    <option key={p.name} value={p.name}>{p.name}</option>
+                  ))}
+                </select>
               </Field>
               <Field label="Google Analytics ID (opsional)">
                 <div className="flex items-center gap-2">

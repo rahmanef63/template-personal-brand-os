@@ -25,6 +25,7 @@ import type * as portfolio from "../portfolio.js";
 import type * as posts from "../posts.js";
 import type * as resources from "../resources.js";
 import type * as seed from "../seed.js";
+import type * as seedPoster from "../seedPoster.js";
 import type * as services from "../services.js";
 import type * as settings from "../settings.js";
 import type * as setup from "../setup.js";
@@ -57,6 +58,7 @@ declare const fullApi: ApiFromModules<{
   posts: typeof posts;
   resources: typeof resources;
   seed: typeof seed;
+  seedPoster: typeof seedPoster;
   services: typeof services;
   settings: typeof settings;
   setup: typeof setup;

@@ -66,12 +66,19 @@ async function insertAll(ctx: any) {
   // landing sections — the public home composes from these (HomePage reads
   // useLandingSections → filter enabled → sort order). Without them home is blank.
   const landing = [
-    { id: "ls-hero", order: 10, kind: "hero", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.", subtitle: "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.", enabled: true, config: '{"badge":"2026 mentorship cohort open"}' },
+    { id: "ls-hero", order: 10, kind: "hero", title: "Saya bantu brand bercerita dengan jelas — produk, konten, dan strategi.", subtitle: "Designer-developer untuk founder & tim Indonesia: strategi produk, mentorship engineer, dan riset go-to-market.", enabled: true, config: '{"badge":"Available for freelance work"}' },
     { id: "ls-stats", order: 20, kind: "stats", title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
     { id: "ls-blog", order: 30, kind: "blog", title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
     { id: "ls-portfolio", order: 40, kind: "portfolio", title: "Karya pilihan", subtitle: "Proyek yang menggambarkan cara saya bekerja.", enabled: true },
     { id: "ls-services", order: 50, kind: "services", title: "Layanan", subtitle: "Tiga jalur kerja sama.", enabled: true },
     { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true },
+    { id: "ls-pricing", order: 55, kind: "pricing", title: "Paket kerja sama", subtitle: "Harga transparan — pilih jalur yang pas, upgrade kapan saja.", enabled: true },
+    { id: "ls-faq", order: 65, kind: "faq", title: "Pertanyaan yang sering muncul", subtitle: "Hal-hal yang biasanya ditanyakan sebelum mulai.", enabled: true, config: JSON.stringify({ items: [
+      { q: "Berapa lama satu engagement biasanya?", a: "Consulting 2-4 minggu, design sprint 1 minggu, retainer bulanan berjalan minimal 3 bulan." },
+      { q: "Apakah bisa remote sepenuhnya?", a: "Ya — semua kerja sama berjalan async-first dengan 1-2 call per minggu sesuai zona waktu kamu." },
+      { q: "Bagaimana sistem pembayarannya?", a: "50% di depan, 50% saat serah terima. Retainer ditagih di awal bulan. Invoice + kontrak standar tersedia." },
+      { q: "Apakah hasil kerja jadi milik saya?", a: "100%. Semua source file, dokumen riset, dan kode diserahkan penuh tanpa lisensi tambahan." },
+    ] }) },
     { id: "ls-newsletter", order: 70, kind: "newsletter", title: "Newsletter", subtitle: "Sekali sebulan, kabar produk + sumber bacaan.", enabled: true },
   ];
   for (const s of landing) await ctx.db.insert("landingSections", { sectionId: s.id, data: s });

@@ -19,6 +19,8 @@ const FIELDS = {
   contactEmail: v.optional(v.string()),
   brandColor: v.optional(v.string()),
   themeDefault: v.optional(v.string()),
+  // tweakcn preset name — site-wide color preset ("" = template default)
+  themePreset: v.optional(v.string()),
   logoUrl: v.optional(v.string()),
   faviconUrl: v.optional(v.string()),
   socials: v.optional(v.string()),
