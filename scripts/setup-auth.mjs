@@ -90,9 +90,11 @@ if (!ok) {
   console.error(`
 [setup-auth] ──────────────────────────────────────────────────────────
   Kunci login TIDAK terpasang. Penyebab paling umum:
-   1. CONVEX_DEPLOY_KEY bukan "Production deploy key"
-      (dashboard.convex.dev → pilih project → Production → Settings →
-      Deploy Keys → Generate), atau
+   1. Deploy key kamu tidak mencentang capability env — di UI deploy key
+      Convex terbaru, pastikan key punya: deployment:deploy +
+      deployment:env:view + deployment:env:write (atau pilih full access).
+      Generate: dashboard.convex.dev → project → Production → Settings →
+      Deploy Keys.
    2. Akun pembuat key bukan admin / Project Admin di team Convex itu.
   Build TETAP dilanjutkan — situs akan live, tapi daftar/login owner
   gagal sampai key diganti di Vercel lalu Redeploy.

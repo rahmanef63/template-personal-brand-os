@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { api } from "@/convex/_generated/api";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
+import { ResetForm } from "@/components/admin-reset";
 
 function Spinner() {
   return (
@@ -57,6 +58,7 @@ function LoginForm() {
   const [signupKey, setSignupKey] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [resetMode, setResetMode] = React.useState(false);
 
   // Fresh site (no owner yet) → land on the claim form by default.
   const [touched, setTouched] = React.useState(false);
@@ -103,6 +105,10 @@ function LoginForm() {
     } finally {
       setBusy(false);
     }
+  }
+
+  if (resetMode) {
+    return <ResetForm onBack={() => setResetMode(false)} />;
   }
 
   return (
@@ -159,6 +165,15 @@ function LoginForm() {
               {busy ? <Loader2 className="size-4 animate-spin" /> : flow === "signIn" ? "Masuk" : "Daftar"}
             </Button>
           </form>
+          {flow === "signIn" && ownerClaimed && (
+            <button
+              type="button"
+              onClick={() => setResetMode(true)}
+              className="mt-3 block text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              Lupa password?
+            </button>
+          )}
           {signupOpen && (
             <button
               type="button"
