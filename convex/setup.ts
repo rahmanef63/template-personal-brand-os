@@ -16,6 +16,9 @@ export const status = query({
     return {
       ownerClaimed,
       seeded: !!(post || landing),
+      // JWT auth keys present? (setup-auth.mjs provisions them at build; a
+      // deploy key without WriteEnvironmentVariables leaves them missing.)
+      authReady: !!process.env.JWT_PRIVATE_KEY,
       // Onboarding wizard is done once the owner finishes it (onboardedAt set).
       onboarded: !!settings?.onboardedAt,
       // Signup is open if no owner has claimed yet, or a key is configured (invites).

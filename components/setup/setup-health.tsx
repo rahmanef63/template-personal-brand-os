@@ -75,6 +75,24 @@ function Checklist() {
       <StepRow state="done" title="Backend ter-deploy">
         <p className="text-sm text-muted-foreground">Fungsi & tabel database aktif.</p>
       </StepRow>
+      {status.authReady === false ? (
+        <StepRow state="warn" title="Kunci login belum terpasang">
+          <p className="text-sm text-muted-foreground">
+            Deploy key kamu tidak punya izin menulis env Convex
+            (<code>WriteEnvironmentVariables</code>), jadi kunci login tidak
+            bisa dibuat otomatis. Perbaiki:
+          </p>
+          <ol className="list-decimal space-y-1 pl-4 text-sm text-muted-foreground">
+            <li>
+              Buka <a className="text-brand underline" href="https://dashboard.convex.dev" target="_blank" rel="noreferrer">dashboard.convex.dev</a>{" "}
+              → project kamu → pilih <b>Production</b> → Settings → Deploy Keys →
+              <b> Generate production deploy key</b> (pakai akun admin team).
+            </li>
+            <li>Di Vercel → Settings → Environment Variables, ganti nilai <b>CONVEX_DEPLOY_KEY</b>.</li>
+            <li>Klik <b>Redeploy</b> — kunci login dibuat otomatis saat build.</li>
+          </ol>
+        </StepRow>
+      ) : null}
       <StepRow
         state={status.ownerClaimed ? "done" : "todo"}
         title="Akun admin diklaim"
