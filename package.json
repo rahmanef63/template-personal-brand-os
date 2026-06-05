@@ -36,7 +36,7 @@
     "ai": "^4.3.19",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "convex": "^1.39.1",
+    "convex": "^1.40.0",
     "highlight.js": "^11.11.1",
     "katex": "^0.17.0",
     "lucide-react": "^0.460.0",
