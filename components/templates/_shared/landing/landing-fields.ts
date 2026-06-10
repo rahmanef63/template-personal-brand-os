@@ -117,8 +117,8 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
       '`{"limit":4}` caps how many items a blog/changelog/testimonials section shows. ' +
       'Content overrides: stats `{"stats":[{"value":120,"suffix":"+","label":"Klien"}],"clients":["Acme"]}`; ' +
       'testimonials `{"items":[{"quote":"…","author":"…","role":"…","rating":5}]}`; ' +
-      'faq `{"items":[{"q":"…","a":"…"}],"ctaLabel":"…","ctaHref":"/contact"}`; ' +
-      'pricing `{"tiers":[{"name":"…","price":"Rp 99rb","period":"/bln","features":["…"],"featured":true,"ctaHref":"…"}]}`; ' +
+      'faq `{"items":[{"q":"…","a":"…"}],"ctaLabel":"…","ctaHref":"/contact","ctaPrefix":"Masih ada pertanyaan?"}`; ' +
+      'pricing `{"eyebrow":"Harga","tiers":[{"name":"…","price":"Rp 99rb","period":"/bln","features":["…"],"featured":true,"ctaHref":"…"}]}`; ' +
       'newsletter `{"placeholder":"…","buttonLabel":"…","successText":"…"}`; ' +
       'custom `{"body":["paragraf…"],"ctaLabel":"…","ctaHref":"…"}`. ' +
       "Leave empty to use the template's defaults.",

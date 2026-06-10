@@ -21,12 +21,15 @@ export function StatsSection({
   section,
   stats,
   clients,
+  locale = "id-ID",
   className,
 }: {
   section: LandingSection;
   stats: StatItem[];
   /** Client/brand names for the marquee strip; omit to hide it. */
   clients?: string[];
+  /** Thousands-separator locale for the CountUp numerals. Default "id-ID". */
+  locale?: string;
   className?: string;
 }) {
   const cfg = parseConfigObject(section.config);
@@ -54,7 +57,7 @@ export function StatsSection({
             <div key={s.label} className="text-center">
               <p className="text-3xl font-semibold tabular-nums tracking-tight md:text-4xl">
                 {s.prefix}
-                <CountUp value={s.value} />
+                <CountUp value={s.value} locale={locale} />
                 {s.suffix}
               </p>
               <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">

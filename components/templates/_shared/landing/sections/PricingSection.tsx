@@ -11,6 +11,7 @@ import { SectionHead } from "../../ui/section-head";
 import { Stagger } from "../../motion";
 import {
   cfgArray,
+  cfgString,
   isPricingTier,
   parseConfigObject,
   type PricingTier,
@@ -33,21 +34,25 @@ export function PricingSection({
   section,
   tiers,
   featuredBadge = "Paling populer",
+  eyebrow = "Harga",
   className,
 }: {
   section: LandingSection;
   tiers: PricingTier[];
   featuredBadge?: string;
+  /** Section eyebrow. Default "Harga"; override per-locale or via config.eyebrow. */
+  eyebrow?: string;
   className?: string;
 }) {
   const cfg = parseConfigObject(section.config);
   const list = cfgArray(cfg, "tiers", isPricingTier) ?? tiers;
   if (list.length === 0) return null;
   const cols = GRID_COLS[Math.min(list.length, 4)] ?? GRID_COLS[3];
+  const eyebrowText = cfgString(cfg, "eyebrow") ?? eyebrow;
 
   return (
     <div className={cn("mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20", className)}>
-      <SectionHead align="center" eyebrow="Harga" title={section.title} subtitle={section.subtitle} />
+      <SectionHead align="center" eyebrow={eyebrowText} title={section.title} subtitle={section.subtitle} />
       <div className={cn("mx-auto mt-10 grid gap-4", cols)}>
         <Stagger itemClassName="h-full">
           {list.map((t) => (

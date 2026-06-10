@@ -29,24 +29,31 @@ export function FaqSection({
   items,
   ctaLabel,
   ctaHref,
+  ctaPrefix = "Masih ada pertanyaan?",
+  eyebrow = "FAQ",
   className,
 }: {
   section: LandingSection;
   items: FaqItem[];
-  /** "Masih ada pertanyaan?" escape hatch under the accordion. */
+  /** Escape-hatch link under the accordion (label + href). */
   ctaLabel?: string;
   ctaHref?: string;
+  /** Lead-in text before the escape-hatch link. Override per-locale or via config.ctaPrefix. */
+  ctaPrefix?: string;
+  /** Section eyebrow. Default "FAQ". */
+  eyebrow?: string;
   className?: string;
 }) {
   const cfg = parseConfigObject(section.config);
   const list = cfgArray(cfg, "items", isFaqItem) ?? items;
   const label = cfgString(cfg, "ctaLabel") ?? ctaLabel;
   const href = cfgString(cfg, "ctaHref") ?? ctaHref;
+  const prefix = cfgString(cfg, "ctaPrefix") ?? ctaPrefix;
   if (list.length === 0) return null;
 
   return (
     <div className={cn("mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20", className)}>
-      <SectionHead align="center" eyebrow="FAQ" title={section.title} subtitle={section.subtitle} />
+      <SectionHead align="center" eyebrow={eyebrow} title={section.title} subtitle={section.subtitle} />
       <Reveal delay={120} className="mt-10">
         <Accordion
           type="single"
@@ -64,7 +71,7 @@ export function FaqSection({
       </Reveal>
       {label && href && (
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Masih ada pertanyaan?{" "}
+          {prefix}{" "}
           <Link href={href} className="font-medium text-foreground underline underline-offset-4">
             {label}
           </Link>

@@ -13,12 +13,15 @@ export function CountUp({
   value,
   duration = 1200,
   format,
+  locale = "id-ID",
   className,
 }: {
   value: number;
   duration?: number;
-  /** defaults to id-ID thousands formatting. */
+  /** custom formatter; overrides `locale`. */
   format?: (n: number) => string;
+  /** thousands-separator locale when no `format` given. Default "id-ID". */
+  locale?: string;
   className?: string;
 }) {
   const { ref, inView } = useInView<HTMLSpanElement>();
@@ -44,7 +47,7 @@ export function CountUp({
 
   return (
     <span ref={ref} className={className}>
-      {format ? format(display) : display.toLocaleString("id-ID")}
+      {format ? format(display) : display.toLocaleString(locale)}
     </span>
   );
 }
