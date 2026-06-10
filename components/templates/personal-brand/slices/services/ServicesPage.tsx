@@ -19,6 +19,7 @@ import {
   type PricingTier as SliceTier,
 } from "@/features/pricing-page";
 import { FAQSection } from "@/features/faq-section";
+import { useCart } from "@/features/storefront-checkout";
 import { Reveal } from "@/components/templates/_shared/motion";
 import { nid, useServices, useStore } from "../../shared/store";
 
@@ -29,6 +30,7 @@ import { nid, useServices, useStore } from "../../shared/store";
  */
 export function ServicesPage() {
   const services = useServices();
+  const { add } = useCart();
   const [openSvc, setOpenSvc] = React.useState<string | null>(null);
   const active = services.find((s) => s.id === openSvc) ?? null;
 
@@ -52,15 +54,51 @@ export function ServicesPage() {
           subtitle="Pilih sesuai konteks tim atau kariermu. Bisa kombinasi — strategy sprint dulu, lanjut mentoring bulanan."
           tiers={tiers}
           className="!px-0 !pt-0"
-          renderTierCta={(t) => (
-            <Button
-              className="w-full"
-              variant={t.featured ? "default" : "outline"}
-              onClick={() => setOpenSvc(t.id)}
-            >
-              Book {t.name} <ArrowRight className="size-4" />
-            </Button>
-          )}
+          renderTierCta={(t) => {
+            const svc = services.find((s) => s.id === t.id);
+            const purchasable = Boolean(svc?.slug && svc?.priceNumber);
+            if (purchasable && svc) {
+              return (
+                <div className="space-y-2">
+                  <Button
+                    className="w-full"
+                    variant={t.featured ? "default" : "outline"}
+                    onClick={() => {
+                      add(
+                        {
+                          slug: svc.slug,
+                          name: svc.name,
+                          price: svc.priceNumber!,
+                          priceLabel: svc.priceLabel,
+                        },
+                        1,
+                      );
+                      toast.success("Masuk keranjang ✓");
+                    }}
+                  >
+                    Pesan & bayar <ArrowRight className="size-4" />
+                  </Button>
+                  <Button
+                    className="w-full"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setOpenSvc(t.id)}
+                  >
+                    Tanya dulu
+                  </Button>
+                </div>
+              );
+            }
+            return (
+              <Button
+                className="w-full"
+                variant={t.featured ? "default" : "outline"}
+                onClick={() => setOpenSvc(t.id)}
+              >
+                Book {t.name} <ArrowRight className="size-4" />
+              </Button>
+            );
+          }}
         />
       </Reveal>
 

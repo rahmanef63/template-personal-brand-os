@@ -65,9 +65,11 @@ async function insertAll(ctx: any) {
     });
   }
 
+  // priceNumber = fixed IDR amount → purchasable via guest checkout. Services
+  // without it (Monthly Retainer) are book-only (lead.create), never carted.
   const services = [
-    { slug: "consulting", name: "Consulting", priceLabel: "$2k", period: "/project", featured: true, bullets: ["Strategy session", "Roadmap", "Async support"] },
-    { slug: "design-sprint", name: "Design Sprint", priceLabel: "$5k", period: "/week", featured: false, bullets: ["5-day sprint", "Prototype", "User test"] },
+    { slug: "consulting", name: "Consulting", priceLabel: "$2k", period: "/project", featured: true, bullets: ["Strategy session", "Roadmap", "Async support"], priceNumber: 2_000_000 },
+    { slug: "design-sprint", name: "Design Sprint", priceLabel: "$5k", period: "/week", featured: false, bullets: ["5-day sprint", "Prototype", "User test"], priceNumber: 5_000_000 },
     { slug: "retainer", name: "Monthly Retainer", priceLabel: "$3k", period: "/mo", featured: false, bullets: ["Ongoing work", "Priority", "Monthly review"] },
   ];
   for (const s of services) {
@@ -123,6 +125,36 @@ export const syncLanding = mutation({
       }
     }
     return { inserted, reordered };
+  },
+});
+
+// Additive commerce backfill for already-seeded deployments: gives existing
+// `services` rows their `priceNumber` (and `slug` if somehow missing) from the
+// seed lineup (matched by unique name) ONLY when missing. Idempotent; never
+// overwrites an admin-set value.
+export const syncServicesCommerce = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const SEED_SERVICES = [
+      { slug: "consulting", name: "Consulting", priceNumber: 2_000_000 },
+      { slug: "design-sprint", name: "Design Sprint", priceNumber: 5_000_000 },
+      { slug: "retainer", name: "Monthly Retainer" },
+    ];
+    let patched = 0;
+    const rows = await ctx.db.query("services").collect();
+    for (const s of SEED_SERVICES) {
+      const existing = rows.find((r) => r.name === s.name);
+      if (!existing) continue;
+      const patch: { slug?: string; priceNumber?: number } = {};
+      if (!existing.slug && s.slug) patch.slug = s.slug;
+      const seedPrice = (s as { priceNumber?: number }).priceNumber;
+      if (!existing.priceNumber && seedPrice) patch.priceNumber = seedPrice;
+      if (Object.keys(patch).length > 0) {
+        await ctx.db.patch(existing._id, patch);
+        patched++;
+      }
+    }
+    return { patched };
   },
 });
 

@@ -208,6 +208,7 @@ export const SEED_SERVICES: Service[] = [
     period: "/sprint",
     bullets: ["Stakeholder interviews", "Workshop fasilitasi", "Final deck + recording"],
     featured: true,
+    priceNumber: 18_000_000,
   },
   {
     id: "svc-3",
@@ -219,6 +220,7 @@ export const SEED_SERVICES: Service[] = [
     period: "/sesi",
     bullets: ["Same-week booking", "Prep brief by email", "Follow-up notes"],
     featured: false,
+    priceNumber: 750_000,
   },
 ];
 

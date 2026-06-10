@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { type ReactNode } from "react";
 import { StoreProvider } from "@/components/templates/personal-brand/shared/store";
+import { CartProvider } from "@/features/storefront-checkout";
 import { SiteLoader } from "@/components/site-loader";
 import { DemoRibbon } from "@/components/demo-ribbon";
 import { PublicChrome } from "@/components/public-chrome";
@@ -38,10 +39,12 @@ export const metadata: Metadata = {
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <StoreProvider>
-      <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
-      <PublicChrome>{children}</PublicChrome>
-      <AiChatFab brand={DEFAULT_SITE_CONFIG.brandName} />
-      <DemoRibbon />
+      <CartProvider storageKey="pb-cart">
+        <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
+        <PublicChrome>{children}</PublicChrome>
+        <AiChatFab brand={DEFAULT_SITE_CONFIG.brandName} />
+        <DemoRibbon />
+      </CartProvider>
     </StoreProvider>
   );
 }

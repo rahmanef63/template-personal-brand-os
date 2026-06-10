@@ -2,6 +2,7 @@ import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import { notionTables } from "./features/notion/_schema";
+import { paymentTables } from "./features/payment/_schema";
 
 // Personal Brand OS — full schema (Convex Cloud target).
 // authTables = @convex-dev/auth. Content tables mirror the localStorage shape
@@ -9,6 +10,7 @@ import { notionTables } from "./features/notion/_schema";
 export default defineSchema({
   ...authTables,
   ...notionTables,
+  ...paymentTables,
 
   posts: defineTable({
     slug: v.string(),
@@ -48,7 +50,33 @@ export default defineSchema({
     period: v.string(),
     bullets: v.array(v.string()),
     featured: v.boolean(),
+    // Commerce (additive): priceNumber = fixed IDR. Services without it are
+    // retainer/quote (book-only) and can't be added to the cart.
+    priceNumber: v.optional(v.number()),
   }).index("by_slug", ["slug"]),
+
+  // Guest checkout orders (storefront-checkout + doku-payment). orderId is
+  // the unguessable capability token for /order/[id]; joins paymentOrders.
+  pbOrders: defineTable({
+    orderId: v.string(),
+    buyer: v.object({
+      name: v.string(),
+      email: v.string(),
+      phone: v.optional(v.string()),
+    }),
+    items: v.array(
+      v.object({
+        slug: v.string(),
+        name: v.string(),
+        qty: v.number(),
+        price: v.number(),
+        priceLabel: v.string(),
+      }),
+    ),
+    totalLabel: v.string(),
+    status: v.string(),
+    ts: v.number(),
+  }).index("by_orderId", ["orderId"]),
 
   resources: defineTable({
     title: v.string(),

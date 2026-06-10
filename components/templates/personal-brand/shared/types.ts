@@ -39,6 +39,9 @@ export type Service = {
   period: string; // "/bulan"
   bullets: string[];
   featured: boolean;
+  // Commerce (additive): fixed IDR amount. Services without it are
+  // retainer/quote (book-only) and can't be added to the cart.
+  priceNumber?: number;
 };
 
 export type Resource = {

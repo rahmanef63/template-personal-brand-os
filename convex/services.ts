@@ -18,6 +18,7 @@ export const upsert = mutation({
     period: v.string(),
     bullets: v.array(v.string()),
     featured: v.boolean(),
+    priceNumber: v.optional(v.number()),
   },
   handler: async (ctx, { id, ...data }) => {
     if (id) {
