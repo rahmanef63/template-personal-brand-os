@@ -25,6 +25,7 @@ export function PublicChrome({ children }: { children: ReactNode }) {
     ...DEFAULT_SITE_CONFIG,
     brandName,
     brandLetter: brandName.charAt(0).toUpperCase() || DEFAULT_SITE_CONFIG.brandLetter,
+    logoUrl: s?.logoUrl,
   };
   const tagline = s?.tagline || FOOTER_TAGLINE;
 

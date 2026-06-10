@@ -26,7 +26,7 @@ export function SiteFooter({
   socials = [{ Icon: IconBrandX }, { Icon: IconBrandLinkedin }, { Icon: IconBrandGithub }, { Icon: IconBrandYoutube }],
   belowBrand,
 }: {
-  brand: Pick<Brand, "brandLetter" | "brandName" | "description">;
+  brand: Pick<Brand, "brandLetter" | "brandName" | "description" | "logoUrl">;
   homeHref: string;
   columns: FooterColumn[];
   copyrightHolder?: string;
@@ -39,7 +39,12 @@ export function SiteFooter({
       <div className={`mx-auto grid max-w-6xl gap-8 px-6 py-12 md:grid-cols-${Math.min(4, columns.length + 2)}`}>
         <div className="md:col-span-2">
           <Link href={homeHref} className="flex items-center gap-2 font-semibold">
-            <span className="grid size-7 place-items-center rounded-md bg-foreground text-background">{brand.brandLetter}</span>
+            {brand.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={brand.logoUrl} alt={brand.brandName} className="h-7 w-auto rounded-md object-contain" />
+            ) : (
+              <span className="grid size-7 place-items-center rounded-md bg-foreground text-background">{brand.brandLetter}</span>
+            )}
             <span>{brand.brandName}</span>
           </Link>
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">{brand.description}</p>

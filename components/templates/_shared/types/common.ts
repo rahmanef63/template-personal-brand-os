@@ -4,6 +4,9 @@
 export type Brand = {
   brandLetter: string;
   brandName: string;
+  /** Owner-uploaded logo image URL (Convex settings). When set, the public
+   *  nav/footer render this instead of the brand-letter tile. */
+  logoUrl?: string;
   tagline: string;
   description: string;
   baseUrl: string;
