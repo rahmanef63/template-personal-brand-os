@@ -13,10 +13,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
-  BlogListSection,
-  type BlogPost as SliceBlogPost,
-} from "@/features/blog-section";
-import {
   PortfolioListSection,
   type PortfolioItem as SlicePortfolioItem,
 } from "@/features/portfolio-section";
@@ -28,75 +24,9 @@ import {
   TestimonialCard,
   type Testimonial as SliceTestimonial,
 } from "@/features/testimonials-grid";
-import { CountUp, Stagger } from "@/components/templates/_shared/motion";
-import { usePortfolio, usePublishedPosts, useServices } from "../../shared/store";
+import { usePortfolio, useServices } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
-import { STATS, TESTIMONIALS } from "./home-data";
-
-/** "120+" / "8 thn" / "60K" → animated <CountUp> + plain suffix.
- *  Non-integer values ("4.9") render statically. */
-function StatValue({ value }: { value: string }) {
-  const m = /^(\d+)([^\d.]*)$/.exec(value);
-  if (!m) return <>{value}</>;
-  return (
-    <>
-      <CountUp value={Number(m[1])} />
-      {m[2]}
-    </>
-  );
-}
-
-export function StatsStrip() {
-  return (
-    <section className="border-y border-border/50 bg-muted/20">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-10 md:grid-cols-4">
-        <Stagger>
-          {STATS.map((s) => (
-            <div key={s.label}>
-              <p className="text-3xl font-semibold tracking-tight">
-                <StatValue value={s.value} />
-              </p>
-              <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{s.label}</p>
-            </div>
-          ))}
-        </Stagger>
-      </div>
-    </section>
-  );
-}
-
-export function FeaturedPosts({ posts }: { posts: ReturnType<typeof usePublishedPosts> }) {
-  const items: SliceBlogPost[] = posts.map((p) => ({
-    id: p.id,
-    slug: p.slug,
-    title: p.title,
-    excerpt: p.excerpt,
-    publishedAt: p.publishedAt,
-    tags: [p.tag],
-    cover: { src: p.cover, alt: p.title },
-  }));
-  return (
-    <>
-      <BlogListSection
-        eyebrow="Blog"
-        title="Tulisan terbaru"
-        subtitle="Esai panjang & catatan singkat — strategy, engineering, refleksi."
-        posts={items}
-        hrefFor={(p) => `${PUBLIC_BASE}/blog/${p.slug}`}
-        columns={3}
-        layout="cards"
-        limit={3}
-      />
-      <div className="mx-auto -mt-12 max-w-6xl px-6 text-right">
-        <Button asChild variant="ghost" size="sm">
-          <Link href={`${PUBLIC_BASE}/blog`}>
-            Semua tulisan <ArrowRight className="size-3.5" />
-          </Link>
-        </Button>
-      </div>
-    </>
-  );
-}
+import { TESTIMONIALS } from "./home-data";
 
 export function PortfolioStrip({ items }: { items: ReturnType<typeof usePortfolio> }) {
   const sliceItems: SlicePortfolioItem[] = items.map((p) => ({
