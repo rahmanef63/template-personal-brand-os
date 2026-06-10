@@ -34,7 +34,7 @@ export function SiteNav({
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
-        <Link href={homeHref} className="group flex items-center gap-2 font-semibold tracking-tight">
+        <Link href={homeHref || "/"} className="group flex items-center gap-2 font-semibold tracking-tight">
           {brand.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={brand.logoUrl} alt={brand.brandName} className="h-7 w-auto rounded-md object-contain transition-transform duration-200 group-hover:scale-110" />

@@ -38,7 +38,7 @@ export function SiteFooter({
     <footer className="border-t border-border/60 bg-background">
       <div className={`mx-auto grid max-w-6xl gap-8 px-6 py-12 md:grid-cols-${Math.min(4, columns.length + 2)}`}>
         <div className="md:col-span-2">
-          <Link href={homeHref} className="flex items-center gap-2 font-semibold">
+          <Link href={homeHref || "/"} className="flex items-center gap-2 font-semibold">
             {brand.logoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={brand.logoUrl} alt={brand.brandName} className="h-7 w-auto rounded-md object-contain" />
