@@ -2,8 +2,16 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import {
   BlogListSection,
   type BlogPost as SliceBlogPost,
@@ -17,23 +25,41 @@ import {
   type PricingTier as SliceTier,
 } from "@/features/pricing-page";
 import {
-  TestimonialsGridSection,
+  TestimonialCard,
   type Testimonial as SliceTestimonial,
 } from "@/features/testimonials-grid";
+import { CountUp, Stagger } from "@/components/templates/_shared/motion";
 import { usePortfolio, usePublishedPosts, useServices } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 import { STATS, TESTIMONIALS } from "./home-data";
+
+/** "120+" / "8 thn" / "60K" → animated <CountUp> + plain suffix.
+ *  Non-integer values ("4.9") render statically. */
+function StatValue({ value }: { value: string }) {
+  const m = /^(\d+)([^\d.]*)$/.exec(value);
+  if (!m) return <>{value}</>;
+  return (
+    <>
+      <CountUp value={Number(m[1])} />
+      {m[2]}
+    </>
+  );
+}
 
 export function StatsStrip() {
   return (
     <section className="border-y border-border/50 bg-muted/20">
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-6 py-10 md:grid-cols-4">
-        {STATS.map((s) => (
-          <div key={s.label}>
-            <p className="text-3xl font-semibold tracking-tight">{s.value}</p>
-            <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{s.label}</p>
-          </div>
-        ))}
+        <Stagger>
+          {STATS.map((s) => (
+            <div key={s.label}>
+              <p className="text-3xl font-semibold tracking-tight">
+                <StatValue value={s.value} />
+              </p>
+              <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{s.label}</p>
+            </div>
+          ))}
+        </Stagger>
       </div>
     </section>
   );
@@ -143,14 +169,38 @@ export function TestimonialsGrid() {
   }));
   return (
     <section className="border-y border-border/50 bg-muted/10">
-      <TestimonialsGridSection
-        eyebrow="Testimonials"
-        title="Apa kata mereka"
-        subtitle="Sebagian feedback dari klien dan student."
-        items={items}
-        columns={2}
-        layout="cards"
-      />
+      <div className="mx-auto max-w-6xl px-6 py-16 md:py-24">
+        <header className="mb-8 flex flex-col gap-3">
+          <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Testimonials
+          </span>
+          <h2 className="text-3xl font-semibold leading-tight md:text-4xl">Apa kata mereka</h2>
+          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
+            Sebagian feedback dari klien dan student.
+          </p>
+        </header>
+        <Carousel
+          opts={{ align: "start", loop: items.length > 3 }}
+          plugins={[Autoplay({ delay: 4500, stopOnInteraction: true })]}
+        >
+          <div className="mb-4 flex items-center justify-end gap-2">
+            <CarouselPrevious />
+            <CarouselNext />
+          </div>
+          <CarouselContent>
+            {items.map((t) => (
+              <CarouselItem key={t.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
+                <TestimonialCard
+                  quote={t.quote}
+                  author={t.author}
+                  role={t.role}
+                  className="h-full"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
     </section>
   );
 }

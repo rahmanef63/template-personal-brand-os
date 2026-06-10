@@ -46,8 +46,11 @@ export function Hero({ title, subtitle, badge, trust, image }: HeroProps = {}) {
       <div className="absolute inset-0 -z-10">
         <Image src={HERO_IMG} alt="" fill priority sizes="100vw" className="object-cover opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/85 to-background" />
-        <div className="absolute -right-40 top-32 h-96 w-96 rounded-full bg-brand/15 blur-3xl" />
-        <div className="absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-[oklch(0.78_0.11_78_/_0.12)] blur-3xl" />
+        <div className="motion-blob absolute -right-40 top-32 h-96 w-96 rounded-full bg-brand/15 blur-3xl" />
+        <div
+          className="motion-blob absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-[oklch(0.78_0.11_78_/_0.12)] blur-3xl"
+          style={{ animationDelay: "-8s", animationDuration: "22s" }}
+        />
       </div>
       <div
         className={cn(

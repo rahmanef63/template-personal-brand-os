@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { Reveal } from "@/components/templates/_shared/motion";
 import { nid, useStore } from "../../shared/store";
 
 export function ContactPage() {
@@ -47,7 +48,7 @@ export function ContactPage() {
 
   return (
     <section className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2">
-      <div>
+      <Reveal>
         <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Contact</p>
         <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl">Mau ngobrol?</h1>
         <p className="mt-3 max-w-md text-muted-foreground">
@@ -61,59 +62,61 @@ export function ContactPage() {
           <p className="flex items-center gap-2"><MessageCircle className="size-4" /> +62 812 3456 7890 (WA)</p>
           <p className="flex items-center gap-2"><Calendar className="size-4" /> cal.com/lorem</p>
         </div>
-      </div>
+      </Reveal>
 
-      <Card className="border-border/60 bg-card/60">
-        <CardContent className="p-6">
-          <form onSubmit={submit} className="space-y-3">
-            {/* honeypot */}
-            <input
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-              value={hp}
-              onChange={(e) => setHp(e.target.value)}
-              className="hidden"
-              aria-hidden="true"
-            />
-            <div className="grid gap-2 md:grid-cols-2">
-              <div>
-                <label className="text-xs text-muted-foreground">Nama</label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} className="mt-1" />
+      <Reveal delay={120}>
+        <Card className="h-full border-border/60 bg-card/60">
+          <CardContent className="p-6">
+            <form onSubmit={submit} className="space-y-3">
+              {/* honeypot */}
+              <input
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={hp}
+                onChange={(e) => setHp(e.target.value)}
+                className="hidden"
+                aria-hidden="true"
+              />
+              <div className="grid gap-2 md:grid-cols-2">
+                <div>
+                  <label className="text-xs text-muted-foreground">Nama</label>
+                  <Input value={name} onChange={(e) => setName(e.target.value)} className="mt-1" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground">Email</label>
+                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" />
+                </div>
               </div>
               <div>
-                <label className="text-xs text-muted-foreground">Email</label>
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" />
+                <label className="text-xs text-muted-foreground">Topik</label>
+                <Input
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                  placeholder="Singkat saja — apa yang ingin dibahas?"
+                  className="mt-1"
+                />
               </div>
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">Topik</label>
-              <Input
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                placeholder="Singkat saja — apa yang ingin dibahas?"
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">Pesan</label>
-              <Textarea
-                rows={5}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Lorem ipsum dolor sit amet…"
-                className="mt-1"
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Kirim pesan <ArrowRight className="size-4" />
-            </Button>
-            <p className="text-[11px] text-muted-foreground">
-              Honeypot + rate-limit aktif. Auto-reply terkirim otomatis.
-            </p>
-          </form>
-        </CardContent>
-      </Card>
+              <div>
+                <label className="text-xs text-muted-foreground">Pesan</label>
+                <Textarea
+                  rows={5}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Lorem ipsum dolor sit amet…"
+                  className="mt-1"
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Kirim pesan <ArrowRight className="size-4" />
+              </Button>
+              <p className="text-[11px] text-muted-foreground">
+                Honeypot + rate-limit aktif. Auto-reply terkirim otomatis.
+              </p>
+            </form>
+          </CardContent>
+        </Card>
+      </Reveal>
     </section>
   );
 }

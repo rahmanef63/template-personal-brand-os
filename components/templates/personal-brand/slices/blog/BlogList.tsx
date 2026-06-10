@@ -9,6 +9,7 @@ import {
   BlogListSection,
   type BlogPost as SliceBlogPost,
 } from "@/features/blog-section";
+import { Reveal } from "@/components/templates/_shared/motion";
 import { usePublishedPosts } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
@@ -44,13 +45,15 @@ export function BlogList() {
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
-      <header className="mb-10">
-        <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Blog</p>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl">Tulisan</h1>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Esai panjang dan catatan singkat. Cari berdasarkan judul atau filter berdasarkan kategori.
-        </p>
-      </header>
+      <Reveal>
+        <header className="mb-10">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Blog</p>
+          <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl">Tulisan</h1>
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            Esai panjang dan catatan singkat. Cari berdasarkan judul atau filter berdasarkan kategori.
+          </p>
+        </header>
+      </Reveal>
 
       <div className="mb-8 flex flex-wrap items-center gap-2">
         <div className="relative max-w-sm flex-1">
@@ -83,19 +86,21 @@ export function BlogList() {
         ))}
       </div>
 
-      {items.length === 0 ? (
-        <Card className="border-dashed bg-muted/10 p-10 text-center text-sm text-muted-foreground">
-          Tidak ada post yang cocok. Reset filter atau buat post baru di Admin.
-        </Card>
-      ) : (
-        <BlogListSection
-          posts={items}
-          hrefFor={(p) => `${PUBLIC_BASE}/blog/${p.slug}`}
-          layout="cards"
-          columns={3}
-          className="!p-0"
-        />
-      )}
+      <Reveal delay={120}>
+        {items.length === 0 ? (
+          <Card className="border-dashed bg-muted/10 p-10 text-center text-sm text-muted-foreground">
+            Tidak ada post yang cocok. Reset filter atau buat post baru di Admin.
+          </Card>
+        ) : (
+          <BlogListSection
+            posts={items}
+            hrefFor={(p) => `${PUBLIC_BASE}/blog/${p.slug}`}
+            layout="cards"
+            columns={3}
+            className="!p-0"
+          />
+        )}
+      </Reveal>
     </section>
   );
 }

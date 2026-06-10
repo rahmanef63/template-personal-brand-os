@@ -8,6 +8,7 @@ import {
   PortfolioListSection,
   type PortfolioItem as SliceItem,
 } from "@/features/portfolio-section";
+import { Reveal } from "@/components/templates/_shared/motion";
 import { usePortfolio } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
@@ -34,13 +35,15 @@ export function PortfolioListPage() {
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
-      <header className="mb-10">
-        <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Portfolio</p>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl">Karya terpilih</h1>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Case study dengan struktur problem→approach→result. Pilih kategori untuk filter.
-        </p>
-      </header>
+      <Reveal>
+        <header className="mb-10">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Portfolio</p>
+          <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl">Karya terpilih</h1>
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            Case study dengan struktur problem→approach→result. Pilih kategori untuk filter.
+          </p>
+        </header>
+      </Reveal>
 
       <div className="mb-8 flex flex-wrap items-center gap-2">
         <Filter className="size-3.5 text-muted-foreground" />
@@ -65,19 +68,21 @@ export function PortfolioListPage() {
         ))}
       </div>
 
-      {sliceItems.length === 0 ? (
-        <Card className="border-dashed bg-muted/10 p-10 text-center text-sm text-muted-foreground">
-          Belum ada case study di kategori ini.
-        </Card>
-      ) : (
-        <PortfolioListSection
-          items={sliceItems}
-          hrefFor={(i) => `${PUBLIC_BASE}/portfolio/${i.slug}`}
-          layout="uniform"
-          columns={2}
-          className="!p-0"
-        />
-      )}
+      <Reveal delay={120}>
+        {sliceItems.length === 0 ? (
+          <Card className="border-dashed bg-muted/10 p-10 text-center text-sm text-muted-foreground">
+            Belum ada case study di kategori ini.
+          </Card>
+        ) : (
+          <PortfolioListSection
+            items={sliceItems}
+            hrefFor={(i) => `${PUBLIC_BASE}/portfolio/${i.slug}`}
+            layout="uniform"
+            columns={2}
+            className="!p-0"
+          />
+        )}
+      </Reveal>
     </section>
   );
 }

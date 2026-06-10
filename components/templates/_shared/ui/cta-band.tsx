@@ -1,8 +1,11 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useInView } from "../motion/use-in-view";
 import type { Cta } from "../types/common";
 
 /**
@@ -24,9 +27,17 @@ export function CtaBand({
   bordered?: boolean;
   className?: string;
 }) {
+  const { ref, inView } = useInView<HTMLDivElement>();
   return (
     <section className={cn(bordered && "border-t border-border/60", className)}>
-      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20">
+      <div
+        ref={ref}
+        data-reveal="zoom"
+        className={cn(
+          "mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-20",
+          inView && "is-inview",
+        )}
+      >
         <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl">{title}</h2>
         {subtitle && <p className="mt-3 text-muted-foreground">{subtitle}</p>}
         {(cta || secondaryCta) && (

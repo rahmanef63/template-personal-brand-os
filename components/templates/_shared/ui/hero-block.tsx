@@ -1,14 +1,22 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useInView } from "../motion/use-in-view";
 import {
   ASPECT_RATIO_CLASS,
   type AspectRatio,
 } from "../landing/types";
 import type { Cta } from "../types/common";
+
+/** Inline stagger helper — hero children reveal with incremental delays
+ *  once the root scope flips `.is-inview` (motion kit CSS). */
+const delayAt = (ms: number) =>
+  ({ "--reveal-delay": `${ms}ms` }) as React.CSSProperties;
 
 /**
  * Shared hero block — used by every public template's home page.
@@ -50,13 +58,26 @@ export function HeroBlock({
     variant === "split" || (image && !sidekick) ? "split" : "centered";
   const imageSidekick = image && !sidekick ? <HeroImage image={image} /> : null;
   const rightCol = sidekick ?? imageSidekick;
+  // Entrance: root scope flips on mount (hero sits above the fold), children
+  // stagger in. Glow blobs drift slowly via `motion-blob` (globals.css).
+  const { ref, inView } = useInView<HTMLElement>({ threshold: 0 });
   return (
-    <section className={cn("relative isolate overflow-hidden border-b border-border/60", className)}>
+    <section
+      ref={ref}
+      className={cn(
+        "relative isolate overflow-hidden border-b border-border/60",
+        inView && "is-inview",
+        className,
+      )}
+    >
       {glow && (
         <div className="absolute inset-0 -z-10 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
-          <div className="absolute -right-40 top-32 h-96 w-96 rounded-full bg-orange-500/15 blur-3xl" />
-          <div className="absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
+          <div className="motion-blob absolute -right-40 top-32 h-96 w-96 rounded-full bg-orange-500/15 blur-3xl" />
+          <div
+            className="motion-blob absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl"
+            style={{ animationDelay: "-8s", animationDuration: "22s" }}
+          />
         </div>
       )}
       <div
@@ -67,25 +88,42 @@ export function HeroBlock({
       >
         <div className={effectiveVariant === "split" ? "md:col-span-7" : ""}>
           {badge && (
-            <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-[11px]">
-              <Sparkles className="mr-1 size-3" /> {badge}
-            </Badge>
+            <div data-reveal="fade-up">
+              <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-[11px]">
+                <Sparkles className="mr-1 size-3" /> {badge}
+              </Badge>
+            </div>
           )}
           {eyebrow && !badge && (
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <p
+              data-reveal="fade-up"
+              className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+            >
               {eyebrow}
             </p>
           )}
-          <h1 className="mt-3 text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
+          <h1
+            data-reveal="fade-up"
+            style={delayAt(90)}
+            className="mt-3 text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
+          >
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl">
+            <p
+              data-reveal="fade-up"
+              style={delayAt(180)}
+              className="mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl"
+            >
               {subtitle}
             </p>
           )}
           {(primaryCta || secondaryCta) && (
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div
+              data-reveal="fade-up"
+              style={delayAt(270)}
+              className="mt-8 flex flex-wrap items-center gap-3"
+            >
               {primaryCta && (
                 <Button asChild size="lg">
                   <Link href={primaryCta.href}>
@@ -102,7 +140,9 @@ export function HeroBlock({
           )}
         </div>
         {effectiveVariant === "split" && rightCol && (
-          <div className="md:col-span-5">{rightCol}</div>
+          <div data-reveal="fade-right" style={delayAt(240)} className="md:col-span-5">
+            {rightCol}
+          </div>
         )}
       </div>
     </section>

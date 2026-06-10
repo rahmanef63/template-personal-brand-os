@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Stagger } from "@/components/templates/_shared/motion";
+import { cn } from "@/lib/utils";
 import type { Service } from "../../shared/types";
 
 export interface FaqItem {
@@ -67,45 +69,48 @@ export function PricingTiers({ services }: { services: Service[] }) {
   }
   return (
     <div className="mx-auto grid max-w-5xl gap-4 px-6 md:grid-cols-3">
-      {tiers.map((s) => (
-        <Card
-          key={s.id}
-          className={
-            s.featured
-              ? "border-brand/50 shadow-[0_0_0_1px_var(--brand)] relative"
-              : "border-border/60"
-          }
-        >
-          <CardContent className="flex h-full flex-col gap-4 p-6">
-            {s.featured ? (
-              <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-brand px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white">
-                Populer
-              </span>
-            ) : null}
-            <div>
-              <h3 className="font-medium">{s.name}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
-            </div>
-            <p className="text-3xl font-semibold tracking-tight">
-              {s.priceLabel}
-              {s.period ? (
-                <span className="ml-1 text-sm font-normal text-muted-foreground">{s.period}</span>
+      <Stagger itemClassName="h-full">
+        {tiers.map((s) => (
+          <Card
+            key={s.id}
+            className={cn(
+              "h-full transition-[translate,box-shadow] duration-300 hover:-translate-y-1",
+              s.featured
+                ? "border-brand/50 shadow-[0_0_0_1px_var(--brand)] relative"
+                : "border-border/60 hover:shadow-lg",
+            )}
+          >
+            <CardContent className="flex h-full flex-col gap-4 p-6">
+              {s.featured ? (
+                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-brand px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white">
+                  Populer
+                </span>
               ) : null}
-            </p>
-            <ul className="flex-1 space-y-2 text-sm">
-              {(s.bullets ?? []).map((b, i) => (
-                <li key={i} className="flex gap-2">
-                  <Check className="mt-0.5 size-4 shrink-0 text-brand" />
-                  <span className="text-muted-foreground">{b}</span>
-                </li>
-              ))}
-            </ul>
-            <Button asChild variant={s.featured ? "default" : "outline"} className="w-full">
-              <Link href="/contact">Mulai</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
+              <div>
+                <h3 className="font-medium">{s.name}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
+              </div>
+              <p className="text-3xl font-semibold tracking-tight">
+                {s.priceLabel}
+                {s.period ? (
+                  <span className="ml-1 text-sm font-normal text-muted-foreground">{s.period}</span>
+                ) : null}
+              </p>
+              <ul className="flex-1 space-y-2 text-sm">
+                {(s.bullets ?? []).map((b, i) => (
+                  <li key={i} className="flex gap-2">
+                    <Check className="mt-0.5 size-4 shrink-0 text-brand" />
+                    <span className="text-muted-foreground">{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button asChild variant={s.featured ? "default" : "outline"} className="w-full">
+                <Link href="/contact">Mulai</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </Stagger>
     </div>
   );
 }

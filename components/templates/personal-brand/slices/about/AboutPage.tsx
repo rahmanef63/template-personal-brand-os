@@ -8,6 +8,7 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Reveal, Stagger } from "@/components/templates/_shared/motion";
 import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
@@ -65,31 +66,40 @@ export function AboutPage() {
       </header>
 
       <section className="mt-16">
-        <h2 className="text-2xl font-semibold tracking-tight">Timeline</h2>
-        <ol className="mt-6 space-y-3 border-l border-border/60 pl-6">
-          {TIMELINE.map((t) => (
-            <li key={t.year} className="relative">
-              <span className="absolute -left-[29px] top-1.5 grid size-3 place-items-center rounded-full border border-border bg-background">
-                <span className="size-1 rounded-full bg-foreground" />
-              </span>
-              <p className="text-xs font-mono text-muted-foreground">{t.year}</p>
-              <p className="text-sm text-foreground/85">{t.milestone}</p>
-            </li>
-          ))}
-        </ol>
+        <Reveal>
+          <h2 className="text-2xl font-semibold tracking-tight">Timeline</h2>
+          <ol className="mt-6 space-y-3 border-l border-border/60 pl-6">
+            {TIMELINE.map((t) => (
+              <li key={t.year} className="relative">
+                <span className="absolute -left-[29px] top-1.5 grid size-3 place-items-center rounded-full border border-border bg-background">
+                  <span className="size-1 rounded-full bg-foreground" />
+                </span>
+                <p className="text-xs font-mono text-muted-foreground">{t.year}</p>
+                <p className="text-sm text-foreground/85">{t.milestone}</p>
+              </li>
+            ))}
+          </ol>
+        </Reveal>
       </section>
 
       <section className="mt-16">
-        <h2 className="text-2xl font-semibold tracking-tight">Achievements & mentions</h2>
+        <Reveal>
+          <h2 className="text-2xl font-semibold tracking-tight">Achievements & mentions</h2>
+        </Reveal>
         <div className="mt-6 grid gap-3 md:grid-cols-2">
-          {MENTIONS.map((m) => (
-            <Card key={m} className="border-border/60 bg-card/60">
-              <CardContent className="flex items-start gap-3 p-4 text-sm">
-                <CheckCircle2 className="mt-0.5 size-4 text-foreground/70" />
-                <span className="text-foreground/85">{m}</span>
-              </CardContent>
-            </Card>
-          ))}
+          <Stagger itemClassName="h-full">
+            {MENTIONS.map((m) => (
+              <Card
+                key={m}
+                className="h-full border-border/60 bg-card/60 transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                <CardContent className="flex items-start gap-3 p-4 text-sm">
+                  <CheckCircle2 className="mt-0.5 size-4 text-foreground/70" />
+                  <span className="text-foreground/85">{m}</span>
+                </CardContent>
+              </Card>
+            ))}
+          </Stagger>
         </div>
       </section>
     </section>

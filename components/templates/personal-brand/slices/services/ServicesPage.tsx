@@ -19,6 +19,7 @@ import {
   type PricingTier as SliceTier,
 } from "@/features/pricing-page";
 import { FAQSection } from "@/features/faq-section";
+import { Reveal } from "@/components/templates/_shared/motion";
 import { nid, useServices, useStore } from "../../shared/store";
 
 /**
@@ -44,22 +45,24 @@ export function ServicesPage() {
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
-      <PricingSection
-        eyebrow="Services"
-        title="Cara kerja sama"
-        subtitle="Pilih sesuai konteks tim atau kariermu. Bisa kombinasi — strategy sprint dulu, lanjut mentoring bulanan."
-        tiers={tiers}
-        className="!px-0 !pt-0"
-        renderTierCta={(t) => (
-          <Button
-            className="w-full"
-            variant={t.featured ? "default" : "outline"}
-            onClick={() => setOpenSvc(t.id)}
-          >
-            Book {t.name} <ArrowRight className="size-4" />
-          </Button>
-        )}
-      />
+      <Reveal>
+        <PricingSection
+          eyebrow="Services"
+          title="Cara kerja sama"
+          subtitle="Pilih sesuai konteks tim atau kariermu. Bisa kombinasi — strategy sprint dulu, lanjut mentoring bulanan."
+          tiers={tiers}
+          className="!px-0 !pt-0"
+          renderTierCta={(t) => (
+            <Button
+              className="w-full"
+              variant={t.featured ? "default" : "outline"}
+              onClick={() => setOpenSvc(t.id)}
+            >
+              Book {t.name} <ArrowRight className="size-4" />
+            </Button>
+          )}
+        />
+      </Reveal>
 
       <BookDialog
         open={!!active}
@@ -165,12 +168,14 @@ const FAQ_ITEMS = [
 
 function FaqSection() {
   return (
-    <FAQSection
-      eyebrow="FAQ"
-      title="Pertanyaan umum"
-      items={FAQ_ITEMS}
-      layout="two-column"
-      className="mt-20 !px-0 !py-0"
-    />
+    <Reveal>
+      <FAQSection
+        eyebrow="FAQ"
+        title="Pertanyaan umum"
+        items={FAQ_ITEMS}
+        layout="two-column"
+        className="mt-20 !px-0 !py-0"
+      />
+    </Reveal>
   );
 }

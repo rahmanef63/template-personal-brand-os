@@ -8,6 +8,7 @@ import {
   PortfolioDetailView,
   type PortfolioItem as SliceItem,
 } from "@/features/portfolio-section";
+import { Reveal } from "@/components/templates/_shared/motion";
 import { usePortfolio, usePortfolioItem } from "../../shared/store";
 import { PUBLIC_BASE } from "../../shared/nav-config";
 
@@ -64,17 +65,19 @@ export function PortfolioDetailPage({ slug }: { slug: string }) {
       related={relatedItems}
       hrefForRelated={(r) => `${PUBLIC_BASE}/portfolio/${r.slug}`}
       afterContent={
-        <Card className="border-border/60 bg-gradient-to-br from-card/80 to-muted/20">
-          <CardContent className="flex flex-col gap-4 p-8 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h3 className="text-xl font-semibold tracking-tight">Mau hasil serupa?</h3>
-              <p className="text-sm text-muted-foreground">Mulai dari office hours 30 menit, gratis untuk first-timer.</p>
-            </div>
-            <Button asChild>
-              <Link href={`${PUBLIC_BASE}/services`}>Lihat layanan <ArrowUpRight className="size-4" /></Link>
-            </Button>
-          </CardContent>
-        </Card>
+        <Reveal variant="zoom">
+          <Card className="border-border/60 bg-gradient-to-br from-card/80 to-muted/20">
+            <CardContent className="flex flex-col gap-4 p-8 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h3 className="text-xl font-semibold tracking-tight">Mau hasil serupa?</h3>
+                <p className="text-sm text-muted-foreground">Mulai dari office hours 30 menit, gratis untuk first-timer.</p>
+              </div>
+              <Button asChild>
+                <Link href={`${PUBLIC_BASE}/services`}>Lihat layanan <ArrowUpRight className="size-4" /></Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </Reveal>
       }
     />
   );

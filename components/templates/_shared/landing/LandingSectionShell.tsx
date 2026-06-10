@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useInView } from "../motion/use-in-view";
 import type { LandingSection } from "./types";
 
 interface Props {
@@ -21,10 +22,16 @@ interface Props {
  */
 export function LandingSectionShell({ section, children, defaultClassName }: Props) {
   const hasBg = Boolean(section.bgImageUrl);
+  // Scroll reveal: the shell fades up as a unit and doubles as the
+  // `.is-inview` scope for any `data-reveal` descendants (motion kit).
+  const { ref, inView } = useInView<HTMLElement>({ threshold: 0.05 });
   return (
     <section
+      ref={ref}
+      data-reveal="fade-up"
       className={cn(
         "relative",
+        inView && "is-inview",
         defaultClassName,
         section.className,
         hasBg && "isolate overflow-hidden text-foreground",

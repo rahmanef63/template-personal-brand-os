@@ -1,8 +1,11 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useInView } from "../motion/use-in-view";
 import type { Cta } from "../types/common";
 
 /**
@@ -27,9 +30,17 @@ export function SectionHead({
   align?: "left" | "center";
   className?: string;
 }) {
+  // Self-observing reveal — works standalone on list pages and inside
+  // LandingSectionShell (independent observers fire together).
+  const { ref, inView } = useInView<HTMLDivElement>();
+
   if (align === "center") {
     return (
-      <div className={cn("mx-auto max-w-3xl text-center", className)}>
+      <div
+        ref={ref}
+        data-reveal="fade-up"
+        className={cn("mx-auto max-w-3xl text-center", inView && "is-inview", className)}
+      >
         {eyebrow && (
           <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{eyebrow}</p>
         )}
@@ -40,7 +51,15 @@ export function SectionHead({
   }
 
   return (
-    <div className={cn("mb-10 flex flex-wrap items-end justify-between gap-4", className)}>
+    <div
+      ref={ref}
+      data-reveal="fade-up"
+      className={cn(
+        "mb-10 flex flex-wrap items-end justify-between gap-4",
+        inView && "is-inview",
+        className,
+      )}
+    >
       <div className="max-w-xl">
         {eyebrow && (
           <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">{eyebrow}</p>
