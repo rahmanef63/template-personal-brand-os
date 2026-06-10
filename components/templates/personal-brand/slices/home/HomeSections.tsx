@@ -160,13 +160,27 @@ export function ServicesBand({ services }: { services: ReturnType<typeof useServ
   );
 }
 
-export function TestimonialsGrid() {
-  const items: SliceTestimonial[] = TESTIMONIALS.map((t, i) => ({
+export function TestimonialsGrid({
+  title = "Apa kata mereka",
+  subtitle = "Sebagian feedback dari klien dan student.",
+  items,
+  limit,
+}: {
+  /** Landing passes admin-editable section.title / section.subtitle. */
+  title?: string;
+  subtitle?: string;
+  /** Override list (e.g. parsed from section.config items). */
+  items?: SliceTestimonial[];
+  limit?: number;
+} = {}) {
+  const defaults: SliceTestimonial[] = TESTIMONIALS.map((t, i) => ({
     id: `t-${i}`,
     quote: t.quote,
     author: t.name,
     role: t.role,
   }));
+  const list = (items ?? defaults).slice(0, limit);
+  if (list.length === 0) return null;
   return (
     <section className="border-y border-border/50 bg-muted/10">
       <div className="mx-auto max-w-6xl px-6 py-16 md:py-24">
@@ -174,13 +188,15 @@ export function TestimonialsGrid() {
           <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Testimonials
           </span>
-          <h2 className="text-3xl font-semibold leading-tight md:text-4xl">Apa kata mereka</h2>
-          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            Sebagian feedback dari klien dan student.
-          </p>
+          <h2 className="text-3xl font-semibold leading-tight md:text-4xl">{title}</h2>
+          {subtitle ? (
+            <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
+              {subtitle}
+            </p>
+          ) : null}
         </header>
         <Carousel
-          opts={{ align: "start", loop: items.length > 3 }}
+          opts={{ align: "start", loop: list.length > 3 }}
           plugins={[Autoplay({ delay: 4500, stopOnInteraction: true })]}
         >
           <div className="mb-4 flex items-center justify-end gap-2">
@@ -188,7 +204,7 @@ export function TestimonialsGrid() {
             <CarouselNext />
           </div>
           <CarouselContent>
-            {items.map((t) => (
+            {list.map((t) => (
               <CarouselItem key={t.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
                 <TestimonialCard
                   quote={t.quote}

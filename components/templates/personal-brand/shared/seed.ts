@@ -12,10 +12,45 @@ export const SEED_LANDING_SECTIONS: LandingSection[] = [
     config: '{"badge":"2026 mentorship cohort open"}',
   },
   { id: "ls-stats",        order: 20, kind: "stats",        title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
+  {
+    id: "ls-features",
+    order: 25,
+    kind: "features",
+    title: "Fokus yang saya kerjakan",
+    subtitle: "Empat jalur utama: strategi produk, mentorship engineering, tulisan, dan sesi untuk tim.",
+    enabled: true,
+  },
   { id: "ls-blog",         order: 30, kind: "blog",         title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
   { id: "ls-portfolio",    order: 40, kind: "portfolio",    title: "Karya pilihan", subtitle: "Proyek yang menggambarkan cara saya bekerja.", enabled: true },
   { id: "ls-services",     order: 50, kind: "services",     title: "Layanan", subtitle: "Tiga jalur kerja sama.", enabled: true },
+  // Engagement-model tiers (Konsultasi / Kolaborasi / Retainer). Ships off
+  // because Layanan di atas sudah menampilkan paket berharga — toggle on
+  // dari /admin landing kalau mau dua framing sekaligus.
+  {
+    id: "ls-pricing",
+    order: 55,
+    kind: "pricing",
+    title: "Model kerja sama",
+    subtitle: "Mulai dari sesi konsultasi tunggal sampai retainer bulanan.",
+    enabled: false,
+  },
   { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true },
+  {
+    id: "ls-faq",
+    order: 62,
+    kind: "faq",
+    title: "Pertanyaan yang sering masuk",
+    subtitle: "Soal kolaborasi, jasa, timeline, dan harga — sebelum kamu kirim email.",
+    enabled: true,
+  },
+  {
+    id: "ls-cta",
+    order: 65,
+    kind: "cta",
+    title: "Punya proyek atau butuh sparring partner?",
+    subtitle: "Ceritakan konteksmu — dibalas dalam 1×24 jam kerja.",
+    enabled: true,
+  },
   { id: "ls-newsletter",   order: 70, kind: "newsletter",   title: "Newsletter", subtitle: "Sekali sebulan, kabar produk + sumber bacaan.", enabled: true },
 ];
 import { SEED_PAGES } from "./pages-seed";

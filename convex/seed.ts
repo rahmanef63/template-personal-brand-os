@@ -9,6 +9,23 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 const now = 1_780_000_000_000;
 const day = 86_400_000;
 
+// Keep in sync with components/templates/personal-brand/shared/seed.ts
+// SEED_LANDING_SECTIONS. `syncLanding` below pushes additions/order to an
+// already-seeded deployment without touching admin-edited copy.
+const LANDING = [
+  { id: "ls-hero", order: 10, kind: "hero", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.", subtitle: "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.", enabled: true, config: '{"badge":"2026 mentorship cohort open"}' },
+  { id: "ls-stats", order: 20, kind: "stats", title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
+  { id: "ls-features", order: 25, kind: "features", title: "Fokus yang saya kerjakan", subtitle: "Empat jalur utama: strategi produk, mentorship engineering, tulisan, dan sesi untuk tim.", enabled: true },
+  { id: "ls-blog", order: 30, kind: "blog", title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
+  { id: "ls-portfolio", order: 40, kind: "portfolio", title: "Karya pilihan", subtitle: "Proyek yang menggambarkan cara saya bekerja.", enabled: true },
+  { id: "ls-services", order: 50, kind: "services", title: "Layanan", subtitle: "Tiga jalur kerja sama.", enabled: true },
+  { id: "ls-pricing", order: 55, kind: "pricing", title: "Model kerja sama", subtitle: "Mulai dari sesi konsultasi tunggal sampai retainer bulanan.", enabled: false },
+  { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true },
+  { id: "ls-faq", order: 62, kind: "faq", title: "Pertanyaan yang sering masuk", subtitle: "Soal kolaborasi, jasa, timeline, dan harga — sebelum kamu kirim email.", enabled: true },
+  { id: "ls-cta", order: 65, kind: "cta", title: "Punya proyek atau butuh sparring partner?", subtitle: "Ceritakan konteksmu — dibalas dalam 1×24 jam kerja.", enabled: true },
+  { id: "ls-newsletter", order: 70, kind: "newsletter", title: "Newsletter", subtitle: "Sekali sebulan, kabar produk + sumber bacaan.", enabled: true },
+];
+
 // All demo content inserts (no wipe). Shared by `run` and `seedSample`.
 async function insertAll(ctx: any) {
   const posts = [
@@ -65,25 +82,9 @@ async function insertAll(ctx: any) {
 
   // landing sections — the public home composes from these (HomePage reads
   // useLandingSections → filter enabled → sort order). Without them home is blank.
-  const landing = [
-    { id: "ls-hero", order: 10, kind: "hero", title: "Saya bantu brand bercerita dengan jelas — produk, konten, dan strategi.", subtitle: "Designer-developer untuk founder & tim Indonesia: strategi produk, mentorship engineer, dan riset go-to-market.", enabled: true, config: '{"badge":"Available for freelance work"}' },
-    { id: "ls-stats", order: 20, kind: "stats", title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
-    { id: "ls-blog", order: 30, kind: "blog", title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
-    { id: "ls-portfolio", order: 40, kind: "portfolio", title: "Karya pilihan", subtitle: "Proyek yang menggambarkan cara saya bekerja.", enabled: true },
-    { id: "ls-services", order: 50, kind: "services", title: "Layanan", subtitle: "Tiga jalur kerja sama.", enabled: true },
-    { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true },
-    { id: "ls-pricing", order: 55, kind: "pricing", title: "Paket kerja sama", subtitle: "Harga transparan — pilih jalur yang pas, upgrade kapan saja.", enabled: true },
-    { id: "ls-faq", order: 65, kind: "faq", title: "Pertanyaan yang sering muncul", subtitle: "Hal-hal yang biasanya ditanyakan sebelum mulai.", enabled: true, config: JSON.stringify({ items: [
-      { q: "Berapa lama satu engagement biasanya?", a: "Consulting 2-4 minggu, design sprint 1 minggu, retainer bulanan berjalan minimal 3 bulan." },
-      { q: "Apakah bisa remote sepenuhnya?", a: "Ya — semua kerja sama berjalan async-first dengan 1-2 call per minggu sesuai zona waktu kamu." },
-      { q: "Bagaimana sistem pembayarannya?", a: "50% di depan, 50% saat serah terima. Retainer ditagih di awal bulan. Invoice + kontrak standar tersedia." },
-      { q: "Apakah hasil kerja jadi milik saya?", a: "100%. Semua source file, dokumen riset, dan kode diserahkan penuh tanpa lisensi tambahan." },
-    ] }) },
-    { id: "ls-newsletter", order: 70, kind: "newsletter", title: "Newsletter", subtitle: "Sekali sebulan, kabar produk + sumber bacaan.", enabled: true },
-  ];
-  for (const s of landing) await ctx.db.insert("landingSections", { sectionId: s.id, data: s });
+  for (const s of LANDING) await ctx.db.insert("landingSections", { sectionId: s.id, data: s });
 
-  return { posts: posts.length, portfolio: portfolio.length, services: services.length, resources: resources.length, landing: landing.length };
+  return { posts: posts.length, portfolio: portfolio.length, services: services.length, resources: resources.length, landing: LANDING.length };
 }
 
 // Power/CLI seed: wipes content tables first, then inserts. Destructive — only
@@ -95,6 +96,33 @@ export const run = mutation({
       for (const row of await ctx.db.query(t).take(1000)) await ctx.db.delete(row._id);
     }
     return insertAll(ctx);
+  },
+});
+
+// Additive landing sync for already-seeded deployments: inserts LANDING
+// entries whose sectionId is missing and aligns `order` to the canonical
+// lineup. Never touches admin-edited copy/enabled/config on existing rows.
+export const syncLanding = mutation({
+  args: {},
+  handler: async (ctx) => {
+    let inserted = 0;
+    let reordered = 0;
+    for (const s of LANDING) {
+      const existing = await ctx.db
+        .query("landingSections")
+        .withIndex("by_sectionId", (q) => q.eq("sectionId", s.id))
+        .unique();
+      if (!existing) {
+        await ctx.db.insert("landingSections", { sectionId: s.id, data: s });
+        inserted++;
+      } else if ((existing.data as { order?: number }).order !== s.order) {
+        await ctx.db.patch(existing._id, {
+          data: { ...(existing.data as Record<string, unknown>), order: s.order },
+        });
+        reordered++;
+      }
+    }
+    return { inserted, reordered };
   },
 });
 

@@ -1,19 +1,41 @@
 "use client";
 
 import * as React from "react";
+import {
+  CtaBand,
+  FeatureGrid,
+  SectionHead,
+} from "@/components/templates/_shared";
 import type { LandingSection } from "@/components/templates/_shared/landing/types";
 import { LandingSectionShell } from "@/components/templates/_shared/landing/LandingSectionShell";
 import { parseConfigBadge } from "@/components/templates/_shared/landing/parse-config";
+import {
+  cfgArray,
+  cfgNumber,
+  cfgString,
+  isTestimonialItem,
+  parseConfigObject,
+  CustomSection,
+  FaqSection,
+  PricingSection,
+  StatsSection,
+} from "@/components/templates/_shared/landing/sections";
+import { PUBLIC_BASE } from "../../shared/nav-config";
 import { Hero } from "./Hero";
 import { NewsletterBlock } from "./NewsletterBlock";
 import {
-  FeaturedPosts,
   PortfolioStrip,
   ServicesBand,
-  StatsStrip,
   TestimonialsGrid,
 } from "./HomeSections";
-import { FaqList, PricingTiers, parseFaqItems } from "./FaqPricingSections";
+import {
+  BlogTeaser,
+  BRAND_CLIENTS,
+  BRAND_FAQS,
+  BRAND_FEATURES,
+  BRAND_STATS,
+  BRAND_TIERS,
+} from "./LandingExtras";
 import type {
   Service,
   PortfolioItem,
@@ -29,8 +51,8 @@ interface Deps {
 /**
  * Personal-brand landing renderer. Maps each enabled section.kind to
  * its template-side component, threading admin-editable title / subtitle
- * through. Unknown kinds render a minimal stub so admin still sees them
- * without crashing the page.
+ * through; section.config JSON overrides the template defaults that live
+ * in LandingExtras (see _shared/landing/sections/config.ts for keys).
  */
 export function renderLanding(section: LandingSection, deps: Deps) {
   switch (section.kind) {
@@ -48,15 +70,24 @@ export function renderLanding(section: LandingSection, deps: Deps) {
 
     case "stats":
       return (
-        <LandingSectionShell section={section}>
-          <StatsStrip />
+        <LandingSectionShell section={section} defaultClassName="border-y border-border/50 bg-muted/10">
+          <StatsSection section={section} stats={BRAND_STATS} clients={BRAND_CLIENTS} />
+        </LandingSectionShell>
+      );
+
+    case "features":
+      return (
+        <LandingSectionShell section={section} defaultClassName="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+          <SectionHead eyebrow="Fokus" title={section.title} subtitle={section.subtitle} />
+          <FeatureGrid items={BRAND_FEATURES} columns={4} className="mt-10" />
         </LandingSectionShell>
       );
 
     case "blog":
+    case "changelog":
       return (
         <LandingSectionShell section={section}>
-          <FeaturedPosts posts={deps.posts.slice(0, 3)} />
+          <BlogTeaser section={section} posts={deps.posts} />
         </LandingSectionShell>
       );
 
@@ -74,62 +105,79 @@ export function renderLanding(section: LandingSection, deps: Deps) {
         </LandingSectionShell>
       );
 
-    case "testimonials":
+    case "testimonials": {
+      const cfg = parseConfigObject(section.config);
+      const fromConfig = cfgArray(cfg, "items", isTestimonialItem)?.map((t, i) => ({
+        id: `cfg-${i}`,
+        quote: t.quote,
+        author: t.author,
+        role: t.role,
+      }));
       return (
         <LandingSectionShell section={section}>
-          <TestimonialsGrid />
+          <TestimonialsGrid
+            title={section.title}
+            subtitle={section.subtitle}
+            items={fromConfig}
+            limit={cfgNumber(cfg, "limit")}
+          />
         </LandingSectionShell>
       );
-
-    case "newsletter":
-    case "cta":
-      return (
-        <LandingSectionShell section={section}>
-          <NewsletterBlock />
-        </LandingSectionShell>
-      );
+    }
 
     case "pricing":
       return (
-        <LandingSectionShell
-          section={section}
-          defaultClassName="border-y border-border/40 bg-muted/10 py-14"
-        >
-          <SectionHead title={section.title} subtitle={section.subtitle} kicker="Pricing" />
-          <PricingTiers services={deps.services} />
+        <LandingSectionShell section={section} defaultClassName="border-y border-border/50 bg-muted/10">
+          <PricingSection section={section} tiers={BRAND_TIERS} />
         </LandingSectionShell>
       );
 
     case "faq":
       return (
-        <LandingSectionShell
-          section={section}
-          defaultClassName="border-y border-border/40 bg-muted/10 py-14"
-        >
-          <SectionHead title={section.title} subtitle={section.subtitle} kicker="FAQ" />
-          <FaqList items={parseFaqItems(section.config)} />
+        <LandingSectionShell section={section}>
+          <FaqSection
+            section={section}
+            items={BRAND_FAQS}
+            ctaLabel="Hubungi saya"
+            ctaHref={`${PUBLIC_BASE}/contact`}
+          />
         </LandingSectionShell>
       );
 
-    case "features":
-    case "changelog":
+    case "cta": {
+      const cfg = parseConfigObject(section.config);
+      return (
+        <LandingSectionShell section={section}>
+          <CtaBand
+            title={section.title}
+            subtitle={section.subtitle ?? "Ceritakan konteksmu — dibalas dalam 1×24 jam kerja."}
+            cta={{
+              label: cfgString(cfg, "ctaLabel") ?? "Book a call",
+              href: cfgString(cfg, "ctaHref") ?? `${PUBLIC_BASE}/contact`,
+            }}
+          />
+        </LandingSectionShell>
+      );
+    }
+
+    case "newsletter": {
+      const cfg = parseConfigObject(section.config);
+      return (
+        <LandingSectionShell section={section}>
+          <NewsletterBlock
+            title={section.title}
+            subtitle={section.subtitle}
+            placeholder={cfgString(cfg, "placeholder")}
+            buttonLabel={cfgString(cfg, "buttonLabel")}
+          />
+        </LandingSectionShell>
+      );
+    }
+
     case "custom":
       return (
-        <LandingSectionShell
-          section={section}
-          defaultClassName="border-y border-border/40 bg-muted/10 py-12"
-        >
-          <div className="mx-auto max-w-3xl px-6 text-center">
-            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-              {section.kind}
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-              {section.title}
-            </h2>
-            {section.subtitle ? (
-              <p className="mt-3 text-sm text-muted-foreground">{section.subtitle}</p>
-            ) : null}
-          </div>
+        <LandingSectionShell section={section}>
+          <CustomSection section={section} />
         </LandingSectionShell>
       );
 
@@ -137,14 +185,3 @@ export function renderLanding(section: LandingSection, deps: Deps) {
       return null;
   }
 }
-
-function SectionHead({ title, subtitle, kicker }: { title: string; subtitle?: string; kicker: string }) {
-  return (
-    <div className="mx-auto mb-8 max-w-3xl px-6 text-center">
-      <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">{kicker}</p>
-      <h2 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h2>
-      {subtitle ? <p className="mt-3 text-sm text-muted-foreground">{subtitle}</p> : null}
-    </div>
-  );
-}
-
