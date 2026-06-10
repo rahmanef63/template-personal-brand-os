@@ -10,8 +10,10 @@ import { cfgString, parseConfigObject } from "./config";
 import type { LandingSection } from "../types";
 
 /**
- * Newsletter capture band. Submit is LOCAL-ONLY (no backend) — shows the
- * success state and stores nothing; consumers wire a real provider later.
+ * Newsletter capture band. By default submit is LOCAL-ONLY (shows the success
+ * state, stores nothing) so the slice stays framework-pure. Hosts that want to
+ * persist leads pass `onSubscribe` (e.g. a Convex mutation) — on `{ok:true}`
+ * the success state shows; on `{ok:false}` the returned `notice` is surfaced.
  * Config keys: { placeholder, buttonLabel, successText }.
  * Renders inside LandingSectionShell (caller wraps).
  */
@@ -20,12 +22,14 @@ export function NewsletterSection({
   placeholder = "Alamat email kamu",
   buttonLabel = "Daftar",
   successText = "Terima kasih — kamu terdaftar!",
+  onSubscribe,
   className,
 }: {
   section: LandingSection;
   placeholder?: string;
   buttonLabel?: string;
   successText?: string;
+  onSubscribe?: (email: string) => Promise<{ ok: boolean; notice?: string }>;
   className?: string;
 }) {
   const cfg = parseConfigObject(section.config);
@@ -34,6 +38,28 @@ export function NewsletterSection({
   const ok = cfgString(cfg, "successText") ?? successText;
   const [email, setEmail] = React.useState("");
   const [done, setDone] = React.useState(false);
+  const [busy, setBusy] = React.useState(false);
+  const [notice, setNotice] = React.useState<string | null>(null);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.includes("@")) return;
+    setNotice(null);
+    if (!onSubscribe) {
+      setDone(true);
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await onSubscribe(email);
+      if (res.ok) setDone(true);
+      else setNotice(res.notice ?? "Gagal mendaftar — coba lagi.");
+    } catch {
+      setNotice("Gagal mendaftar — coba lagi.");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
     <div className={cn("mx-auto max-w-3xl px-4 py-16 sm:px-6", className)}>
@@ -57,10 +83,7 @@ export function NewsletterSection({
           ) : (
             <form
               className="mx-auto mt-6 flex max-w-md flex-col gap-2 sm:flex-row"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (email.includes("@")) setDone(true);
-              }}
+              onSubmit={submit}
             >
               <Input
                 type="email"
@@ -70,10 +93,13 @@ export function NewsletterSection({
                 placeholder={ph}
                 className="h-10 flex-1 bg-background"
               />
-              <Button type="submit" className="h-10">
+              <Button type="submit" className="h-10" disabled={busy}>
                 {btn}
               </Button>
             </form>
+          )}
+          {notice && (
+            <p className="mt-3 text-sm text-muted-foreground">{notice}</p>
           )}
         </div>
       </Reveal>
