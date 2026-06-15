@@ -76,6 +76,9 @@ export function OnboardingWizard({
   async function finish() {
     setBusy(true);
     try {
+      if (seedSample && !alreadySeeded) {
+        try { await seedSample(); } catch { /* non-fatal: dashboard banner still offers seeding */ }
+      }
       await save({
         siteName: f.siteName || undefined,
         tagline: f.tagline || undefined,
