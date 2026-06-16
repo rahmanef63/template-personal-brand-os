@@ -11,29 +11,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Reveal, Stagger } from "@/components/templates/_shared/motion";
 import { DEFAULT_SITE_CONFIG } from "../../shared/site-config";
 import { PUBLIC_BASE } from "../../shared/nav-config";
-
-const TIMELINE = [
-  { year: "2026", milestone: "Founder, Lorem Studio. Mentor Y Combinator W22 cohort." },
-  { year: "2024", milestone: "Lead PM, Foobar Inc. — scale dari 5K ke 80K MAU." },
-  { year: "2022", milestone: "Sr. Engineer, Acme Tech. Lead 4-engineer team, ship checkout v3." },
-  { year: "2019", milestone: "Co-founder, Beta Labs. Bootstrap dari Rp 0 ke profitable in 18mo." },
-  { year: "2017", milestone: "First job — junior dev di Gamma Corp. Belajar production reality." },
-  { year: "2014", milestone: "Lulus S1 Teknik Informatika ITB — magang Tokopedia summer." },
-];
-
-const MENTIONS = [
-  "Forbes Indonesia 30 Under 30 — 2024",
-  "Speaker — TEDx Jakarta 2023",
-  "Co-host — Sit Podcast (200K downloads)",
-  "Author — “Ipsum Notes” newsletter (60K subs)",
-  "Investor — Dolor Ventures (early-stage SaaS)",
-  "Open-source maintainer — lorem-utils 12K stars",
-];
+import { resolveAboutContent } from "./about-content";
 
 export function AboutPage() {
   const s = useQuery(api.settings.get);
   const ownerName = s?.ownerName || DEFAULT_SITE_CONFIG.ownerName;
   const intro = s?.seoDescription || s?.tagline;
+  const { timeline: TIMELINE, mentions: MENTIONS } = resolveAboutContent(s?.aboutContent);
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <header className="grid gap-10 md:grid-cols-[1fr_2fr]">

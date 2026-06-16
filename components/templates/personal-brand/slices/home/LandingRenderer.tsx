@@ -32,10 +32,10 @@ import {
   BlogTeaser,
   BRAND_CLIENTS,
   BRAND_FAQS,
-  BRAND_FEATURES,
   BRAND_STATS,
   BRAND_TIERS,
 } from "./LandingExtras";
+import { resolveFeatureItems } from "./feature-config";
 import type {
   Service,
   PortfolioItem,
@@ -79,7 +79,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
       return (
         <LandingSectionShell section={section} defaultClassName="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <SectionHead eyebrow="Fokus" title={section.title} subtitle={section.subtitle} />
-          <FeatureGrid items={BRAND_FEATURES} columns={4} className="mt-10" />
+          <FeatureGrid items={resolveFeatureItems(section.config)} columns={4} className="mt-10" />
         </LandingSectionShell>
       );
 

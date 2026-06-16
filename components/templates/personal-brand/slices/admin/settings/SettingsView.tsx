@@ -7,6 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SiteSettingsForm } from "./SiteSettingsForm";
+import { AboutContentForm } from "./AboutContentForm";
 import { UpdateCard } from "@/components/admin/update-card";
 import { BackupCard } from "@/components/admin/backup-card";
 import { ThemeCard } from "@/components/admin/theme-card";
@@ -45,6 +46,7 @@ export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
       {section === "site" && (
         <>
           <SiteSettingsForm />
+          <AboutContentForm />
           <ThemeCard />
           <UpdateCard />
           <BackupCard />

@@ -163,6 +163,8 @@ export default defineSchema({
     socials: v.optional(v.string()), // JSON string
     seoDescription: v.optional(v.string()),
     analyticsId: v.optional(v.string()),
+    // About-page content (JSON string): { timeline: [{year,milestone}], mentions: [string] }
+    aboutContent: v.optional(v.string()),
     onboardedAt: v.optional(v.number()),
   }),
 });

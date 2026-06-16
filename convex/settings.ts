@@ -26,6 +26,8 @@ const FIELDS = {
   socials: v.optional(v.string()),
   seoDescription: v.optional(v.string()),
   analyticsId: v.optional(v.string()),
+  // About-page content (JSON string): { timeline: [{year,milestone}], mentions: [string] }
+  aboutContent: v.optional(v.string()),
   // set true on the final wizard step so the wizard never shows again
   markOnboarded: v.optional(v.boolean()),
 };
