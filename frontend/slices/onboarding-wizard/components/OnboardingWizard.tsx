@@ -35,6 +35,8 @@ export function OnboardingWizard({
   save,
   seedSample,
   seeded,
+  exportJson,
+  importJson,
   ImageField,
   presetOptions,
   defaultPresetLabel,
@@ -45,6 +47,8 @@ export function OnboardingWizard({
   save: (fields: Partial<OnboardingFields> & { markOnboarded: true }) => Promise<unknown>;
   seedSample?: () => Promise<unknown>;
   seeded?: boolean;
+  exportJson?: () => Promise<unknown>;
+  importJson?: (snapshot: unknown) => Promise<unknown>;
   ImageField?: ImageFieldComponent;
   /** Theme presets for the Branding picker (names or rich options; omit to hide). */
   presetOptions?: ReadonlyArray<string | PresetOption>;
@@ -56,7 +60,10 @@ export function OnboardingWizard({
 }) {
   const [step, setStep] = React.useState(0);
   const [busy, setBusy] = React.useState(false);
+  const [backupBusy, setBackupBusy] = React.useState<"export" | "import" | null>(null);
+  const [backupMessage, setBackupMessage] = React.useState<string | null>(null);
   const [justSeeded, setJustSeeded] = React.useState(false);
+  const fileRef = React.useRef<HTMLInputElement>(null);
   const [f, setF] = React.useState<OnboardingFields>({
     siteName: "",
     tagline: "",
@@ -121,6 +128,66 @@ export function OnboardingWizard({
     }
   }
 
+  async function downloadJson() {
+    if (!exportJson) return;
+    setBusy(true);
+    setBackupBusy("export");
+    setBackupMessage(null);
+    try {
+      const snapshot = exportJson ? await exportJson() : null;
+      const exportedAt =
+        snapshot && typeof snapshot === "object" && "exportedAt" in snapshot
+          ? Number((snapshot as { exportedAt?: unknown }).exportedAt)
+          : Date.now();
+      const stamp = new Date(Number.isFinite(exportedAt) ? exportedAt : Date.now())
+        .toISOString()
+        .slice(0, 10);
+      const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `site-backup-${stamp}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setBackupMessage("Backup JSON terunduh.");
+    } catch {
+      setBackupMessage("Gagal membuat backup JSON.");
+    } finally {
+      setBackupBusy(null);
+      setBusy(false);
+    }
+  }
+
+  async function onImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || !importJson) return;
+    if (!window.confirm("Import akan mengganti konten saat ini dengan isi file JSON. Lanjut?")) return;
+    setBusy(true);
+    setBackupBusy("import");
+    setBackupMessage(null);
+    try {
+      const snapshot = JSON.parse(await file.text());
+      if (!snapshot?.tables) throw new Error("invalid backup");
+      const result = await importJson(snapshot);
+      const inserted =
+        result && typeof result === "object" && "inserted" in result
+          ? Number((result as { inserted?: unknown }).inserted)
+          : null;
+      setJustSeeded(true);
+      setBackupMessage(
+        Number.isFinite(inserted)
+          ? `Import selesai. ${inserted} item dipulihkan.`
+          : "Import selesai.",
+      );
+    } catch {
+      setBackupMessage("File JSON tidak valid atau gagal diimport.");
+    } finally {
+      setBackupBusy(null);
+      setBusy(false);
+    }
+  }
+
   return (
     <div className="grid min-h-screen place-items-center bg-background px-6 py-10">
       <Card className="w-full max-w-lg border-border/60">
@@ -144,7 +211,20 @@ export function OnboardingWizard({
               onPresetPreview={onPresetPreview}
             />
           )}
-          {step === 2 && <StepContent alreadySeeded={alreadySeeded} busy={busy} onSeed={doSeed} />}
+          {step === 2 && (
+            <>
+              <StepContent
+                alreadySeeded={alreadySeeded}
+                busy={busy}
+                onSeed={doSeed}
+                onExport={exportJson ? downloadJson : undefined}
+                onImport={importJson ? () => fileRef.current?.click() : undefined}
+                backupBusy={backupBusy}
+                backupMessage={backupMessage}
+              />
+              <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={onImportFile} />
+            </>
+          )}
           {step === 3 && <StepDone siteName={f.siteName} />}
 
           <div className="mt-7 flex items-center justify-between gap-3">

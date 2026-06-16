@@ -154,6 +154,9 @@ export default defineSchema({
     siteName: v.optional(v.string()),
     tagline: v.optional(v.string()),
     ownerName: v.optional(v.string()),
+    ownerRole: v.optional(v.string()),
+    ownerInitials: v.optional(v.string()),
+    profileImageUrl: v.optional(v.string()),
     contactEmail: v.optional(v.string()),
     brandColor: v.optional(v.string()),
     themeDefault: v.optional(v.string()), // "light" | "dark" | "system"

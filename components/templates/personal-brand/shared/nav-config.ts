@@ -20,9 +20,9 @@ import {
   MessageSquare,
   NotebookPen,
   Newspaper,
-  Settings,
   ShoppingCart,
   Sparkles,
+  UserRound,
   Users,
   Wand2,
 } from "lucide-react";
@@ -123,9 +123,9 @@ export function buildAdminPrimaryNav(state: State): AdminNavItem[] {
 }
 
 export const ADMIN_SETTINGS_NAV: AdminNavItem[] = [
+  { id: "profile", label: "Profile",   href: `${ADMIN_BASE}/settings/site`, icon: UserRound },
   { id: "ai",   label: "AI Config", href: `${ADMIN_BASE}/settings/ai`,   icon: Wand2 },
   { id: "team", label: "Team",      href: `${ADMIN_BASE}/settings/team`, icon: Users },
-  { id: "site", label: "Site",      href: `${ADMIN_BASE}/settings/site`, icon: Settings },
 ];
 
 

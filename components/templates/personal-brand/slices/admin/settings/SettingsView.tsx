@@ -16,7 +16,7 @@ export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
   const TITLES = {
     ai: "AI Configuration",
     team: "Team & Permissions",
-    site: "Site Settings",
+    site: "Profile & Site",
   };
   return (
     <div className="space-y-4">
@@ -24,7 +24,7 @@ export function SettingsView({ section }: { section: "ai" | "team" | "site" }) {
         <h1 className="text-2xl font-semibold tracking-tight">{TITLES[section]}</h1>
         <p className="text-sm text-muted-foreground">
           {section === "site"
-            ? "Identitas situs — tersimpan di Convex, dipakai di seluruh situs."
+            ? "Profil owner, identitas situs, dan aset brand — tersimpan di Convex dan dipakai di public site."
             : section === "team"
             ? "Admin yang bisa mengelola situs ini. Akun pertama = pemilik."
             : "Demo placeholder — di production, wired ke Convex `ai_config` / `workspaces`."}

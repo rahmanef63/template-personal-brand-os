@@ -9,16 +9,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { ImageField } from "@/components/image-field";
 
 type Form = {
   siteName: string;
   tagline: string;
   ownerName: string;
+  ownerRole: string;
+  ownerInitials: string;
+  profileImageUrl: string;
   contactEmail: string;
   brandColor: string;
   themeDefault: string;
   analyticsId: string;
+  seoDescription: string;
   logoUrl: string;
   faviconUrl: string;
 };
@@ -27,10 +32,14 @@ const EMPTY: Form = {
   siteName: "",
   tagline: "",
   ownerName: "",
+  ownerRole: "",
+  ownerInitials: "",
+  profileImageUrl: "",
   contactEmail: "",
   brandColor: "",
   themeDefault: "system",
   analyticsId: "",
+  seoDescription: "",
   logoUrl: "",
   faviconUrl: "",
 };
@@ -52,10 +61,14 @@ export function SiteSettingsForm() {
       siteName: settings?.siteName ?? "",
       tagline: settings?.tagline ?? "",
       ownerName: settings?.ownerName ?? "",
+      ownerRole: settings?.ownerRole ?? "",
+      ownerInitials: settings?.ownerInitials ?? "",
+      profileImageUrl: settings?.profileImageUrl ?? "",
       contactEmail: settings?.contactEmail ?? "",
       brandColor: settings?.brandColor ?? "",
       themeDefault: settings?.themeDefault ?? "system",
       analyticsId: settings?.analyticsId ?? "",
+      seoDescription: settings?.seoDescription ?? "",
       logoUrl: settings?.logoUrl ?? "",
       faviconUrl: settings?.faviconUrl ?? "",
     });
@@ -69,14 +82,18 @@ export function SiteSettingsForm() {
         siteName: f.siteName || undefined,
         tagline: f.tagline || undefined,
         ownerName: f.ownerName || undefined,
+        ownerRole: f.ownerRole || undefined,
+        ownerInitials: f.ownerInitials || undefined,
+        profileImageUrl: f.profileImageUrl || undefined,
         contactEmail: f.contactEmail || undefined,
         brandColor: f.brandColor || undefined,
         themeDefault: f.themeDefault || undefined,
         analyticsId: f.analyticsId || undefined,
+        seoDescription: f.seoDescription || undefined,
         logoUrl: f.logoUrl || undefined,
         faviconUrl: f.faviconUrl || undefined,
       });
-      toast.success("Pengaturan situs tersimpan.");
+      toast.success("Profile tersimpan.");
     } catch {
       toast.error("Gagal menyimpan.");
     } finally {
@@ -107,8 +124,21 @@ export function SiteSettingsForm() {
           <Field label="Nama pemilik">
             <Input value={f.ownerName} onChange={(e) => set("ownerName", e.target.value)} />
           </Field>
+          <Field label="Peran / headline pendek">
+            <Input value={f.ownerRole} onChange={(e) => set("ownerRole", e.target.value)} placeholder="Strategist, builder, mentor" />
+          </Field>
+          <Field label="Initial avatar">
+            <Input value={f.ownerInitials} onChange={(e) => set("ownerInitials", e.target.value)} placeholder="LD" maxLength={4} />
+          </Field>
           <Field label="Email kontak">
             <Input type="email" value={f.contactEmail} onChange={(e) => set("contactEmail", e.target.value)} />
+          </Field>
+          <Field label="Bio singkat">
+            <Textarea value={f.seoDescription} onChange={(e) => set("seoDescription", e.target.value)} placeholder="Ringkasan profil yang tampil di halaman About dan metadata SEO." />
+          </Field>
+          <Field label="Foto profil">
+            {f.profileImageUrl ? <img src={f.profileImageUrl} alt="profile" className="mb-2 h-24 w-20 rounded-lg object-cover" /> : null}
+            <ImageField label="Ganti foto profil" onUploaded={(u) => set("profileImageUrl", u)} />
           </Field>
           <Field label="Warna brand">
             <div className="flex items-center gap-2">

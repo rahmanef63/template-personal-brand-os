@@ -4,7 +4,7 @@
 // to keep each file ≤200 lines. Branding lives in step-branding.tsx.
 
 import * as React from "react";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Download, Loader2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -51,10 +51,18 @@ export function StepContent({
   alreadySeeded,
   busy,
   onSeed,
+  onExport,
+  onImport,
+  backupBusy,
+  backupMessage,
 }: {
   alreadySeeded: boolean;
   busy: boolean;
   onSeed: () => void;
+  onExport?: () => void;
+  onImport?: () => void;
+  backupBusy?: "export" | "import" | null;
+  backupMessage?: string | null;
 }) {
   return (
     <div className="space-y-4">
@@ -65,7 +73,7 @@ export function StepContent({
       <div className="rounded-lg border border-border/60 p-4">
         {alreadySeeded ? (
           <p className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Check className="size-4 text-primary" /> Konten contoh sudah terisi.
+            <Check className="size-4 text-primary" /> Konten sudah terisi.
           </p>
         ) : (
           <>
@@ -78,6 +86,26 @@ export function StepContent({
           </>
         )}
       </div>
+      {onExport || onImport ? (
+        <div className="rounded-lg border border-border/60 p-4">
+          <p className="mb-3 text-sm text-muted-foreground">
+            Punya backup JSON? Import untuk melanjutkan dari data lama, atau download data saat ini.
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <Button type="button" variant="outline" onClick={onExport} disabled={busy || !onExport}>
+              {backupBusy === "export" ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
+              Download JSON
+            </Button>
+            <Button type="button" variant="outline" onClick={onImport} disabled={busy || !onImport}>
+              {backupBusy === "import" ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
+              Import JSON
+            </Button>
+          </div>
+          {backupMessage ? (
+            <p className="mt-3 text-xs text-muted-foreground">{backupMessage}</p>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

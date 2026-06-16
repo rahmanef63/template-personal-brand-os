@@ -29,7 +29,7 @@ export function BackupCard() {
       const a = document.createElement("a");
       const stamp = new Date(snapshot.exportedAt).toISOString().slice(0, 10);
       a.href = url;
-      a.download = `brand-backup-${stamp}.json`;
+      a.download = `site-backup-${stamp}.json`;
       a.click();
       URL.revokeObjectURL(url);
       toast.success("Backup terunduh.");
@@ -73,11 +73,11 @@ export function BackupCard() {
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={download} disabled={exporting} className="gap-1.5">
             {exporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
-            Unduh backup
+            Download JSON
           </Button>
           <Button variant="outline" size="sm" onClick={() => fileRef.current?.click()} disabled={importing} className="gap-1.5">
             {importing ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
-            Restore dari file
+            Import JSON
           </Button>
           <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={onFile} />
         </div>

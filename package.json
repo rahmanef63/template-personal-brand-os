@@ -12,7 +12,7 @@
     "convex:dev": "convex dev",
     "convex:codegen": "convex dev --once",
     "build:vercel": "convex deploy --cmd 'next build'",
-    "build:auto": "if [ -n \"$CONVEX_DEPLOY_KEY\" ]; then node scripts/setup-auth.mjs && convex deploy --cmd 'next build'; else next build; fi",
+    "build:auto": "if [ -n \"$CONVEX_DEPLOY_KEY\" ]; then node scripts/setup-auth.mjs && convex deploy --cmd 'next build'; elif [ \"$VERCEL\" = \"1\" ]; then echo \"Missing CONVEX_DEPLOY_KEY; Convex functions will not deploy. Add CONVEX_DEPLOY_KEY to Vercel environment variables.\" && exit 1; else next build; fi",
     "smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
@@ -40,6 +40,7 @@
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "highlight.js": "^11.11.1",
+    "jose": "^5.10.0",
     "katex": "^0.17.0",
     "lucide-react": "^0.460.0",
     "next": "^16.2.7",

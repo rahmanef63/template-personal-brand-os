@@ -16,15 +16,19 @@ import { resolveAboutContent } from "./about-content";
 export function AboutPage() {
   const s = useQuery(api.settings.get);
   const ownerName = s?.ownerName || DEFAULT_SITE_CONFIG.ownerName;
+  const ownerRole = s?.ownerRole || "strategist, builder, mentor";
   const intro = s?.seoDescription || s?.tagline;
+  const profileImage =
+    s?.profileImageUrl ||
+    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=900&q=70";
   const { timeline: TIMELINE, mentions: MENTIONS } = resolveAboutContent(s?.aboutContent);
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <header className="grid gap-10 md:grid-cols-[1fr_2fr]">
         <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-border/60">
           <Image
-            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=900&q=70"
-            alt=""
+            src={profileImage}
+            alt={ownerName}
             fill
             sizes="(min-width: 768px) 33vw, 100vw"
             className="object-cover"
@@ -33,7 +37,7 @@ export function AboutPage() {
         <div>
           <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">About</p>
           <h1 className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl">
-            {ownerName} — strategist, builder, mentor.
+            {ownerName} — {ownerRole}.
           </h1>
           <p className="mt-4 text-muted-foreground">
             {intro ||
