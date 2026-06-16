@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireUser } from "./_shared/auth";
 
 export const listForPost = query({
   args: { postId: v.id("posts") },
@@ -59,6 +60,7 @@ export const moderate = mutation({
     ),
   },
   handler: async (ctx, { id, status }) => {
+    await requireUser(ctx);
     await ctx.db.patch(id, { status });
   },
 });

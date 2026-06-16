@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireUser } from "./_shared/auth";
 
 // Page-builder entries stored as blobs keyed by the frontend string id.
 export const list = query({
@@ -24,6 +25,7 @@ export const bySlug = query({
 export const upsert = mutation({
   args: { entryId: v.string(), slug: v.string(), data: v.any() },
   handler: async (ctx, { entryId, slug, data }) => {
+    await requireUser(ctx);
     const existing = await ctx.db
       .query("pages")
       .withIndex("by_entryId", (q) => q.eq("entryId", entryId))
@@ -39,6 +41,7 @@ export const upsert = mutation({
 export const remove = mutation({
   args: { entryId: v.string() },
   handler: async (ctx, { entryId }) => {
+    await requireUser(ctx);
     const existing = await ctx.db
       .query("pages")
       .withIndex("by_entryId", (q) => q.eq("entryId", entryId))

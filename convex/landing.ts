@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireUser } from "./_shared/auth";
 
 // Landing sections stored as blobs keyed by the frontend string id.
 export const list = query({
@@ -13,6 +14,7 @@ export const list = query({
 export const upsert = mutation({
   args: { sectionId: v.string(), data: v.any() },
   handler: async (ctx, { sectionId, data }) => {
+    await requireUser(ctx);
     const existing = await ctx.db
       .query("landingSections")
       .withIndex("by_sectionId", (q) => q.eq("sectionId", sectionId))
@@ -28,6 +30,7 @@ export const upsert = mutation({
 export const remove = mutation({
   args: { sectionId: v.string() },
   handler: async (ctx, { sectionId }) => {
+    await requireUser(ctx);
     const existing = await ctx.db
       .query("landingSections")
       .withIndex("by_sectionId", (q) => q.eq("sectionId", sectionId))

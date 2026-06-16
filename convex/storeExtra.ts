@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireUser } from "./_shared/auth";
 
 // Extra functions the store adapter needs but the base entity modules lacked:
 // a list-all for comments + admin upsert/remove for comments/subscribers/chat.
@@ -22,6 +23,7 @@ export const commentUpsert = mutation({
     ts: v.number(),
   },
   handler: async (ctx, { id, ...data }) => {
+    await requireUser(ctx);
     if (id) {
       await ctx.db.patch(id, data);
       return id;
@@ -33,6 +35,7 @@ export const commentUpsert = mutation({
 export const commentRemove = mutation({
   args: { id: v.id("comments") },
   handler: async (ctx, { id }) => {
+    await requireUser(ctx);
     await ctx.db.delete(id);
   },
 });
@@ -46,6 +49,7 @@ export const subscriberUpsert = mutation({
     ts: v.number(),
   },
   handler: async (ctx, { id, ...data }) => {
+    await requireUser(ctx);
     if (id) {
       await ctx.db.patch(id, data);
       return id;
@@ -57,6 +61,7 @@ export const subscriberUpsert = mutation({
 export const subscriberRemove = mutation({
   args: { id: v.id("subscribers") },
   handler: async (ctx, { id }) => {
+    await requireUser(ctx);
     await ctx.db.delete(id);
   },
 });
@@ -69,6 +74,7 @@ export const chatUpsertSession = mutation({
     flagged: v.boolean(),
   },
   handler: async (ctx, { id, ...data }) => {
+    await requireUser(ctx);
     if (id) {
       await ctx.db.patch(id, data);
       return id;
@@ -80,6 +86,7 @@ export const chatUpsertSession = mutation({
 export const chatRemoveSession = mutation({
   args: { id: v.id("chatSessions") },
   handler: async (ctx, { id }) => {
+    await requireUser(ctx);
     for (const m of await ctx.db
       .query("chatMessages")
       .withIndex("by_session_ts", (q) => q.eq("sessionId", id))
