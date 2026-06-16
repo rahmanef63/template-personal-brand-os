@@ -58,21 +58,29 @@ export function CrudFieldInput<T>({
           step={field.step}
         />
       );
-    case "select":
+    case "select": {
+      // Radix forbids <SelectItem value="">. Remap empty option values to a
+      // sentinel so optional "— none —" options work, and convert back to ""
+      // on change so stored data stays unchanged.
+      const NONE = "__none__";
       return (
-        <Select value={String(value ?? "")} onValueChange={onChange}>
+        <Select
+          value={value == null || value === "" ? NONE : String(value)}
+          onValueChange={(v) => onChange(v === NONE ? "" : v)}
+        >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {field.options.map((o) => (
-              <SelectItem key={o.value} value={o.value}>
+              <SelectItem key={o.value} value={o.value === "" ? NONE : o.value}>
                 {o.label}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       );
+    }
     case "tags": {
       const arr = Array.isArray(value) ? (value as string[]) : [];
       return (
