@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { requireUser } from "./_shared/auth";
+import { optionalUser, requireUser } from "./_shared/auth";
 
 export const list = query({
   args: {
@@ -10,6 +10,7 @@ export const list = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, { status, limit }) => {
+    if (!(await optionalUser(ctx))) return [];
     if (status) {
       return await ctx.db
         .query("leads")

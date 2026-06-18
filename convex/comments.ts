@@ -1,10 +1,11 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { requireUser } from "./_shared/auth";
+import { optionalUser, requireUser } from "./_shared/auth";
 
 export const listForPost = query({
   args: { postId: v.id("posts") },
   handler: async (ctx, { postId }) => {
+    if (!(await optionalUser(ctx))) return [];
     return await ctx.db
       .query("comments")
       .withIndex("by_post", (q) => q.eq("postId", postId))
@@ -23,6 +24,7 @@ export const listByStatus = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, { status, limit }) => {
+    if (!(await optionalUser(ctx))) return [];
     return await ctx.db
       .query("comments")
       .withIndex("by_status_ts", (q) => q.eq("status", status))

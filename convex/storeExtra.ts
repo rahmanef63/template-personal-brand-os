@@ -1,13 +1,26 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { requireUser } from "./_shared/auth";
+import { optionalUser, requireUser } from "./_shared/auth";
 
 // Extra functions the store adapter needs but the base entity modules lacked:
 // a list-all for comments + admin upsert/remove for comments/subscribers/chat.
 
 export const commentsListAll = query({
   args: {},
-  handler: async (ctx) => ctx.db.query("comments").order("desc").take(500),
+  handler: async (ctx) => {
+    // Admin (authed) gets the full moderation queue; anon visitors get only
+    // approved comments — the shared store renders these publicly on blog
+    // posts, so we must not return [] (would hide them) nor leak
+    // pending/spam rows + their emails to the public.
+    if (await optionalUser(ctx)) {
+      return ctx.db.query("comments").order("desc").take(500);
+    }
+    return ctx.db
+      .query("comments")
+      .withIndex("by_status_ts", (q) => q.eq("status", "approved"))
+      .order("desc")
+      .take(500);
+  },
 });
 
 export const commentUpsert = mutation({

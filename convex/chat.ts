@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { optionalUser } from "./_shared/auth";
 
 export const listSessions = query({
   args: {
@@ -7,6 +8,7 @@ export const listSessions = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, { flagged, limit }) => {
+    if (!(await optionalUser(ctx))) return [];
     if (flagged !== undefined) {
       return await ctx.db
         .query("chatSessions")
@@ -21,6 +23,7 @@ export const listSessions = query({
 export const messages = query({
   args: { sessionId: v.id("chatSessions") },
   handler: async (ctx, { sessionId }) => {
+    if (!(await optionalUser(ctx))) return [];
     return await ctx.db
       .query("chatMessages")
       .withIndex("by_session_ts", (q) => q.eq("sessionId", sessionId))

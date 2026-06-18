@@ -1,9 +1,11 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { optionalUser } from "./_shared/auth";
 
 export const list = query({
   args: { limit: v.optional(v.number()) },
   handler: async (ctx, { limit }) => {
+    if (!(await optionalUser(ctx))) return [];
     return await ctx.db.query("subscribers").order("desc").take(limit ?? 200);
   },
 });
