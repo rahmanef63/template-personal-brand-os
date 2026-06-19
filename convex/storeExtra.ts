@@ -15,11 +15,15 @@ export const commentsListAll = query({
     if (await optionalUser(ctx)) {
       return ctx.db.query("comments").order("desc").take(500);
     }
-    return ctx.db
+    const approved = await ctx.db
       .query("comments")
       .withIndex("by_status_ts", (q) => q.eq("status", "approved"))
       .order("desc")
       .take(500);
+    // ponytail: strip moderation-only PII (email) from the anon payload — the
+    // public blog render reads author/body/ts only, never email. Admin (authed)
+    // branch above keeps the full doc for the moderation queue.
+    return approved.map(({ email, ...pub }) => pub);
   },
 });
 
