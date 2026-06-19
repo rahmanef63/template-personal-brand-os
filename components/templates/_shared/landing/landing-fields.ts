@@ -1,4 +1,6 @@
+import * as React from "react";
 import type { FieldDef } from "@/components/templates/_shared/crud/types";
+import { LandingConfigField } from "./landing-config-field";
 import type { LandingSection } from "./types";
 
 /** Single source of truth for the landing-section editor schema. Used
@@ -104,23 +106,19 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     hint: "Appended to the section wrapper. Use for one-off spacing / color / typography tweaks. Standard Tailwind utilities — same syntax as className= in JSX.",
   },
   {
-    kind: "textarea",
+    kind: "custom",
     key: "config",
-    label: "Kind-specific config (JSON)",
-    rows: 4,
-    mono: true,
-    placeholder: '{ "badge": "New", "columns": 3 }',
+    label: "Content / items",
+    wide: true,
     hint:
-      'Optional JSON for renderer-specific extras. Common keys: ' +
-      '`{"badge":"…"}` overrides the hero eyebrow badge; ' +
-      '`{"columns":3}` lets feature/portfolio grids override their column count; ' +
-      '`{"limit":4}` caps how many items a blog/changelog/testimonials section shows. ' +
-      'Content overrides: stats `{"stats":[{"value":120,"suffix":"+","label":"Klien"}],"clients":["Acme"]}`; ' +
-      'testimonials `{"items":[{"quote":"…","author":"…","role":"…","rating":5}]}`; ' +
-      'faq `{"items":[{"q":"…","a":"…"}],"ctaLabel":"…","ctaHref":"/contact","ctaPrefix":"Masih ada pertanyaan?"}`; ' +
-      'pricing `{"eyebrow":"Harga","tiers":[{"name":"…","price":"Rp 99rb","period":"/bln","features":["…"],"featured":true,"ctaHref":"…"}]}`; ' +
-      'newsletter `{"placeholder":"…","buttonLabel":"…","successText":"…"}`; ' +
-      'custom `{"body":["paragraf…"],"ctaLabel":"…","ctaHref":"…"}`. ' +
-      "Leave empty to use the template's defaults.",
+      "Edit the section's items (features, FAQ, testimonials, pricing tiers, stats) " +
+      "as structured rows. Leave empty to use the template's built-in sample content. " +
+      "Use Advanced (raw JSON) for renderer extras like badge/columns/limit.",
+    render: (value, onChange, ctx) =>
+      React.createElement(LandingConfigField, {
+        config: String(value ?? ""),
+        kind: (ctx?.row as Record<string, unknown> | undefined)?.kind as string | undefined,
+        onChange,
+      }),
   },
 ];

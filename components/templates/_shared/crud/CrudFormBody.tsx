@@ -27,15 +27,16 @@ export function CrudFormBody<T>({
    *  = true when editing an existing row. */
   ctx?: { total: number; editing: boolean };
 }) {
+  const row = draft as Record<string, unknown>;
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       {fields.map((f) => (
         <FieldRender
           key={f.key}
           field={f}
-          value={(draft as Record<string, unknown>)[f.key]}
+          value={row[f.key]}
           onChange={(v) => onChange(f.key as keyof T & string, v)}
-          ctx={ctx}
+          ctx={ctx ? { ...ctx, row } : { total: 0, editing: true, row }}
         />
       ))}
     </div>
@@ -51,7 +52,7 @@ function FieldRender<T>({
   field: FieldDef<T>;
   value: unknown;
   onChange: (next: unknown) => void;
-  ctx?: { total: number; editing: boolean };
+  ctx?: { total: number; editing: boolean; row?: Record<string, unknown> };
 }) {
   const alwaysWide = field.kind === "textarea" || field.kind === "tags";
   const optWide = "wide" in field && field.wide === true;

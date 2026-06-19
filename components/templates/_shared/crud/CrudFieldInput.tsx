@@ -114,10 +114,12 @@ export function CrudFieldInput<T>({
   /** Sibling-aware context for kinds that need it (e.g. `position`).
    *  `total` = current count of items; `editing` = true if editing an
    *  existing row (so range is 1..total instead of 1..total+1). */
-  ctx?: { total: number; editing: boolean };
+  ctx?: { total: number; editing: boolean; row?: Record<string, unknown> };
 }) {
   const onUpload = useConvexUpload();
   switch (field.kind) {
+    case "custom":
+      return <>{field.render(value, onChange, ctx)}</>;
     case "text":
       return (
         <Input
