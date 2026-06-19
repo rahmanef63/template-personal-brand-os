@@ -12,7 +12,7 @@
     "convex:dev": "convex dev",
     "convex:codegen": "convex dev --once",
     "build:vercel": "convex deploy --cmd 'next build'",
-    "build:auto": "if [ -n \"$CONVEX_DEPLOY_KEY\" ]; then node scripts/setup-auth.mjs && convex deploy --cmd 'next build'; elif [ \"$VERCEL\" = \"1\" ]; then echo \"Missing CONVEX_DEPLOY_KEY; Convex functions will not deploy. Add CONVEX_DEPLOY_KEY to Vercel environment variables.\" && exit 1; else next build; fi",
+    "build:auto": "if [ -n \"$CONVEX_DEPLOY_KEY\" ]; then node scripts/setup-auth.mjs && convex deploy --cmd 'next build'; elif [ -n \"$NEXT_PUBLIC_CONVEX_URL\" ]; then echo \"No CONVEX_DEPLOY_KEY — building frontend against existing NEXT_PUBLIC_CONVEX_URL (backend not redeployed).\" && next build; elif [ \"$VERCEL\" = \"1\" ]; then echo \"Missing CONVEX_DEPLOY_KEY and NEXT_PUBLIC_CONVEX_URL; set one in Vercel env.\" && exit 1; else next build; fi",
     "smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
