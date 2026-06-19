@@ -1,6 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { Upload } from "lucide-react";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -11,7 +14,93 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import type { FieldDef } from "./types";
+
+// Upload a File to Convex storage -> served URL string. Used by both the plain
+// `image` field (URL + Upload button) and the `imagePicker` dialog's Upload tab.
+function useConvexUpload() {
+  const genUploadUrl = useMutation(api.files.generateUploadUrl);
+  const getFileUrl = useMutation(api.files.getUrl);
+  return React.useCallback(
+    async (file: File): Promise<string> => {
+      const uploadUrl = await genUploadUrl();
+      const res = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      const { storageId } = (await res.json()) as { storageId: string };
+      return ((await getFileUrl({ storageId: storageId as never })) as string) ?? "";
+    },
+    [genUploadUrl, getFileUrl],
+  );
+}
+
+// Plain URL image field + a real file-upload button (Convex storage).
+function ImageUrlField({
+  value,
+  onChange,
+  placeholder,
+  onUpload,
+}: {
+  value: string;
+  onChange: (next: unknown) => void;
+  placeholder?: string;
+  onUpload: (file: File) => Promise<string>;
+}) {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = React.useState(false);
+  const showPreview = /^(https?:\/\/|\/)/i.test(value);
+  async function pick(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setBusy(true);
+    try {
+      const url = await onUpload(file);
+      if (url) onChange(url);
+    } catch (err) {
+      console.error("[CrudFieldInput] upload failed", err);
+    } finally {
+      setBusy(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+  return (
+    <div className="space-y-2">
+      <div className="flex gap-2">
+        <Input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder ?? "https://… or /path.jpg"}
+          className="font-mono text-xs"
+        />
+        <input ref={inputRef} type="file" accept="image/*" hidden onChange={pick} />
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={busy}
+          onClick={() => inputRef.current?.click()}
+          className="shrink-0 gap-1"
+        >
+          <Upload className="h-3.5 w-3.5" /> {busy ? "…" : "Upload"}
+        </Button>
+      </div>
+      {showPreview && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={value}
+          alt="preview"
+          className="h-20 w-32 rounded-md border border-border/60 object-cover"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).style.display = "none";
+          }}
+        />
+      )}
+    </div>
+  );
+}
 
 export function CrudFieldInput<T>({
   field,
@@ -27,6 +116,7 @@ export function CrudFieldInput<T>({
    *  existing row (so range is 1..total instead of 1..total+1). */
   ctx?: { total: number; editing: boolean };
 }) {
+  const onUpload = useConvexUpload();
   switch (field.kind) {
     case "text":
       return (
@@ -128,30 +218,14 @@ export function CrudFieldInput<T>({
         </Select>
       );
     }
-    case "image": {
-      const url = String(value ?? "");
-      const showPreview = /^(https?:\/\/|\/)/i.test(url);
+    case "image":
       return (
-        <div className="space-y-2">
-          <Input
-            value={url}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={field.placeholder ?? "https://… or /path.jpg"}
-            className="font-mono text-xs"
-          />
-          {showPreview && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={url}
-              alt="preview"
-              className="h-20 w-32 rounded-md border border-border/60 object-cover"
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).style.display = "none";
-              }}
-            />
-          )}
-        </div>
+        <ImageUrlField
+          value={String(value ?? "")}
+          onChange={onChange}
+          placeholder={field.placeholder}
+          onUpload={onUpload}
+        />
       );
-    }
   }
 }
