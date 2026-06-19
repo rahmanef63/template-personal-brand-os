@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageField } from "@/components/image-field";
+import { parseSocials } from "@/components/templates/_shared/ui/site-footer";
 
 type Form = {
   siteName: string;
@@ -26,6 +27,10 @@ type Form = {
   seoDescription: string;
   logoUrl: string;
   faviconUrl: string;
+  socialX: string;
+  socialLinkedin: string;
+  socialGithub: string;
+  socialYoutube: string;
 };
 
 const EMPTY: Form = {
@@ -42,6 +47,10 @@ const EMPTY: Form = {
   seoDescription: "",
   logoUrl: "",
   faviconUrl: "",
+  socialX: "",
+  socialLinkedin: "",
+  socialGithub: "",
+  socialYoutube: "",
 };
 
 /** Real editor for the Convex `siteSettings` singleton — the SAME row the
@@ -57,6 +66,7 @@ export function SiteSettingsForm() {
 
   React.useEffect(() => {
     if (settings === undefined || hydrated) return;
+    const sc = parseSocials(settings?.socials);
     setF({
       siteName: settings?.siteName ?? "",
       tagline: settings?.tagline ?? "",
@@ -71,6 +81,10 @@ export function SiteSettingsForm() {
       seoDescription: settings?.seoDescription ?? "",
       logoUrl: settings?.logoUrl ?? "",
       faviconUrl: settings?.faviconUrl ?? "",
+      socialX: sc.x ?? "",
+      socialLinkedin: sc.linkedin ?? "",
+      socialGithub: sc.github ?? "",
+      socialYoutube: sc.youtube ?? "",
     });
     setHydrated(true);
   }, [settings, hydrated]);
@@ -78,7 +92,12 @@ export function SiteSettingsForm() {
   async function save() {
     setBusy(true);
     try {
+      const socialsMap = Object.fromEntries(
+        ([["x", f.socialX], ["linkedin", f.socialLinkedin], ["github", f.socialGithub], ["youtube", f.socialYoutube]] as const)
+          .filter(([, v]) => v.trim()),
+      );
       await upsert({
+        socials: Object.keys(socialsMap).length ? JSON.stringify(socialsMap) : undefined,
         siteName: f.siteName || undefined,
         tagline: f.tagline || undefined,
         ownerName: f.ownerName || undefined,
@@ -156,6 +175,18 @@ export function SiteSettingsForm() {
           <Field label="Favicon">
             {f.faviconUrl ? <img src={f.faviconUrl} alt="favicon" className="mb-2 size-8 rounded object-contain" /> : null}
             <ImageField label="Ganti favicon" onUploaded={(u) => set("faviconUrl", u)} />
+          </Field>
+          <Field label="X / Twitter URL">
+            <Input value={f.socialX} onChange={(e) => set("socialX", e.target.value)} placeholder="https://x.com/username" />
+          </Field>
+          <Field label="LinkedIn URL">
+            <Input value={f.socialLinkedin} onChange={(e) => set("socialLinkedin", e.target.value)} placeholder="https://linkedin.com/in/username" />
+          </Field>
+          <Field label="GitHub URL">
+            <Input value={f.socialGithub} onChange={(e) => set("socialGithub", e.target.value)} placeholder="https://github.com/username" />
+          </Field>
+          <Field label="YouTube URL">
+            <Input value={f.socialYoutube} onChange={(e) => set("socialYoutube", e.target.value)} placeholder="https://youtube.com/@username" />
           </Field>
         </div>
         <div className="flex justify-end">

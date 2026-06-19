@@ -4,6 +4,7 @@ import { type ReactNode } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
+import { parseSocials } from "@/components/templates/_shared/ui/site-footer";
 import { ThemePresetSwitcher } from "@/features/theme-presets";
 import { CartWidget } from "@/features/storefront-checkout";
 import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
@@ -45,6 +46,7 @@ export function PublicChrome({ children }: { children: ReactNode }) {
       }
       footerColumns={FOOTER_COLUMNS}
       footerTagline={tagline}
+      footerSocials={parseSocials(s?.socials)}
       copyrightHolder={brand.brandName}
     >
       {children}

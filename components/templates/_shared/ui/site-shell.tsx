@@ -21,6 +21,7 @@ export function SiteShell({
   footerColumns,
   copyrightHolder,
   footerTagline,
+  footerSocials,
   belowFooterBrand,
   children,
 }: {
@@ -32,6 +33,7 @@ export function SiteShell({
   footerColumns: FooterColumn[];
   copyrightHolder?: string;
   footerTagline?: string;
+  footerSocials?: Record<string, string>;
   belowFooterBrand?: ReactNode;
   children: ReactNode;
 }) {
@@ -45,6 +47,7 @@ export function SiteShell({
         columns={footerColumns}
         copyrightHolder={copyrightHolder}
         tagline={footerTagline}
+        socials={footerSocials}
         belowBrand={belowFooterBrand}
       />
     </div>
