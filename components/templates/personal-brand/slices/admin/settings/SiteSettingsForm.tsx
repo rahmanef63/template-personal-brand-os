@@ -21,6 +21,8 @@ type Form = {
   ownerInitials: string;
   profileImageUrl: string;
   contactEmail: string;
+  contactPhone: string;
+  contactAddress: string;
   brandColor: string;
   themeDefault: string;
   analyticsId: string;
@@ -41,6 +43,8 @@ const EMPTY: Form = {
   ownerInitials: "",
   profileImageUrl: "",
   contactEmail: "",
+  contactPhone: "",
+  contactAddress: "",
   brandColor: "",
   themeDefault: "system",
   analyticsId: "",
@@ -75,6 +79,8 @@ export function SiteSettingsForm() {
       ownerInitials: settings?.ownerInitials ?? "",
       profileImageUrl: settings?.profileImageUrl ?? "",
       contactEmail: settings?.contactEmail ?? "",
+      contactPhone: settings?.contactPhone ?? "",
+      contactAddress: settings?.contactAddress ?? "",
       brandColor: settings?.brandColor ?? "",
       themeDefault: settings?.themeDefault ?? "system",
       analyticsId: settings?.analyticsId ?? "",
@@ -105,6 +111,8 @@ export function SiteSettingsForm() {
         ownerInitials: f.ownerInitials || undefined,
         profileImageUrl: f.profileImageUrl || undefined,
         contactEmail: f.contactEmail || undefined,
+        contactPhone: f.contactPhone || undefined,
+        contactAddress: f.contactAddress || undefined,
         brandColor: f.brandColor || undefined,
         themeDefault: f.themeDefault || undefined,
         analyticsId: f.analyticsId || undefined,
@@ -151,6 +159,12 @@ export function SiteSettingsForm() {
           </Field>
           <Field label="Email kontak">
             <Input type="email" value={f.contactEmail} onChange={(e) => set("contactEmail", e.target.value)} />
+          </Field>
+          <Field label="Telepon / WhatsApp">
+            <Input value={f.contactPhone} onChange={(e) => set("contactPhone", e.target.value)} placeholder="+62 812 3456 7890" />
+          </Field>
+          <Field label="Alamat">
+            <Input value={f.contactAddress} onChange={(e) => set("contactAddress", e.target.value)} placeholder="Jl. ... , Kota" />
           </Field>
           <Field label="Bio singkat">
             <Textarea value={f.seoDescription} onChange={(e) => set("seoDescription", e.target.value)} placeholder="Ringkasan profil yang tampil di halaman About dan metadata SEO." />

@@ -16,6 +16,7 @@ export function ContactPage() {
   const { dispatch } = useStore();
   const s = useQuery(api.settings.get);
   const contactEmail = s?.contactEmail || "hi@lorem.dev";
+  const contactPhone = s?.contactPhone || "+62 812 3456 7890";
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [topic, setTopic] = React.useState("");
@@ -59,7 +60,7 @@ export function ContactPage() {
             <Mail className="size-4" />
             <a href={`mailto:${contactEmail}`} className="hover:text-foreground">{contactEmail}</a>
           </p>
-          <p className="flex items-center gap-2"><MessageCircle className="size-4" /> +62 812 3456 7890 (WA)</p>
+          <p className="flex items-center gap-2"><MessageCircle className="size-4" /> {contactPhone} (WA)</p>
           <p className="flex items-center gap-2"><Calendar className="size-4" /> cal.com/lorem</p>
         </div>
       </Reveal>

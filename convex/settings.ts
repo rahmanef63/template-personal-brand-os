@@ -20,6 +20,8 @@ const FIELDS = {
   ownerInitials: v.optional(v.string()),
   profileImageUrl: v.optional(v.string()),
   contactEmail: v.optional(v.string()),
+  contactPhone: v.optional(v.string()),
+  contactAddress: v.optional(v.string()),
   brandColor: v.optional(v.string()),
   themeDefault: v.optional(v.string()),
   // tweakcn preset name — site-wide color preset ("" = template default)
