@@ -1,4 +1,4 @@
-import { NotionDatabaseHost } from "@/components/templates/_shared/notion/database-host";
+import { NotionDatabaseHost } from "@/features/_shared/notion/database-host";
 
 export default function Page() {
   return (

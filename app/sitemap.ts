@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
-import { SEED_POSTS, SEED_PORTFOLIO } from "@/components/templates/personal-brand/shared/seed";
-import { DEFAULT_SITE_CONFIG, TEMPLATE_SLUG } from "@/components/templates/personal-brand/shared/site-config";
-import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+import { SEED_POSTS, SEED_PORTFOLIO } from "@/features/_app/seed";
+import { DEFAULT_SITE_CONFIG, TEMPLATE_SLUG } from "@/features/_app/site-config";
+import { buildTemplatePaths } from "@/features/_shared/config/template-paths";
 
 const PUBLIC_BASE = buildTemplatePaths(TEMPLATE_SLUG).publicBase;
 

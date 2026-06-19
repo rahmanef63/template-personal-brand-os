@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { type ReactNode } from "react";
-import { StoreProvider } from "@/components/templates/personal-brand/shared/store";
+import { StoreProvider } from "@/features/_app/store";
 import { CartProvider } from "@/features/storefront-checkout";
 import { SiteLoader } from "@/components/site-loader";
 import { DemoRibbon } from "@/components/demo-ribbon";
 import { PublicChrome } from "@/components/public-chrome";
 import { AiChatFab } from "@/components/ai-chat-fab";
-import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
+import { DEFAULT_SITE_CONFIG } from "@/features/_app/site-config";
 
 const c = DEFAULT_SITE_CONFIG;
 

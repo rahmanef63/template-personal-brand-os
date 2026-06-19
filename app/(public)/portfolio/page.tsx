@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PortfolioListPage } from "@/components/templates/personal-brand/slices/portfolio/PortfolioListPage";
+import { PortfolioListPage } from "@/features/portfolio/PortfolioListPage";
 
 export const metadata: Metadata = { title: "Portfolio", description: "Selected projects and case studies." };
 

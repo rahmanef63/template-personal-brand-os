@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense, type ReactNode } from "react";
-import { StoreProvider } from "@/components/templates/personal-brand/shared/store";
-import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
+import { StoreProvider } from "@/features/_app/store";
+import { DEFAULT_SITE_CONFIG } from "@/features/_app/site-config";
 import { AdminGate } from "@/components/admin-gate";
 import { DashboardShellClient } from "./dashboard-shell-client";
 

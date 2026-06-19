@@ -1,4 +1,4 @@
-import { ResourcesAdminView } from "@/components/templates/personal-brand/slices/admin/resources/ResourcesAdminView";
+import { ResourcesAdminView } from "@/features/admin/resources/ResourcesAdminView";
 
 export default function Page() {
   return <ResourcesAdminView />;

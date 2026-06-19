@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ResourcesPage } from "@/components/templates/personal-brand/slices/resources/ResourcesPage";
+import { ResourcesPage } from "@/features/resources/ResourcesPage";
 
 export const metadata: Metadata = { title: "Resources", description: "Free downloads — guides, templates, and worksheets." };
 

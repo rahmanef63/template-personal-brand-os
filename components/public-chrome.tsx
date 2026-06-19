@@ -3,18 +3,18 @@
 import { type ReactNode } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { SiteShell } from "@/components/templates/_shared/ui/site-shell";
-import { parseSocials } from "@/components/templates/_shared/ui/site-footer";
+import { SiteShell } from "@/features/_shared/ui/site-shell";
+import { parseSocials } from "@/features/_shared/ui/site-footer";
 import { ThemePresetSwitcher } from "@/features/theme-presets";
 import { CartWidget } from "@/features/storefront-checkout";
-import { DEFAULT_SITE_CONFIG } from "@/components/templates/personal-brand/shared/site-config";
+import { DEFAULT_SITE_CONFIG } from "@/features/_app/site-config";
 import {
   FOOTER_COLUMNS,
   FOOTER_TAGLINE,
   PUBLIC_BASE,
   PUBLIC_CTA,
   PUBLIC_NAV,
-} from "@/components/templates/personal-brand/shared/nav-config";
+} from "@/features/_app/nav-config";
 
 /**
  * Public chrome (nav + footer) with owner branding applied at runtime — the

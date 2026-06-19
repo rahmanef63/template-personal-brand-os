@@ -1,8 +1,8 @@
-import { PageEditorView } from "@/components/templates/_shared/pages/PageEditorView";
+import { PageEditorView } from "@/features/_shared/pages/PageEditorView";
 import {
   ADMIN_BASE,
   PUBLIC_BASE,
-} from "@/components/templates/personal-brand/shared/nav-config";
+} from "@/features/_app/nav-config";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

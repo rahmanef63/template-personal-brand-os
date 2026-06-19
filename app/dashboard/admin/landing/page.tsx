@@ -1,4 +1,4 @@
-import { LandingView } from "@/components/templates/_shared/landing";
+import { LandingView } from "@/features/_shared/landing";
 
 export default function Page() {
   return <LandingView />;

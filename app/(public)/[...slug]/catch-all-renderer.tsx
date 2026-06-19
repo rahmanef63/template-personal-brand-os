@@ -1,8 +1,8 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { BlocksRenderer } from "@/components/templates/_shared/pages/block-renderer";
-import { usePages } from "@/components/templates/personal-brand/shared/store";
+import { BlocksRenderer } from "@/features/_shared/pages/block-renderer";
+import { usePages } from "@/features/_app/store";
 
 /**
  * Client catch-all: reads the pages slice (localStorage-hydrated) and

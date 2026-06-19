@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { DEFAULT_SITE_CONFIG, TEMPLATE_SLUG } from "@/components/templates/personal-brand/shared/site-config";
-import { buildTemplatePaths } from "@/components/templates/_shared/config/template-paths";
+import { DEFAULT_SITE_CONFIG, TEMPLATE_SLUG } from "@/features/_app/site-config";
+import { buildTemplatePaths } from "@/features/_shared/config/template-paths";
 
 export default function robots(): MetadataRoute.Robots {
   const paths = buildTemplatePaths(TEMPLATE_SLUG);

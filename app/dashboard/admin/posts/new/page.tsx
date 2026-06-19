@@ -1,4 +1,4 @@
-import { PostEditor } from "@/components/templates/personal-brand/slices/admin/posts/PostEditor";
+import { PostEditor } from "@/features/admin/posts/PostEditor";
 
 export default function Page() {
   return <PostEditor id={null} />;

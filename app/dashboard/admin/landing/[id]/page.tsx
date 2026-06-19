@@ -1,4 +1,4 @@
-import { LandingEditorView } from "@/components/templates/_shared/landing";
+import { LandingEditorView } from "@/features/_shared/landing";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { OrderTrackingPage } from "@/components/templates/personal-brand/slices/checkout/OrderTrackingPage";
+import { OrderTrackingPage } from "@/features/checkout/OrderTrackingPage";
 
 export const metadata: Metadata = { title: "Lacak pesanan" };
 

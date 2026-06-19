@@ -1,4 +1,4 @@
-import { SubscriberEditorView } from "@/components/templates/personal-brand/slices/admin/newsletter/SubscriberEditorView";
+import { SubscriberEditorView } from "@/features/admin/newsletter/SubscriberEditorView";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

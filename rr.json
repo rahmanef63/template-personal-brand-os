@@ -11,9 +11,9 @@
   "aliases": {
     "components": "@/components",
     "ui": "@/components/ui",
-    "shared": "@/components/templates/_shared",
-    "templates": "@/components/templates",
-    "slices": "@/components/templates/{template}/slices",
+    "shared": "@/features/_shared",
+    "templates": "@/features",
+    "slices": "@/features",
     "features": "@/features",
     "convex": "@/convex",
     "lib": "@/lib",
@@ -23,7 +23,7 @@
     "kind": "vertical-slice",
     "publicRoute": "app/(public)",
     "adminRoute": "app/(admin)",
-    "sliceRoot": "components/templates"
+    "sliceRoot": "frontend/slices"
   },
   "template": {
     "slug": "personal-brand-os",

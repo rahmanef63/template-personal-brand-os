@@ -1,4 +1,4 @@
-import { CommentEditorView } from "@/components/templates/personal-brand/slices/admin/comments/CommentEditorView";
+import { CommentEditorView } from "@/features/admin/comments/CommentEditorView";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

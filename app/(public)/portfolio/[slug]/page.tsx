@@ -3,8 +3,8 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
-import { PortfolioDetailPage } from "@/components/templates/personal-brand/slices/portfolio/PortfolioDetailPage";
-import { SEED_PORTFOLIO } from "@/components/templates/personal-brand/shared/seed";
+import { PortfolioDetailPage } from "@/features/portfolio/PortfolioDetailPage";
+import { SEED_PORTFOLIO } from "@/features/_app/seed";
 
 const getItem = cache(async (slug: string) => {
   try {

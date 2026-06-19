@@ -3,8 +3,8 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
-import { BlogDetail } from "@/components/templates/personal-brand/slices/blog/BlogDetail";
-import { SEED_POSTS } from "@/components/templates/personal-brand/shared/seed";
+import { BlogDetail } from "@/features/blog/BlogDetail";
+import { SEED_POSTS } from "@/features/_app/seed";
 
 // SSR fetch the post (real CMS data) for metadata + existence — falls back to
 // the static seed if Convex is unreachable. cache() dedupes the call across
