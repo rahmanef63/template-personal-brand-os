@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { useMutation } from "convex/react";
+import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
+import { IS_DEMO } from "@/lib/stage";
 import { dispatchSiteAction } from "./store-dispatch-cases";
 import type { Action, State } from "./types";
 
@@ -83,6 +85,13 @@ export function useConvexDispatch(state: State): (a: Action) => void {
 
   return React.useCallback(
     (action: Action) => {
+      // Demo isolation: PUBLIC demo visitors share one Convex DB, so every
+      // business write is blocked here (above the switch) — reads (useQuery)
+      // still show seeded content. Pure no-op when NEXT_PUBLIC_DEMO !== "1".
+      if (IS_DEMO) {
+        toast.info("Mode demo — clone template untuk menyimpan perubahan");
+        return;
+      }
       const fail = (e: unknown) => console.error(`[store] ${action.type} failed`, e);
       dispatchContentAction(action, m, knownIds, fail);
       dispatchSiteAction(action, state, m, knownIds, fail);
