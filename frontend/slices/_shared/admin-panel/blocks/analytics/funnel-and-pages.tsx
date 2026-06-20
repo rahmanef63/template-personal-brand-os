@@ -2,15 +2,17 @@
 
 import * as React from "react";
 import { Clock, MousePointerClick } from "lucide-react";
-import { FUNNEL, TOP_PAGES } from "./seed";
+import { useAnalyticsBindings } from "./bindings";
 
 export function FunnelList() {
-  const top = FUNNEL[0]?.count ?? 1;
+  const { funnel } = useAnalyticsBindings();
+  const top = funnel[0]?.count || 1;
   return (
     <ol className="space-y-2">
-      {FUNNEL.map((s, i) => {
+      {funnel.map((s, i) => {
         const pct = (s.count / top) * 100;
-        const dropPct = i === 0 ? null : 100 - (s.count / (FUNNEL[i - 1]?.count ?? top)) * 100;
+        const dropPct =
+          i === 0 ? null : 100 - (s.count / (funnel[i - 1]?.count || top)) * 100;
         return (
           <li key={s.id} className="space-y-1">
             <div className="flex items-center justify-between text-xs">
@@ -36,9 +38,10 @@ export function FunnelList() {
 }
 
 export function TopPagesTable() {
+  const { topPages } = useAnalyticsBindings();
   return (
     <div className="divide-y rounded-lg border bg-card">
-      {TOP_PAGES.map((p) => (
+      {topPages.map((p) => (
         <div key={p.path} className="flex items-center gap-3 px-3 py-2">
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs font-medium">{p.title}</p>

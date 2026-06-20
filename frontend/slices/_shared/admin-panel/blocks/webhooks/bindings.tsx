@@ -24,6 +24,9 @@ export type WebhooksBindings = {
    *  prepends a synthetic delivery. Convex impl POSTs to the endpoint
    *  URL and writes the delivery record. */
   fire: (endpointId: string, event?: WebhookEventName) => void;
+  /** Creates a new active endpoint. Demo impl prepends a synthetic
+   *  endpoint; Convex impl inserts an adminWebhooks row. */
+  addEndpoint: (url: string, events: WebhookEventName[]) => void;
 };
 
 /** Demo physics for the synthetic delivery created by fire(). 70%
@@ -82,7 +85,25 @@ export function useDefaultWebhooksBindings(): WebhooksBindings {
     );
   }, []);
 
-  return { endpoints, deliveries, isLoading: false, togglePause, remove, fire };
+  const addEndpoint: WebhooksBindings["addEndpoint"] = React.useCallback(
+    (url, events) =>
+      setEndpoints((prev) => [
+        {
+          id: `wh_live_${Date.now().toString(36)}`,
+          url,
+          description: url,
+          events,
+          status: "active",
+          secretTail: Math.random().toString(36).slice(2, 6),
+          lastDeliveryAt: null,
+          failingRetries: 0,
+        },
+        ...prev,
+      ]),
+    [],
+  );
+
+  return { endpoints, deliveries, isLoading: false, togglePause, remove, fire, addEndpoint };
 }
 
 const Ctx = React.createContext<WebhooksBindings | null>(null);

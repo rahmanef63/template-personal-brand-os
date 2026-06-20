@@ -8,6 +8,7 @@ import {
   Filter,
   Search,
   Shield,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +24,7 @@ import type { AuditAction, AuditSeverity } from "./types";
  *  No persistence. Backed by frontend/slices/audit-log/ types in real
  *  ejected impl (see eject-spec.md + AuditLogBindings contract). */
 export function AuditLogBlockView() {
-  const { events } = useAuditLogBindings();
+  const { events, clear } = useAuditLogBindings();
   const [actionFilter, setActionFilter] = React.useState<AuditAction | "all">("all");
   const [severityFilter, setSeverityFilter] = React.useState<AuditSeverity | "all">("all");
   const [query, setQuery] = React.useState("");
@@ -56,10 +57,31 @@ export function AuditLogBlockView() {
         title="Audit log"
         meta={`${events.length} events · ${alertCount} alerts · ${warnCount} warnings · ${infoCount} info`}
         actions={
-          <Button variant="outline" size="sm" className="gap-1.5">
-            <Download className="size-3.5" />
-            Export CSV
-          </Button>
+          <div className="flex items-center gap-2">
+            {clear ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5"
+                onClick={() => {
+                  if (
+                    typeof window !== "undefined" &&
+                    !window.confirm("Clear the entire audit log? This cannot be undone.")
+                  ) {
+                    return;
+                  }
+                  clear();
+                }}
+              >
+                <Trash2 className="size-3.5" />
+                Clear log
+              </Button>
+            ) : null}
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <Download className="size-3.5" />
+              Export CSV
+            </Button>
+          </div>
         }
       />
 
@@ -145,12 +167,21 @@ export function AuditLogBlockView() {
         </div>
       </section>
 
-      <p className="text-[10px] text-muted-foreground">
-        Demo data — resets on browser reload. Real implementation backed by{" "}
-        <code className="rounded bg-muted px-1 py-0.5 text-[10px]">audit-log</code> slice with Convex
-        bindings (per <code className="rounded bg-muted px-1 py-0.5 text-[10px]">AuditLogBindings</code>{" "}
-        contract).
-      </p>
+      {clear ? (
+        <p className="text-[10px] text-muted-foreground">
+          Live log — admin actions are appended here and persist across reloads
+          (backed by Convex per the{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-[10px]">AuditLogBindings</code>{" "}
+          contract).
+        </p>
+      ) : (
+        <p className="text-[10px] text-muted-foreground">
+          Demo data — resets on browser reload. Real implementation backed by{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-[10px]">audit-log</code> slice with Convex
+          bindings (per <code className="rounded bg-muted px-1 py-0.5 text-[10px]">AuditLogBindings</code>{" "}
+          contract).
+        </p>
+      )}
     </div>
   );
 }

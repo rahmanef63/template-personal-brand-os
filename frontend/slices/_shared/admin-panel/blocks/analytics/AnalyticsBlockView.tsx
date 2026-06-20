@@ -102,9 +102,10 @@ export function AnalyticsBlockView() {
       </section>
 
       <p className="text-[10px] text-muted-foreground">
-        Demo data — deterministic seed, resets on browser reload. Real impl backed by{" "}
-        <code className="rounded bg-muted px-1 py-0.5 text-[10px]">event-tracking</code> slice +
-        Convex events table.
+        KPIs, traffic series, sources, and top pages are computed live from your
+        content (posts, leads, subscribers, orders). Funnel + per-page
+        duration/bounce are illustrative — no event-tracking infra in this
+        template yet.
       </p>
     </div>
   );

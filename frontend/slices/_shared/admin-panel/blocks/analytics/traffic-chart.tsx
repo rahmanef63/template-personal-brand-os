@@ -10,7 +10,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { SERIES_30D } from "./seed";
+import { useAnalyticsBindings } from "./bindings";
 
 const CONFIG = {
   views: { label: "Views", color: "var(--chart-1)" },
@@ -18,14 +18,15 @@ const CONFIG = {
 } satisfies ChartConfig;
 
 export function TrafficChart() {
+  const { series } = useAnalyticsBindings();
   const data = React.useMemo(
     () =>
-      SERIES_30D.map((p) => ({
+      series.map((p) => ({
         date: p.date.slice(5), // mm-dd
         views: p.views,
         sessions: p.sessions,
       })),
-    [],
+    [series],
   );
 
   return (

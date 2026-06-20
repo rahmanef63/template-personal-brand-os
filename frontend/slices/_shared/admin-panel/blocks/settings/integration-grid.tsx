@@ -4,12 +4,14 @@ import * as React from "react";
 import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { INTEGRATIONS, INTEGRATION_STATUS_META } from "./seed";
+import { useSettingsBindings } from "./bindings";
+import { INTEGRATION_STATUS_META } from "./seed";
 
 export function IntegrationGrid() {
+  const { integrations } = useSettingsBindings();
   return (
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-      {INTEGRATIONS.map((i) => {
+      {integrations.map((i) => {
         const meta = INTEGRATION_STATUS_META[i.status];
         const isConnected = i.status === "connected";
         const isError = i.status === "error";

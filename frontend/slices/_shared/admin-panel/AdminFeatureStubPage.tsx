@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import { AdminFeatureCard } from "./AdminFeatureCard";
 import { ADMIN_PANEL_BLOCKS } from "./feature-blocks";
-import { UsersBlockView } from "./blocks/users/UsersBlockView";
-import { AuditLogBlockView } from "./blocks/audit-log/AuditLogBlockView";
-import { AiConfigBlockView } from "./blocks/ai-config/AiConfigBlockView";
-import { AnalyticsBlockView } from "./blocks/analytics/AnalyticsBlockView";
-import { WebhooksBlockView } from "./blocks/webhooks/WebhooksBlockView";
-import { SettingsBlockView } from "./blocks/settings/SettingsBlockView";
+import { UsersBlockConvex } from "./blocks/users/UsersBlockConvex";
+import { AuditLogBlockConvex } from "./blocks/audit-log/AuditLogBlockConvex";
+import { AiConfigBlockConvex } from "./blocks/ai-config/AiConfigBlockConvex";
+import { AnalyticsBlockConvex } from "./blocks/analytics/AnalyticsBlockConvex";
+import { WebhooksBlockConvex } from "./blocks/webhooks/WebhooksBlockConvex";
+import { SettingsBlockConvex } from "./blocks/settings/SettingsBlockConvex";
 
 /**
  * BG-wave — shared stub renderer used by every per-template admin
@@ -23,11 +23,11 @@ import { SettingsBlockView } from "./blocks/settings/SettingsBlockView";
 export function AdminFeatureStubPage({ segment }: { segment: string }) {
   const block = ADMIN_PANEL_BLOCKS.find((b) => b.segment === segment);
   if (!block) notFound();
-  if (segment === "users") return <UsersBlockView />;
-  if (segment === "audit-log") return <AuditLogBlockView />;
-  if (segment === "ai-config") return <AiConfigBlockView />;
-  if (segment === "analytics") return <AnalyticsBlockView />;
-  if (segment === "webhooks") return <WebhooksBlockView />;
-  if (segment === "settings") return <SettingsBlockView />;
+  if (segment === "users") return <UsersBlockConvex />;
+  if (segment === "audit-log") return <AuditLogBlockConvex />;
+  if (segment === "ai-config") return <AiConfigBlockConvex />;
+  if (segment === "analytics") return <AnalyticsBlockConvex />;
+  if (segment === "webhooks") return <WebhooksBlockConvex />;
+  if (segment === "settings") return <SettingsBlockConvex />;
   return <AdminFeatureCard block={block} />;
 }

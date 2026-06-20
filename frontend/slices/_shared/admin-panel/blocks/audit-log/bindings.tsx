@@ -12,6 +12,9 @@ export type AuditLogBindings = {
   isLoading: boolean;
   /** Optional — present in Convex bindings, absent in demo. */
   logEvent?: (event: Omit<AuditEventRow, "id" | "at">) => void;
+  /** Optional — clears the persisted log. Present in Convex bindings only;
+   *  the in-memory demo omits it (the "Clear log" control hides when absent). */
+  clear?: () => void;
 };
 
 export function useDefaultAuditLogBindings(): AuditLogBindings {

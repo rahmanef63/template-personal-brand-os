@@ -1,17 +1,13 @@
 "use client";
 
-import * as React from "react";
 import { Copy, KeyRound, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SCOPE_META, SEED_KEYS } from "./seed";
-import type { ApiKey } from "./types";
+import { useSettingsBindings } from "./bindings";
+import { SCOPE_META } from "./seed";
 
 export function ApiKeysList() {
-  const [keys, setKeys] = React.useState<ApiKey[]>(SEED_KEYS);
-  function remove(id: string) {
-    setKeys((prev) => prev.filter((k) => k.id !== id));
-  }
+  const { apiKeys: keys, revokeKey } = useSettingsBindings();
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
@@ -59,7 +55,7 @@ export function ApiKeysList() {
                 className="size-7 text-destructive"
                 aria-label={`Revoke ${k.label}`}
                 title="Revoke"
-                onClick={() => remove(k.id)}
+                onClick={() => revokeKey(k.id)}
               >
                 <Trash2 className="size-3.5" />
               </Button>

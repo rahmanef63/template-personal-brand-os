@@ -18,7 +18,7 @@ import { EmptyState } from "../../ui/empty-state";
  *  showing HMAC-SHA256 signature header that real impl would emit.
  *  No persistence. */
 export function WebhooksBlockView() {
-  const { endpoints, deliveries, togglePause, remove, fire } = useWebhooksBindings();
+  const { endpoints, deliveries, togglePause, remove, fire, addEndpoint } = useWebhooksBindings();
   const activeCount = endpoints.filter((e) => e.status === "active").length;
   const failingCount = endpoints.filter((e) => e.status === "failing").length;
   const last24h = deliveries.length;
@@ -33,7 +33,16 @@ export function WebhooksBlockView() {
         title="Webhooks"
         meta={`${endpoints.length} endpoint${endpoints.length === 1 ? "" : "s"} · ${activeCount} active · ${failingCount} failing · ${last24h} deliveries (24h) · ${successRate}% success`}
         actions={
-          <Button size="sm" className="gap-1.5">
+          <Button
+            size="sm"
+            className="gap-1.5"
+            onClick={() => {
+              // ponytail: minimal prompt-based create (no Dialog dep). New
+              // endpoints default to the post.created event.
+              const url = window.prompt("Endpoint URL (https://…)")?.trim();
+              if (url) addEndpoint(url, ["post.created"]);
+            }}
+          >
             <Plus className="size-3.5" />
             Add endpoint
           </Button>
