@@ -57,7 +57,7 @@ export function HeroLayersField({
         type,
         enabled: true,
         placement: "background",
-        opacity: type === "image" ? 30 : 100,
+        opacity: 100,
       },
     ]);
   }

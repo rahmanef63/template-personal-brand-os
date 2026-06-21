@@ -19,12 +19,13 @@ export function HeroLayers({
   layers,
   fallbackImg,
   placement,
-  fallbackOpacity = 30,
+  fallbackOpacity = 100,
 }: {
   layers?: HeroLayer[];
   fallbackImg?: string;
   placement: "background" | "foreground";
-  /** Opacity (0-100) for the back-compat fallback image. */
+  /** Opacity (0-100) for the back-compat fallback image. Full by default so
+   *  the image shows in its real colors. */
   fallbackOpacity?: number;
 }) {
   const all = layers ?? [];

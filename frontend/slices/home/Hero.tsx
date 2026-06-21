@@ -29,6 +29,9 @@ export interface HeroProps {
    *  layer is set it replaces the default HERO_IMG; otherwise HERO_IMG is
    *  the fallback. */
   layers?: HeroLayer[];
+  /** Readability scrim + brand glow. Off by default → image shows in full
+   *  real color; on → gradient + glow for legibility. */
+  shade?: boolean;
 }
 
 const DEFAULTS = {
@@ -39,7 +42,7 @@ const DEFAULTS = {
   trust: "Trusted by — Acme · Foobar · Beta Labs · Gamma · Delta · Zeta",
 } as const;
 
-export function Hero({ title, subtitle, badge, trust, image, layers }: HeroProps = {}) {
+export function Hero({ title, subtitle, badge, trust, image, layers, shade }: HeroProps = {}) {
   const t = title?.trim() || DEFAULTS.title;
   const s = subtitle?.trim() || DEFAULTS.subtitle;
   const b = badge?.trim() || DEFAULTS.badge;
@@ -48,18 +51,21 @@ export function Hero({ title, subtitle, badge, trust, image, layers }: HeroProps
   const ratioClass = ASPECT_RATIO_CLASS[image?.ratio ?? "16:9"];
   return (
     <section className="relative isolate overflow-hidden">
-      {/* Background image band — admin layers, or HERO_IMG fallback. */}
+      {/* Background image band — admin layers, or HERO_IMG fallback (full
+          opacity = real colors). */}
       <HeroLayers placement="background" layers={layers} fallbackImg={HERO_IMG} />
-      {/* Readability scrim + brand glow — chrome, always on, above the
-          image band but behind the content. */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/85 to-background" />
-        <div className="motion-blob absolute -right-40 top-32 h-96 w-96 rounded-full bg-brand/15 blur-3xl" />
-        <div
-          className="motion-blob absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-[oklch(0.78_0.11_78_/_0.12)] blur-3xl"
-          style={{ animationDelay: "-8s", animationDuration: "22s" }}
-        />
-      </div>
+      {/* Readability scrim + brand glow — opt-in via the `shade` toggle so
+          the image can show in full real color by default. */}
+      {shade && (
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/85 to-background" />
+          <div className="motion-blob absolute -right-40 top-32 h-96 w-96 rounded-full bg-brand/15 blur-3xl" />
+          <div
+            className="motion-blob absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-[oklch(0.78_0.11_78_/_0.12)] blur-3xl"
+            style={{ animationDelay: "-8s", animationDuration: "22s" }}
+          />
+        </div>
+      )}
       <div
         className={cn(
           "mx-auto max-w-6xl gap-10 px-6 pt-24 pb-28 md:pt-32 md:pb-36",

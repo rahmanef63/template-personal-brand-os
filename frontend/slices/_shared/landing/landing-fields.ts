@@ -111,6 +111,12 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
         kind: (ctx?.row as Record<string, unknown> | undefined)?.kind as string | undefined,
       }),
   },
+  {
+    kind: "switch",
+    key: "shade",
+    label: "Hero shade (readability overlay)",
+    hint: "Off = hero image shows in full real color. On = adds a gradient scrim + brand glow so text stays legible over busy images. Hero section only.",
+  },
 
   {
     kind: "text",

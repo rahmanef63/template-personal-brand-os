@@ -59,6 +59,10 @@ export type LandingSection = {
    *  template's built-in hero background (back-compat). Only the hero kind
    *  renders these. */
   layers?: HeroLayer[];
+  /** Hero readability overlay (gradient scrim + brand glow). OFF by default
+   *  so the hero image shows in its full, real colors; toggle ON to keep
+   *  text legible over busy images. Hero kind only. */
+  shade?: boolean;
 };
 
 /** A single hero composition layer. `image` = a picture; `html` = a raw

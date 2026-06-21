@@ -11,7 +11,7 @@ export const SEED_LANDING_SECTIONS: LandingSection[] = [
     enabled: true,
     config: '{"badge":"2026 mentorship cohort open"}',
     layers: [
-      { id: "hero-photo", type: "image", placement: "background", opacity: 30, enabled: true, url: "/hero.webp" },
+      { id: "hero-photo", type: "image", placement: "background", opacity: 100, enabled: true, url: "/hero.webp" },
     ],
   },
   { id: "ls-stats",        order: 20, kind: "stats",        title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
