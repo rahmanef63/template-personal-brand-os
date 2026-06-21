@@ -31,7 +31,15 @@ export const create = mutation({
     message: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("leads", { ...args, ts: Date.now(), status: "new" });
+    if (!args.email.includes("@")) throw new Error("Email tidak valid");
+    const lead = {
+      name: args.name.slice(0, 200),
+      email: args.email.slice(0, 320),
+      topic: args.topic.slice(0, 500),
+      source: args.source.slice(0, 500),
+      message: args.message?.slice(0, 5000),
+    };
+    return await ctx.db.insert("leads", { ...lead, ts: Date.now(), status: "new" });
   },
 });
 

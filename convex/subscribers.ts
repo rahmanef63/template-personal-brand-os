@@ -13,6 +13,9 @@ export const list = query({
 export const subscribe = mutation({
   args: { email: v.string(), source: v.string() },
   handler: async (ctx, { email, source }) => {
+    if (!email.includes("@")) throw new Error("Email tidak valid");
+    email = email.slice(0, 320);
+    source = source.slice(0, 500);
     const existing = await ctx.db
       .query("subscribers")
       .withIndex("by_email", (q) => q.eq("email", email))
