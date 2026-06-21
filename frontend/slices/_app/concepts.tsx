@@ -1,8 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { BlogListSection } from "@/features/blog-section";
-import { PortfolioListSection } from "@/features/portfolio-section";
 import { usePublishedPosts, usePortfolio } from "@/features/_app/store";
 import { PUBLIC_BASE } from "@/features/_app/nav-config";
 import type {
@@ -12,10 +10,11 @@ import type {
 
 /**
  * Per-template CONCEPT REGISTRY — maps a canonical concept to {data selector +
- * field map + grid renderer}, so the shared ConceptListPage works for this
- * template's real tables/fields. Adapter-only: no schema/table/state rename,
- * wraps existing selectors → zero data migration. Other templates ship their
- * own _app/concepts pointing at their own tables (e.g. agencyArticles).
+ * field map + link}, consumed by the shared ConceptListPage (default grid via
+ * ConceptCardView). Adapter-only: wraps existing selectors, no schema/table/
+ * state rename → zero data migration. Every template ships its own copy of this
+ * file pointing at its own tables (e.g. agencyArticles), giving one consistent
+ * list UI fleet-wide.
  */
 
 export const blogAdapter: ConceptListAdapter = {
@@ -26,7 +25,9 @@ export const blogAdapter: ConceptListAdapter = {
       "Esai panjang dan catatan singkat. Cari berdasarkan judul atau filter berdasarkan kategori.",
   },
   searchable: true,
+  columns: 3,
   emptyText: "Tidak ada post yang cocok. Reset filter atau buat post baru di Admin.",
+  hrefFor: (c) => `${PUBLIC_BASE}/blog/${c.slug}`,
   useCards: () => {
     const posts = usePublishedPosts();
     return React.useMemo<ConceptCard[]>(
@@ -43,23 +44,6 @@ export const blogAdapter: ConceptListAdapter = {
       [posts],
     );
   },
-  renderGrid: (cards) => (
-    <BlogListSection
-      posts={cards.map((c) => ({
-        id: c.id,
-        slug: c.slug,
-        title: c.title,
-        excerpt: c.excerpt ?? "",
-        publishedAt: c.date ?? 0,
-        tags: c.tags,
-        cover: { src: c.cover ?? "", alt: c.title },
-      }))}
-      hrefFor={(p) => `${PUBLIC_BASE}/blog/${p.slug}`}
-      layout="cards"
-      columns={3}
-      className="!p-0"
-    />
-  ),
 };
 
 export const portfolioAdapter: ConceptListAdapter = {
@@ -69,7 +53,9 @@ export const portfolioAdapter: ConceptListAdapter = {
     subtitle:
       "Case study dengan struktur problem→approach→result. Pilih kategori untuk filter.",
   },
+  columns: 2,
   emptyText: "Belum ada case study di kategori ini.",
+  hrefFor: (c) => `${PUBLIC_BASE}/portfolio/${c.slug}`,
   useCards: () => {
     const items = usePortfolio();
     return React.useMemo<ConceptCard[]>(
@@ -85,20 +71,4 @@ export const portfolioAdapter: ConceptListAdapter = {
       [items],
     );
   },
-  renderGrid: (cards) => (
-    <PortfolioListSection
-      items={cards.map((c) => ({
-        id: c.id,
-        slug: c.slug,
-        title: c.title,
-        summary: c.excerpt ?? "",
-        tags: c.tags,
-        cover: { src: c.cover ?? "", alt: c.title },
-      }))}
-      hrefFor={(i) => `${PUBLIC_BASE}/portfolio/${i.slug}`}
-      layout="uniform"
-      columns={2}
-      className="!p-0"
-    />
-  ),
 };

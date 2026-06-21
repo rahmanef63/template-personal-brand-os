@@ -5,7 +5,9 @@ import { Filter } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Reveal } from "@/features/_shared/motion";
+import { ConceptCardView } from "./ConceptCardView";
 
 /**
  * Canonical, normalized card shape every concept's adapter maps its rows into.
@@ -32,10 +34,15 @@ export type ConceptListAdapter = {
   header: { eyebrow: string; title: string; subtitle?: string };
   searchable?: boolean;
   emptyText: string;
+  /** Grid columns at lg (default 3). Mobile is always 1, sm always 2. */
+  columns?: 2 | 3;
   /** Hook: wraps the template's existing selector + maps rows → ConceptCard[]. */
   useCards: () => ConceptCard[];
-  /** Delegate the filtered cards to the concept's shared section renderer. */
-  renderGrid: (cards: ConceptCard[]) => React.ReactNode;
+  /** Per-card link target. */
+  hrefFor: (card: ConceptCard) => string;
+  /** Optional override: render the grid yourself (e.g. delegate to a bespoke
+   *  section). When omitted, the shared default ConceptCardView grid is used. */
+  renderGrid?: (cards: ConceptCard[]) => React.ReactNode;
 };
 
 export function ConceptListPage({ adapter }: { adapter: ConceptListAdapter }) {
@@ -117,8 +124,19 @@ export function ConceptListPage({ adapter }: { adapter: ConceptListAdapter }) {
           <Card className="border-dashed bg-muted/10 p-10 text-center text-sm text-muted-foreground">
             {adapter.emptyText}
           </Card>
-        ) : (
+        ) : adapter.renderGrid ? (
           adapter.renderGrid(filtered)
+        ) : (
+          <div
+            className={cn(
+              "grid grid-cols-1 gap-5 sm:grid-cols-2",
+              (adapter.columns ?? 3) === 3 && "lg:grid-cols-3",
+            )}
+          >
+            {filtered.map((c) => (
+              <ConceptCardView key={c.id} card={c} href={adapter.hrefFor(c)} />
+            ))}
+          </div>
         )}
       </Reveal>
     </section>
