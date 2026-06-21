@@ -34,16 +34,14 @@ export function SiteNav({
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
-        <Link href={homeHref || "/"} className="group flex items-center gap-2 font-semibold tracking-tight">
+        <Link href={homeHref || "/"} className="flex items-center gap-2 font-semibold tracking-tight">
           {brand.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={brand.logoUrl} alt={brand.brandName} className="h-7 w-auto rounded-md object-contain transition-transform duration-200 group-hover:scale-110" />
+            <img src={brand.logoUrl} alt={brand.brandName} className="h-7 w-auto rounded-md object-contain" />
           ) : (
-            <span className="grid size-7 place-items-center rounded-md bg-foreground text-background transition-transform duration-200 group-hover:scale-110 group-hover:rotate-3">
-              {brand.brandLetter}
-            </span>
+            <span className="grid size-7 place-items-center rounded-md bg-foreground text-background">{brand.brandLetter}</span>
           )}
-          <span className="transition-colors group-hover:text-brand">{brand.brandName}</span>
+          <span>{brand.brandName}</span>
         </Link>
         <nav className="hidden items-center gap-1 text-sm md:flex">
           {items.map((n) => {
@@ -53,10 +51,8 @@ export function SiteNav({
                 key={n.href}
                 href={n.href}
                 className={cn(
-                  "rounded-md px-3 py-1.5 font-medium transition-colors",
-                  on
-                    ? "bg-brand/10 text-brand"
-                    : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                  "rounded-md px-3 py-1.5 transition",
+                  on ? "bg-accent text-foreground" : "text-muted-foreground hover:bg-accent hover:text-foreground",
                 )}
               >
                 {n.label}
@@ -87,24 +83,16 @@ export function SiteNav({
       {open && (
         <div className="border-t border-border/60 bg-background md:hidden">
           <nav className="mx-auto flex max-w-6xl flex-col px-6 py-2">
-            {items.map((n) => {
-              const on = pathname === n.href || pathname.startsWith(n.href + "/");
-              return (
-                <Link
-                  key={n.href}
-                  href={n.href}
-                  onClick={() => setOpen(false)}
-                  className={cn(
-                    "rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                    on
-                      ? "bg-brand/10 text-brand"
-                      : "text-muted-foreground hover:bg-accent hover:text-foreground",
-                  )}
-                >
-                  {n.label}
-                </Link>
-              );
-            })}
+            {items.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                {n.label}
+              </Link>
+            ))}
           </nav>
         </div>
       )}

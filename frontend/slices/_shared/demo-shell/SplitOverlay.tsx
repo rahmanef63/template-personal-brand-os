@@ -97,8 +97,8 @@ function DividerHandle({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       className={cn(
-        "z-20 flex shrink-0 items-center justify-center bg-border/70 transition-colors hover:bg-brand/60 touch-none select-none",
-        dragging && "bg-brand/70",
+        "z-20 flex shrink-0 items-center justify-center bg-border/70 transition-colors hover:bg-primary/60 touch-none select-none",
+        dragging && "bg-primary/70",
         isMobile ? "h-2 w-full cursor-row-resize" : "h-full w-2 cursor-col-resize",
       )}
     >
