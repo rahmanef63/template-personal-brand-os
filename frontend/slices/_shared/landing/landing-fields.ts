@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { FieldDef } from "@/features/_shared/crud/types";
 import { LandingConfigField } from "./landing-config-field";
+import { HeroLayersField } from "./hero-layers-field";
 import type { LandingSection } from "./types";
 
 /** Single source of truth for the landing-section editor schema. Used
@@ -94,6 +95,21 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     wide: true,
     placeholder: "https://… (subtle textures work best)",
     hint: "Full-bleed background behind the section. A soft gradient scrim keeps text readable.",
+  },
+  {
+    kind: "custom",
+    key: "layers",
+    label: "Hero layers (background / foreground)",
+    wide: true,
+    hint:
+      "Stack images + custom HTML/CSS behind or in front of the hero, each with its own opacity slider and on/off toggle. " +
+      "Empty = the template's built-in hero background. Only the hero section renders these.",
+    render: (value, onChange, ctx) =>
+      React.createElement(HeroLayersField, {
+        value,
+        onChange,
+        kind: (ctx?.row as Record<string, unknown> | undefined)?.kind as string | undefined,
+      }),
   },
 
   {

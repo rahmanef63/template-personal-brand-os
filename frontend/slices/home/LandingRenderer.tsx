@@ -64,6 +64,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
             subtitle={section.subtitle}
             badge={parseConfigBadge(section.config)}
             image={section.imageUrl ? { url: section.imageUrl, ratio: section.imageRatio } : undefined}
+            layers={section.layers}
           />
         </LandingSectionShell>
       );

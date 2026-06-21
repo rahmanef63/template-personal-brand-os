@@ -10,6 +10,9 @@ export const SEED_LANDING_SECTIONS: LandingSection[] = [
       "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.",
     enabled: true,
     config: '{"badge":"2026 mentorship cohort open"}',
+    layers: [
+      { id: "hero-photo", type: "image", placement: "background", opacity: 30, enabled: true, url: "/hero.webp" },
+    ],
   },
   { id: "ls-stats",        order: 20, kind: "stats",        title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
   {

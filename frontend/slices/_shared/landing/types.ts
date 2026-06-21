@@ -54,6 +54,34 @@ export type LandingSection = {
   /** Free-form JSON the renderer can interpret (kind-specific extras).
    *  Common keys: { badge: string } for hero badge override. */
   config?: string;
+  /** Stacked hero background / foreground layers (images + custom HTML/CSS),
+   *  each with its own opacity + on/off toggle. Empty / undefined => the
+   *  template's built-in hero background (back-compat). Only the hero kind
+   *  renders these. */
+  layers?: HeroLayer[];
+};
+
+/** A single hero composition layer. `image` = a picture; `html` = a raw
+ *  HTML block + optional CSS (author-controlled, admin-only). `placement`
+ *  decides z-order: background sits behind the hero content, foreground
+ *  above it (click-through). `opacity` (0-100) is the dashboard control
+ *  that replaces the old hardcoded hero opacity. */
+export type HeroLayer = {
+  /** Stable id (React key + editor rows). */
+  id: string;
+  type: "image" | "html";
+  /** Off => skipped at render (the "optional" toggle). */
+  enabled: boolean;
+  placement: "background" | "foreground";
+  /** 0-100, applied as CSS opacity. */
+  opacity: number;
+  /** type=image: image URL or /public path. */
+  url?: string;
+  /** type=html: raw HTML injected into the layer. */
+  html?: string;
+  /** type=html: extra CSS injected in a <style> tag for this layer
+   *  (global — scope your selectors). */
+  css?: string;
 };
 
 export type AspectRatio =

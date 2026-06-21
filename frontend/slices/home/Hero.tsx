@@ -1,6 +1,5 @@
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,9 @@ import { cn } from "@/lib/utils";
 import {
   ASPECT_RATIO_CLASS,
   type AspectRatio,
+  type HeroLayer,
 } from "@/features/_shared/landing/types";
+import { HeroLayers } from "@/features/_shared/landing/HeroLayers";
 import { PUBLIC_BASE } from "@/features/_app/nav-config";
 import { HERO_IMG } from "./home-data";
 
@@ -24,6 +25,10 @@ export interface HeroProps {
   /** Optional foreground illustration. Renders as right-column when
    *  set, with the text content auto-narrowing to fit. */
   image?: { url: string; ratio?: AspectRatio; alt?: string };
+  /** Admin-composed background / foreground layers. When a background
+   *  layer is set it replaces the default HERO_IMG; otherwise HERO_IMG is
+   *  the fallback. */
+  layers?: HeroLayer[];
 }
 
 const DEFAULTS = {
@@ -34,7 +39,7 @@ const DEFAULTS = {
   trust: "Trusted by — Acme · Foobar · Beta Labs · Gamma · Delta · Zeta",
 } as const;
 
-export function Hero({ title, subtitle, badge, trust, image }: HeroProps = {}) {
+export function Hero({ title, subtitle, badge, trust, image, layers }: HeroProps = {}) {
   const t = title?.trim() || DEFAULTS.title;
   const s = subtitle?.trim() || DEFAULTS.subtitle;
   const b = badge?.trim() || DEFAULTS.badge;
@@ -43,8 +48,11 @@ export function Hero({ title, subtitle, badge, trust, image }: HeroProps = {}) {
   const ratioClass = ASPECT_RATIO_CLASS[image?.ratio ?? "16:9"];
   return (
     <section className="relative isolate overflow-hidden">
+      {/* Background image band — admin layers, or HERO_IMG fallback. */}
+      <HeroLayers placement="background" layers={layers} fallbackImg={HERO_IMG} />
+      {/* Readability scrim + brand glow — chrome, always on, above the
+          image band but behind the content. */}
       <div className="absolute inset-0 -z-10">
-        <Image src={HERO_IMG} alt="" fill priority sizes="100vw" className="object-cover opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/85 to-background" />
         <div className="motion-blob absolute -right-40 top-32 h-96 w-96 rounded-full bg-brand/15 blur-3xl" />
         <div
@@ -112,6 +120,8 @@ export function Hero({ title, subtitle, badge, trust, image }: HeroProps = {}) {
           </div>
         )}
       </div>
+      {/* Foreground layers — above the content, click-through. */}
+      <HeroLayers placement="foreground" layers={layers} />
     </section>
   );
 }
