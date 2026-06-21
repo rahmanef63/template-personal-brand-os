@@ -15,8 +15,12 @@ import {
 import type { LandingSection } from "@/features/_shared/landing/types";
 import { ADMIN_BASE, PUBLIC_BASE } from "./nav-config";
 import { StoreCtx, useStore, type Ctx } from "./store-context";
-import { useConvexDispatch } from "./store-dispatch";
-import type { State } from "./types";
+import { useConvexDispatch, useDemoDispatch } from "./store-dispatch";
+import { reducer } from "./store-reducer";
+import { SEED_STATE } from "./seed";
+import { loadDemoState, openDemoChannel } from "@/lib/demo-store";
+import { IS_DEMO } from "@/lib/stage";
+import type { Action, State } from "./types";
 
 // Convex-backed store. Replaces the old localStorage reducer: `state` is
 // assembled from live Convex queries; `dispatch` routes each action to the
@@ -31,6 +35,38 @@ const withId = <T,>(rows: ReadonlyArray<Record<string, unknown>> | undefined): T
   ((rows ?? []) as Array<Record<string, unknown>>).map((r) => ({ ...r, id: r._id })) as T[];
 
 function Provider({ children }: { children: React.ReactNode }) {
+  if (IS_DEMO) return <DemoProvider>{children}</DemoProvider>;
+  return <ConvexProvider>{children}</ConvexProvider>;
+}
+
+// DEMO-only provider: no Convex queries run (the demo store lives entirely in
+// localStorage), state syncs across the public<->admin iframes via a
+// BroadcastChannel. Mounted only when NEXT_PUBLIC_DEMO=1; tree-shaken/never
+// reached in real clones (IS_DEMO is a build-time const false).
+function DemoProvider({ children }: { children: React.ReactNode }) {
+  const [state, setState] = React.useState<State>(() => loadDemoState(SEED_STATE));
+
+  // Apply actions broadcast from the *other* iframe through the same reducer,
+  // so a create/edit/delete in the admin frame re-renders the public frame.
+  React.useEffect(() => {
+    const ch = openDemoChannel();
+    if (!ch) return;
+    ch.onmessage = (e: MessageEvent<Action>) => setState((s) => reducer(s, e.data));
+    return () => ch.close();
+  }, []);
+
+  const dispatch = useDemoDispatch(setState);
+
+  const value = React.useMemo<Ctx>(
+    // ponytail: ready=true immediately + progress=100 — the demo state is in
+    // hand synchronously, no network load phase to report.
+    () => ({ state, dispatch, ready: true, progress: 100 }),
+    [state, dispatch],
+  );
+  return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>;
+}
+
+function ConvexProvider({ children }: { children: React.ReactNode }) {
   const posts = useQuery(api.posts.listAll);
   const portfolio = useQuery(api.portfolio.list, {});
   const services = useQuery(api.services.list);

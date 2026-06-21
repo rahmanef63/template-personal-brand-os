@@ -6,6 +6,8 @@ import { ConvexClientProvider } from "@/components/convex-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { BrandHead } from "@/components/brand-head";
 import { Toaster } from "sonner";
+import { IS_DEMO } from "@/lib/stage";
+import { DemoShell } from "@/features/_shared/demo-shell";
 import "./globals.css";
 
 // Editorial pairing: characterful serif display + clean grotesk body.
@@ -62,6 +64,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <BrandHead />
             {children}
           </ConvexClientProvider>
+          {/* DEMO-only interactive shell (Public/Admin/Split). Gated here so
+              real clones never even mount the client component. */}
+          {IS_DEMO && <DemoShell />}
           <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>

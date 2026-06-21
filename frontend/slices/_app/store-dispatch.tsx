@@ -2,12 +2,40 @@
 
 import * as React from "react";
 import { useMutation } from "convex/react";
-import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-import { IS_DEMO } from "@/lib/stage";
+import { reducer } from "./store-reducer";
+import { saveDemoState, broadcastAction, openDemoChannel } from "@/lib/demo-store";
 import { dispatchSiteAction } from "./store-dispatch-cases";
 import type { Action, State } from "./types";
+
+// DEMO dispatch: every action runs through the same pure `reducer`, the next
+// State is persisted to localStorage, and the action is broadcast so the
+// sibling iframe (public<->admin) re-renders live. Mounted only when
+// NEXT_PUBLIC_DEMO=1 (see store.tsx DemoProvider); replaces the Convex mutation
+// path for the demo. Real clones never call this — they use useConvexDispatch.
+export function useDemoDispatch(
+  setState: React.Dispatch<React.SetStateAction<State>>,
+): (a: Action) => void {
+  // One channel per provider instance; closed on unmount.
+  const channelRef = React.useRef<BroadcastChannel | null>(null);
+  React.useEffect(() => {
+    channelRef.current = openDemoChannel();
+    return () => channelRef.current?.close();
+  }, []);
+
+  return React.useCallback(
+    (action: Action) => {
+      setState((s) => {
+        const next = reducer(s, action);
+        saveDemoState(next);
+        return next;
+      });
+      broadcastAction(channelRef.current, action);
+    },
+    [setState],
+  );
+}
 
 // Dispatch wiring, split out of store.tsx (move-only): routes each store
 // action to the matching Convex mutation. `id` is passed to upsert only when
@@ -85,13 +113,9 @@ export function useConvexDispatch(state: State): (a: Action) => void {
 
   return React.useCallback(
     (action: Action) => {
-      // Demo isolation: PUBLIC demo visitors share one Convex DB, so every
-      // business write is blocked here (above the switch) — reads (useQuery)
-      // still show seeded content. Pure no-op when NEXT_PUBLIC_DEMO !== "1".
-      if (IS_DEMO) {
-        toast.info("Mode demo — clone template untuk menyimpan perubahan");
-        return;
-      }
+      // Non-DEMO only: routes each action to its Convex mutation. (In DEMO the
+      // store uses useDemoDispatch instead — see store.tsx DemoProvider — so
+      // this path never runs there and Convex is never written from the demo.)
       const fail = (e: unknown) => console.error(`[store] ${action.type} failed`, e);
       dispatchContentAction(action, m, knownIds, fail);
       dispatchSiteAction(action, state, m, knownIds, fail);

@@ -3,7 +3,6 @@ import { type ReactNode } from "react";
 import { StoreProvider } from "@/features/_app/store";
 import { CartProvider } from "@/features/storefront-checkout";
 import { SiteLoader } from "@/components/site-loader";
-import { DemoRibbon } from "@/components/demo-ribbon";
 import { PublicChrome } from "@/components/public-chrome";
 import { AiChatFab } from "@/components/ai-chat-fab";
 import { DEFAULT_SITE_CONFIG } from "@/features/_app/site-config";
@@ -43,7 +42,6 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         <SiteLoader brandLetter={DEFAULT_SITE_CONFIG.brandLetter} />
         <PublicChrome>{children}</PublicChrome>
         <AiChatFab brand={DEFAULT_SITE_CONFIG.brandName} />
-        <DemoRibbon />
       </CartProvider>
     </StoreProvider>
   );

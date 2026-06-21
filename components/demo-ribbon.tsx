@@ -2,14 +2,21 @@
 
 import { Github, Rocket } from "lucide-react";
 import { IS_DEMO, CLONE_URL, REPO_URL } from "@/lib/stage";
+import { useEmbedded } from "@/features/_shared/demo-shell/use-embedded";
 
 /**
  * Demo-stage only: a floating "deploy your own copy" CTA + source link. Renders
  * exclusively when NEXT_PUBLIC_DEMO=1 (set on the showcase deployment), so a
  * cloned site never shows it. Bottom-LEFT to avoid the bottom-right chat FAB.
+ *
+ * In the interactive demo shell the DemoShell control bar supersedes this (same
+ * Deploy/GitHub links, plus mode switch); the public route no longer mounts the
+ * ribbon. It also self-suppresses when embedded so it never shows inside the
+ * shell's iframes — keeping it safe wherever a sibling template still mounts it.
  */
 export function DemoRibbon() {
-  if (!IS_DEMO) return null;
+  const embedded = useEmbedded();
+  if (!IS_DEMO || embedded) return null;
   return (
     <div className="fixed bottom-5 left-5 z-40 flex items-center gap-2">
       <a
