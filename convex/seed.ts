@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { mutation, internalMutation } from "./_generated/server";
 import { ConvexError } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { requireUser } from "./_shared/auth";
@@ -14,7 +14,7 @@ const day = 86_400_000;
 // SEED_LANDING_SECTIONS. `syncLanding` below pushes additions/order to an
 // already-seeded deployment without touching admin-edited copy.
 const LANDING = [
-  { id: "ls-hero", order: 10, kind: "hero", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.", subtitle: "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.", enabled: true, config: '{"badge":"2026 mentorship cohort open"}' },
+  { id: "ls-hero", order: 10, kind: "hero", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.", subtitle: "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.", enabled: true, imageUrl: "/hero.webp", config: '{"badge":"2026 mentorship cohort open"}' },
   { id: "ls-stats", order: 20, kind: "stats", title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
   { id: "ls-features", order: 25, kind: "features", title: "Fokus yang saya kerjakan", subtitle: "Empat jalur utama: strategi produk, mentorship engineering, tulisan, dan sesi untuk tim.", enabled: true },
   { id: "ls-blog", order: 30, kind: "blog", title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
@@ -28,7 +28,7 @@ const LANDING = [
 ];
 
 // All demo content inserts (no wipe). Shared by `run` and `seedSample`.
-async function insertAll(ctx: any) {
+async function insertAll(ctx: any, opts: { landing?: boolean } = {}) {
   const posts = [
     { slug: "designing-with-intent", title: "Designing With Intent", excerpt: "How constraints sharpen creative work.", tag: "Design", cover: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1400&q=70" },
     { slug: "building-a-personal-brand", title: "Building a Personal Brand That Lasts", excerpt: "Consistency beats virality over time.", tag: "Strategy", cover: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1400&q=70" },
@@ -85,7 +85,7 @@ async function insertAll(ctx: any) {
 
   // landing sections — the public home composes from these (HomePage reads
   // useLandingSections → filter enabled → sort order). Without them home is blank.
-  for (const s of LANDING) await ctx.db.insert("landingSections", { sectionId: s.id, data: s });
+  if (opts.landing !== false) for (const s of LANDING) await ctx.db.insert("landingSections", { sectionId: s.id, data: s });
 
   return { posts: posts.length, portfolio: portfolio.length, services: services.length, resources: resources.length, landing: LANDING.length };
 }
@@ -100,6 +100,36 @@ export const run = mutation({
       for (const row of await ctx.db.query(t).take(1000)) await ctx.db.delete(row._id);
     }
     return insertAll(ctx);
+  },
+});
+
+// Demo/CLI seed (NO auth, internal — run via `npx convex run seed:seedDemo`).
+// For SHOWCASE/demo deployments only. Refills the content tables for a full
+// demo and ensures the hero landing image, WITHOUT wiping admin-edited landing
+// copy. Idempotent.
+export const seedDemo = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    for (const t of ["posts", "portfolio", "services", "resources"] as const) {
+      for (const row of await ctx.db.query(t).take(1000)) await ctx.db.delete(row._id);
+    }
+    const counts = await insertAll(ctx, { landing: false });
+    const hero = await ctx.db
+      .query("landingSections")
+      .withIndex("by_sectionId", (q) => q.eq("sectionId", "ls-hero"))
+      .unique();
+    let heroImage = false;
+    if (hero) {
+      const d = hero.data as Record<string, unknown>;
+      if (!d.imageUrl) {
+        await ctx.db.patch(hero._id, { data: { ...d, imageUrl: "/hero.webp" } });
+        heroImage = true;
+      }
+    } else {
+      for (const s of LANDING) await ctx.db.insert("landingSections", { sectionId: s.id, data: s });
+      heroImage = true;
+    }
+    return { ...counts, heroImage };
   },
 });
 
