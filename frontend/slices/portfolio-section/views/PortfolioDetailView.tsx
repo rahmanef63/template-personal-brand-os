@@ -69,7 +69,7 @@ function Gallery({ images }: { images: NonNullable<PortfolioItem["gallery"]> }) 
           key={`${img.src}-${i}`}
           className="relative aspect-[4/3] w-full overflow-hidden rounded-md border bg-muted"
         >
-          <Image src={img.src} alt={img.alt} fill className="object-cover" />
+          <Image src={img.src} alt={img.alt} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
         </div>
       ))}
     </div>
@@ -146,6 +146,7 @@ export function PortfolioDetailView({
             src={item.cover.src}
             alt={item.cover.alt}
             fill
+            sizes="(min-width: 1024px) 1024px, 100vw"
             className="object-cover"
             priority
           />

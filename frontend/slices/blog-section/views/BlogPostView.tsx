@@ -104,6 +104,7 @@ export function BlogPostView({
               src={post.cover.src}
               alt={post.cover.alt}
               fill
+              sizes="(min-width: 768px) 768px, 100vw"
               className="object-cover"
               priority
             />

@@ -170,7 +170,10 @@ export function SiteSettingsForm() {
             <Textarea value={f.seoDescription} onChange={(e) => set("seoDescription", e.target.value)} placeholder="Ringkasan profil yang tampil di halaman About dan metadata SEO." />
           </Field>
           <Field label="Foto profil">
-            {f.profileImageUrl ? <img src={f.profileImageUrl} alt="profile" className="mb-2 h-24 w-20 rounded-lg object-cover" /> : null}
+            {f.profileImageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element -- admin free-text/uploaded profile URL, arbitrary host
+              <img src={f.profileImageUrl} alt="profile" className="mb-2 h-24 w-20 rounded-lg object-cover" />
+            ) : null}
             <ImageField label="Ganti foto profil" onUploaded={(u) => set("profileImageUrl", u)} />
           </Field>
           <Field label="Warna brand">
@@ -183,11 +186,17 @@ export function SiteSettingsForm() {
             <Input value={f.analyticsId} onChange={(e) => set("analyticsId", e.target.value)} placeholder="G-XXXXXXX" />
           </Field>
           <Field label="Logo">
-            {f.logoUrl ? <img src={f.logoUrl} alt="logo" className="mb-2 h-9 rounded object-contain" /> : null}
+            {f.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element -- admin free-text/uploaded logo URL, arbitrary host
+              <img src={f.logoUrl} alt="logo" className="mb-2 h-9 rounded object-contain" />
+            ) : null}
             <ImageField label="Ganti logo" onUploaded={(u) => set("logoUrl", u)} />
           </Field>
           <Field label="Favicon">
-            {f.faviconUrl ? <img src={f.faviconUrl} alt="favicon" className="mb-2 size-8 rounded object-contain" /> : null}
+            {f.faviconUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element -- admin free-text/uploaded favicon URL, arbitrary host
+              <img src={f.faviconUrl} alt="favicon" className="mb-2 size-8 rounded object-contain" />
+            ) : null}
             <ImageField label="Ganti favicon" onUploaded={(u) => set("faviconUrl", u)} />
           </Field>
           <Field label="X / Twitter URL">
