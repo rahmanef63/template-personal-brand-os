@@ -120,6 +120,8 @@ const SEED_KEYS: SeedKey[] = [
 export const get = query({
   args: {},
   handler: async (ctx) => {
+    // Admin-only: exposes workspace settings / webhook endpoints / AI config.
+    if (!(await getAuthUserId(ctx))) throw new ConvexError("Admin only.");
     const identityRow = await ctx.db.query("adminWorkspaceSettings").first();
     const identity = identityRow
       ? {

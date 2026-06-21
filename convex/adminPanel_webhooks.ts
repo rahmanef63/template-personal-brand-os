@@ -44,6 +44,8 @@ function rollDeliveryStatus(): {
 export const get = query({
   args: {},
   handler: async (ctx) => {
+    // Admin-only: exposes workspace settings / webhook endpoints / AI config.
+    if (!(await getAuthUserId(ctx))) throw new ConvexError("Admin only.");
     const endpointRows = await ctx.db.query("adminWebhooks").collect();
     const endpoints = endpointRows.map((e) => ({
       id: e.whId,
