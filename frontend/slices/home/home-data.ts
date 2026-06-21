@@ -1,5 +1,4 @@
-export const HERO_IMG =
-  "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1800&q=70";
+export const HERO_IMG = "/hero.webp";
 
 export const STATS = [
   { value: "120+", label: "Klien & student" },

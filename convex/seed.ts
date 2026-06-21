@@ -14,7 +14,7 @@ const day = 86_400_000;
 // SEED_LANDING_SECTIONS. `syncLanding` below pushes additions/order to an
 // already-seeded deployment without touching admin-edited copy.
 const LANDING = [
-  { id: "ls-hero", order: 10, kind: "hero", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.", subtitle: "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.", enabled: true, imageUrl: "/hero.webp", config: '{"badge":"2026 mentorship cohort open"}' },
+  { id: "ls-hero", order: 10, kind: "hero", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.", subtitle: "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.", enabled: true, config: '{"badge":"2026 mentorship cohort open"}' },
   { id: "ls-stats", order: 20, kind: "stats", title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
   { id: "ls-features", order: 25, kind: "features", title: "Fokus yang saya kerjakan", subtitle: "Empat jalur utama: strategi produk, mentorship engineering, tulisan, dan sesi untuk tim.", enabled: true },
   { id: "ls-blog", order: 30, kind: "blog", title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
@@ -114,22 +114,12 @@ export const seedDemo = internalMutation({
       for (const row of await ctx.db.query(t).take(1000)) await ctx.db.delete(row._id);
     }
     const counts = await insertAll(ctx, { landing: false });
-    const hero = await ctx.db
-      .query("landingSections")
-      .withIndex("by_sectionId", (q) => q.eq("sectionId", "ls-hero"))
-      .unique();
-    let heroImage = false;
-    if (hero) {
-      const d = hero.data as Record<string, unknown>;
-      if (!d.imageUrl) {
-        await ctx.db.patch(hero._id, { data: { ...d, imageUrl: "/hero.webp" } });
-        heroImage = true;
-      }
-    } else {
+    // Seed landing only if the table is empty (preserve admin-edited copy).
+    const hasLanding = await ctx.db.query("landingSections").first();
+    if (!hasLanding) {
       for (const s of LANDING) await ctx.db.insert("landingSections", { sectionId: s.id, data: s });
-      heroImage = true;
     }
-    return { ...counts, heroImage };
+    return counts;
   },
 });
 
