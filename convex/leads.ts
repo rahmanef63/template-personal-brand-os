@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { optionalUser, requireUser } from "./_shared/auth";
+import { limitPublicWrite } from "./_shared/rateLimit";
 
 export const list = query({
   args: {
@@ -32,6 +33,7 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
     if (!args.email.includes("@")) throw new Error("Email tidak valid");
+    await limitPublicWrite(ctx, "lead", args.email);
     const lead = {
       name: args.name.slice(0, 200),
       email: args.email.slice(0, 320),

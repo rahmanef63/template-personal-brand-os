@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { optionalUser } from "./_shared/auth";
+import { limitPublicWrite } from "./_shared/rateLimit";
 
 export const list = query({
   args: { limit: v.optional(v.number()) },
@@ -16,6 +17,7 @@ export const subscribe = mutation({
     if (!email.includes("@")) throw new Error("Email tidak valid");
     email = email.slice(0, 320);
     source = source.slice(0, 500);
+    await limitPublicWrite(ctx, "sub", email);
     const existing = await ctx.db
       .query("subscribers")
       .withIndex("by_email", (q) => q.eq("email", email))
