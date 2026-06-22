@@ -8,6 +8,7 @@ import Pricing from "./Pricing";
 import Testimonials from "./Testimonials";
 import Faq from "./Faq";
 import Cta from "./Cta";
+import Newsletter from "./Newsletter";
 import type { BlockDef, BlockInstance, Field, PageConfig } from "./types";
 
 // SSOT — the canonical block set. Adding a block here makes it available in the
@@ -312,12 +313,33 @@ export const REGISTRY: Record<string, BlockDef> = {
       ctaHref: "/#gallery",
     },
   },
+
+  newsletter: {
+    type: "newsletter",
+    name: "Newsletter",
+    description: "An email-capture band. Every template ships one.",
+    component: Newsletter,
+    fields: [
+      { key: "label", label: "Eyebrow label", type: "text" },
+      { key: "heading", label: "Heading", type: "text" },
+      { key: "subtitle", label: "Subhead", type: "textarea" },
+      { key: "placeholder", label: "Input placeholder", type: "text" },
+      { key: "ctaLabel", label: "Button label", type: "text" },
+    ],
+    defaults: {
+      label: "",
+      heading: "Stay in the loop",
+      subtitle: "One email when something ships. No spam, unsubscribe anytime.",
+      placeholder: "you@company.com",
+      ctaLabel: "Subscribe",
+    },
+  },
 };
 
 // Palette order.
 export const BLOCK_ORDER = [
   "hero", "stats", "logos", "featureGrid", "steps",
-  "collection", "pricing", "testimonials", "faq", "cta",
+  "collection", "pricing", "testimonials", "faq", "cta", "newsletter",
 ];
 
 // The item shape inside a shared collection (the generic card). The builder's
@@ -484,6 +506,17 @@ export const DEFAULT_CONFIG: PageConfig = {
         ctaHref: "/#gallery",
         secondaryLabel: "Build your Brand Kit",
         secondaryHref: "/brand-kit",
+      },
+    },
+    {
+      id: "newsletter-seed",
+      type: "newsletter",
+      props: {
+        label: "Newsletter",
+        heading: "One email when a new template ships.",
+        subtitle: "New verticals, block additions, and deploy guides. No spam, unsubscribe anytime.",
+        placeholder: "you@company.com",
+        ctaLabel: "Subscribe",
       },
     },
   ],
