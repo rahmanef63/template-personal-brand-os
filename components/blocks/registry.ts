@@ -494,4 +494,41 @@ export const DEFAULT_CONFIG: PageConfig = {
       { title: "Analytics setup", blurb: "Event tracking and dashboards that answer the questions you ask.", icon: "analytics", href: "/services" },
     ],
   },
+  // A dedicated page for the SAME `services` collection. The home preview block
+  // and this page's full block read one source, so editing an item updates both.
+  pages: [
+    {
+      id: "services-page",
+      name: "Services",
+      path: "/services",
+      blocks: [
+        {
+          id: "svc-hero",
+          type: "hero",
+          props: {
+            label: "Services",
+            title: "Everything we do, on one page.",
+            subtitle:
+              "This dedicated page renders the full services collection. The landing page shows a preview of the very same source.",
+            align: "left",
+          },
+        },
+        {
+          id: "svc-all",
+          type: "collection",
+          props: { heading: "All services", source: "services", limit: "all" },
+        },
+        {
+          id: "svc-cta",
+          type: "cta",
+          props: {
+            title: "Need something specific?",
+            subtitle: "Tell us what you are building and we will scope it.",
+            ctaLabel: "Get in touch",
+            ctaHref: "/#gallery",
+          },
+        },
+      ],
+    },
+  ],
 };

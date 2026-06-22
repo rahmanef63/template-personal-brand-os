@@ -39,9 +39,22 @@ export interface BlockInstance {
   props: Record<string, unknown>;
 }
 
+// An extra page beyond the home page (e.g. a dedicated /services page). It has
+// its own blocks but SHARES the config's collections, so a landing preview block
+// and this page's full-list block render from one source.
+export interface BuilderPage {
+  id: string;
+  name: string; // tab label, e.g. "Services"
+  path: string; // route, e.g. "/services"
+  blocks: BlockInstance[];
+}
+
 export interface PageConfig {
   version: 1;
-  blocks: BlockInstance[];
+  blocks: BlockInstance[]; // the home page
+  // Additional pages. Home is kept as `blocks` (not in here) so existing
+  // single-page consumers keep working unchanged.
+  pages?: BuilderPage[];
   // Named shared item arrays. A `collection` block references one by name, so a
   // landing preview block and a dedicated full-page block render from ONE source:
   // edit the items once and every block (and page) using that name stays in sync.
