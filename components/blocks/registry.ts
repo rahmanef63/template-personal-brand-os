@@ -88,7 +88,7 @@ export const REGISTRY: Record<string, BlockDef> = {
           { key: "name", label: "Name", type: "text" },
           { key: "price", label: "Price", type: "text" },
           { key: "period", label: "Period", type: "text" },
-          { key: "featured", label: "Featured (highlight)", type: "boolean" },
+          { key: "featured", label: "Featured", type: "boolean" },
           { key: "href", label: "Button link", type: "text" },
           {
             key: "features",

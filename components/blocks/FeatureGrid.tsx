@@ -66,7 +66,7 @@ function IconTile({ icon }: { icon?: string }) {
   );
 }
 
-export default function FeatureGrid({ title, features }: FeatureGridProps) {
+export default function FeatureGrid({ title, features = [] }: FeatureGridProps) {
   if (features.length === 0) return null;
 
   const [lead, ...rest] = features;

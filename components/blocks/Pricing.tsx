@@ -13,7 +13,7 @@ export interface PricingProps {
   tiers: PricingTier[];
 }
 
-export default function Pricing({ tiers }: PricingProps) {
+export default function Pricing({ tiers = [] }: PricingProps) {
   return (
     <section className="reveal mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
       <div className="mb-10 flex flex-col gap-2">
@@ -56,8 +56,8 @@ export default function Pricing({ tiers }: PricingProps) {
               </div>
 
               <ul className="mt-6 flex flex-1 flex-col gap-3">
-                {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2.5 text-sm">
+                {tier.features.map((feature, i) => (
+                  <li key={`${i}`} className="flex items-start gap-2.5 text-sm">
                     <Check
                       weight="bold"
                       className="mt-0.5 size-4 shrink-0 text-primary"

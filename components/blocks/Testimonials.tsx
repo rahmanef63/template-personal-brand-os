@@ -17,7 +17,7 @@ export interface TestimonialsProps {
 export default function Testimonials({
   label,
   heading,
-  items,
+  items = [],
 }: TestimonialsProps) {
   return (
     <section className="reveal mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">

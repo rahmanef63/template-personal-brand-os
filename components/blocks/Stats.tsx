@@ -13,7 +13,7 @@ export interface StatsProps {
  * rail, separated by hairline dividers (two-up on mobile, a single divided
  * row from sm up). Big foreground numbers, mono uppercase muted labels.
  */
-export default function Stats({ stats }: StatsProps) {
+export default function Stats({ stats = [] }: StatsProps) {
   return (
     <section className="reveal mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
       <dl className="grid grid-cols-2 divide-x divide-y divide-border overflow-hidden rounded-xl border border-border bg-muted/30 sm:flex sm:divide-y-0">
