@@ -133,9 +133,10 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     label: "Content / items",
     wide: true,
     hint:
-      "Edit the section's items (features, FAQ, testimonials, pricing tiers, stats) " +
-      "as structured rows. Leave empty to use the template's built-in sample content. " +
-      "Use Advanced (raw JSON) for renderer extras like badge/columns/limit.",
+      "Edit the section's content as structured fields — items (features, FAQ, " +
+      "testimonials, pricing, stats) plus knobs like badge, item count, and CTAs. " +
+      "Leave empty to use the template's built-in sample content. Advanced (raw JSON) " +
+      "stays for anything not surfaced above.",
     render: (value, onChange, ctx) =>
       React.createElement(LandingConfigField, {
         config: String(value ?? ""),
