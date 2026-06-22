@@ -181,6 +181,7 @@ export const REGISTRY: Record<string, BlockDef> = {
       { key: "limit", label: "Show", type: "select", options: ["all", "3", "6", "9", "12"] },
       { key: "viewAllLabel", label: "View-all label", type: "text" },
       { key: "viewAllHref", label: "View-all link", type: "text" },
+      { key: "itemBasePath", label: "Item detail base path", type: "text" },
     ],
     defaults: {
       label: "",
@@ -189,6 +190,7 @@ export const REGISTRY: Record<string, BlockDef> = {
       limit: "all",
       viewAllLabel: "",
       viewAllHref: "",
+      itemBasePath: "",
     },
   },
 
@@ -324,6 +326,7 @@ export const COLLECTION_ITEM_FIELDS: Field[] = [
   { key: "title", label: "Title", type: "text" },
   { key: "blurb", label: "Blurb", type: "textarea" },
   { key: "icon", label: "Icon", type: "select", options: ICONS },
+  { key: "slug", label: "Slug", type: "text", placeholder: "auto from title" },
   { key: "href", label: "Link", type: "text" },
 ];
 
@@ -415,7 +418,8 @@ export const DEFAULT_CONFIG: PageConfig = {
         source: "services",
         limit: "3",
         viewAllLabel: "View all services",
-        viewAllHref: "/services",
+        viewAllHref: "/blocks/services",
+        itemBasePath: "/blocks/services",
       },
     },
     {
@@ -467,6 +471,7 @@ export const DEFAULT_CONFIG: PageConfig = {
         heading: "The same source, rendered in full on its own page.",
         source: "services",
         limit: "all",
+        itemBasePath: "/blocks/services",
       },
     },
     {
@@ -516,7 +521,12 @@ export const DEFAULT_CONFIG: PageConfig = {
         {
           id: "svc-all",
           type: "collection",
-          props: { heading: "All services", source: "services", limit: "all" },
+          props: {
+            heading: "All services",
+            source: "services",
+            limit: "all",
+            itemBasePath: "/blocks/services",
+          },
         },
         {
           id: "svc-cta",

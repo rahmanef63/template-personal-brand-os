@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { resolveIcon } from "./FeatureGrid";
+import { itemSlug } from "./itemSlug";
 
 export interface CollectionItem {
   title: string;
   blurb?: string;
   icon?: string;
+  slug?: string;
   href?: string;
 }
 
@@ -21,6 +23,9 @@ export interface CollectionProps {
   /** Optional link to the dedicated page for this collection (e.g. /services). */
   viewAllLabel?: string;
   viewAllHref?: string;
+  /** When set, each card links to `${itemBasePath}/${itemSlug}` (a per-item detail
+   *  page) instead of its own href. e.g. "/services". */
+  itemBasePath?: string;
   /** Injected by BlockRenderer from collections[source]; never stored in props. */
   items?: CollectionItem[];
 }
@@ -37,8 +42,11 @@ export default function Collection({
   limit = "all",
   viewAllLabel,
   viewAllHref,
+  itemBasePath,
   items = [],
 }: CollectionProps) {
+  const base =
+    typeof itemBasePath === "string" ? itemBasePath.replace(/\/+$/, "") : "";
   const n = limit === "all" ? items.length : Number(limit) || items.length;
   const shown = items.slice(0, n);
   if (shown.length === 0) return null;
@@ -98,8 +106,9 @@ export default function Collection({
               ) : null}
             </>
           );
-          return item.href ? (
-            <Link key={`${i}`} href={item.href} className={cls}>
+          const href = base ? `${base}/${itemSlug(item)}` : item.href;
+          return href ? (
+            <Link key={`${i}`} href={href} className={cls}>
               {inner}
             </Link>
           ) : (
