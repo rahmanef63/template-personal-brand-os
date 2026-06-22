@@ -1,5 +1,8 @@
+import Hero from "./Hero";
 import Stats from "./Stats";
+import Logos from "./Logos";
 import FeatureGrid from "./FeatureGrid";
+import Steps from "./Steps";
 import Collection from "./Collection";
 import Pricing from "./Pricing";
 import Testimonials from "./Testimonials";
@@ -19,6 +22,34 @@ const ICONS = [
 ];
 
 export const REGISTRY: Record<string, BlockDef> = {
+  hero: {
+    type: "hero",
+    name: "Hero",
+    description: "The opening headline and call to action.",
+    component: Hero,
+    fields: [
+      { key: "label", label: "Eyebrow label", type: "text" },
+      { key: "title", label: "Headline", type: "textarea" },
+      { key: "subtitle", label: "Subhead", type: "textarea" },
+      { key: "align", label: "Align", type: "select", options: ["left", "center"] },
+      { key: "ctaLabel", label: "Primary button label", type: "text" },
+      { key: "ctaHref", label: "Primary button link", type: "text" },
+      { key: "secondaryLabel", label: "Secondary button label", type: "text" },
+      { key: "secondaryHref", label: "Secondary button link", type: "text" },
+    ],
+    defaults: {
+      label: "Production-ready templates",
+      title: "Clone a template, brand it, ship it this weekend.",
+      subtitle:
+        "Next.js and Convex starters with auth, reactive data, and a Brand Kit wired before you clone. No account needed.",
+      align: "left",
+      ctaLabel: "Browse templates",
+      ctaHref: "/#gallery",
+      secondaryLabel: "Build your Brand Kit",
+      secondaryHref: "/brand-kit",
+    },
+  },
+
   stats: {
     type: "stats",
     name: "Stats",
@@ -49,6 +80,27 @@ export const REGISTRY: Record<string, BlockDef> = {
     },
   },
 
+  logos: {
+    type: "logos",
+    name: "Logos",
+    description: "A quiet strip of trust wordmarks.",
+    component: Logos,
+    fields: [
+      { key: "label", label: "Label", type: "text" },
+      {
+        key: "names",
+        label: "Names",
+        type: "list",
+        itemLabel: "name",
+        item: { key: "", label: "Name", type: "text" },
+      },
+    ],
+    defaults: {
+      label: "Built by teams shipping with",
+      names: ["Calmwater", "Northbound", "Ledgerwise", "Aperture", "Fieldnote", "Riverbank"],
+    },
+  },
+
   featureGrid: {
     type: "featureGrid",
     name: "Feature grid",
@@ -76,6 +128,36 @@ export const REGISTRY: Record<string, BlockDef> = {
         { icon: "speed", title: "Fast by default", body: "Tuned for performance out of the box, no config required." },
         { icon: "security", title: "Secure", body: "Sensible defaults so you ship safe from day one." },
         { icon: "design", title: "On brand", body: "Drop in your Brand Kit and it follows everywhere." },
+      ],
+    },
+  },
+
+  steps: {
+    type: "steps",
+    name: "Steps",
+    description: "A numbered how-it-works section.",
+    component: Steps,
+    fields: [
+      { key: "label", label: "Eyebrow label", type: "text" },
+      { key: "heading", label: "Heading", type: "text" },
+      {
+        key: "steps",
+        label: "Steps",
+        type: "list",
+        itemLabel: "step",
+        itemFields: [
+          { key: "title", label: "Title", type: "text" },
+          { key: "body", label: "Body", type: "textarea" },
+        ],
+      },
+    ],
+    defaults: {
+      label: "How it works",
+      heading: "From clone to deployed in three steps.",
+      steps: [
+        { title: "Clone a template", body: "Pick a vertical and clone its repo. Auth, data, and theme tokens are already wired." },
+        { title: "Drop in your Brand Kit", body: "Import a portable Brand Kit and every block follows your colors and fonts." },
+        { title: "Deploy", body: "Push to Vercel or self-host on your own Convex. Your data stays yours." },
       ],
     },
   },
@@ -232,7 +314,8 @@ export const REGISTRY: Record<string, BlockDef> = {
 
 // Palette order.
 export const BLOCK_ORDER = [
-  "stats", "featureGrid", "collection", "pricing", "testimonials", "faq", "cta",
+  "hero", "stats", "logos", "featureGrid", "steps",
+  "collection", "pricing", "testimonials", "faq", "cta",
 ];
 
 // The item shape inside a shared collection (the generic card). The builder's
@@ -262,6 +345,21 @@ export const DEFAULT_CONFIG: PageConfig = {
   version: 1,
   blocks: [
     {
+      id: "hero-seed",
+      type: "hero",
+      props: {
+        label: "The shared block library",
+        title: "Compose a page from blocks, then ship it in every template.",
+        subtitle:
+          "These are the exact blocks each template renders. Add sections, edit content, point collections at one source, and export a portable config.",
+        align: "left",
+        ctaLabel: "Browse templates",
+        ctaHref: "/#gallery",
+        secondaryLabel: "Build your Brand Kit",
+        secondaryHref: "/brand-kit",
+      },
+    },
+    {
       id: "stats-seed",
       type: "stats",
       props: {
@@ -271,6 +369,14 @@ export const DEFAULT_CONFIG: PageConfig = {
           { value: "100%", label: "Type-safe" },
           { value: "$0", label: "Account needed" },
         ],
+      },
+    },
+    {
+      id: "logos-seed",
+      type: "logos",
+      props: {
+        label: "The same blocks, on brand in every template",
+        names: ["Calmwater", "Northbound", "Ledgerwise", "Aperture", "Fieldnote", "Riverbank"],
       },
     },
     {
@@ -284,6 +390,19 @@ export const DEFAULT_CONFIG: PageConfig = {
           { icon: "security", title: "Authz at the mutation", body: "Every write checks the caller, so a fresh deploy is never silently read-only." },
           { icon: "design", title: "Drop-in Brand Kit", body: "Colors, fonts, and logo load from a portable kit, no rebuild to rebrand." },
           { icon: "performance", title: "Next.js 16 defaults", body: "Cache Components and streaming on by default, tuned for Vercel and self-host alike." },
+        ],
+      },
+    },
+    {
+      id: "steps-seed",
+      type: "steps",
+      props: {
+        label: "How it works",
+        heading: "Clone, brand, deploy.",
+        steps: [
+          { title: "Clone a template", body: "Pick a vertical and clone its repo. Auth, data, and theme tokens are already wired." },
+          { title: "Drop in your Brand Kit", body: "Import a portable Brand Kit and every block follows your colors and fonts." },
+          { title: "Deploy", body: "Push to Vercel or self-host on your own Convex. Your data stays yours." },
         ],
       },
     },
