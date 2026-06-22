@@ -10,20 +10,32 @@ export interface PricingTier {
 }
 
 export interface PricingProps {
+  label?: string;
+  heading?: string;
   tiers: PricingTier[];
 }
 
-export default function Pricing({ tiers = [] }: PricingProps) {
+export default function Pricing({
+  label = "Pricing",
+  heading = "Pick the plan that ships with you.",
+  tiers = [],
+}: PricingProps) {
   return (
     <section className="reveal mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-      <div className="mb-10 flex flex-col gap-2">
-        <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
-          Pricing
-        </p>
-        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-          Pick the plan that ships with you.
-        </h2>
-      </div>
+      {(label || heading) && (
+        <div className="mb-10 flex flex-col gap-2">
+          {label ? (
+            <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
+              {label}
+            </p>
+          ) : null}
+          {heading ? (
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {heading}
+            </h2>
+          ) : null}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {tiers.map((tier) => {

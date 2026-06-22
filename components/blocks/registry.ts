@@ -1,10 +1,11 @@
 import Stats from "./Stats";
 import FeatureGrid from "./FeatureGrid";
+import Collection from "./Collection";
 import Pricing from "./Pricing";
 import Testimonials from "./Testimonials";
 import Faq from "./Faq";
 import Cta from "./Cta";
-import type { BlockDef, BlockInstance, PageConfig } from "./types";
+import type { BlockDef, BlockInstance, Field, PageConfig } from "./types";
 
 // SSOT — the canonical block set. Adding a block here makes it available in the
 // builder palette AND renderable by BlockRenderer everywhere. `fields` drives
@@ -24,6 +25,8 @@ export const REGISTRY: Record<string, BlockDef> = {
     description: "A row of headline numbers.",
     component: Stats,
     fields: [
+      { key: "label", label: "Eyebrow label", type: "text" },
+      { key: "heading", label: "Heading", type: "text" },
       {
         key: "stats",
         label: "Stats",
@@ -36,6 +39,8 @@ export const REGISTRY: Record<string, BlockDef> = {
       },
     ],
     defaults: {
+      label: "",
+      heading: "",
       stats: [
         { value: "10k+", label: "Users" },
         { value: "99.9%", label: "Uptime" },
@@ -50,6 +55,7 @@ export const REGISTRY: Record<string, BlockDef> = {
     description: "An asymmetric bento of features.",
     component: FeatureGrid,
     fields: [
+      { key: "label", label: "Eyebrow label", type: "text" },
       { key: "title", label: "Heading", type: "text" },
       {
         key: "features",
@@ -64,6 +70,7 @@ export const REGISTRY: Record<string, BlockDef> = {
       },
     ],
     defaults: {
+      label: "",
       title: "Everything you need",
       features: [
         { icon: "speed", title: "Fast by default", body: "Tuned for performance out of the box, no config required." },
@@ -73,12 +80,44 @@ export const REGISTRY: Record<string, BlockDef> = {
     },
   },
 
+  collection: {
+    type: "collection",
+    name: "Collection",
+    description:
+      "A shared list (services, work...) as cards. Point several blocks at one source to keep them in sync.",
+    component: Collection,
+    collection: true,
+    fields: [
+      { key: "label", label: "Eyebrow label", type: "text" },
+      { key: "heading", label: "Heading", type: "text" },
+      {
+        key: "source",
+        label: "Collection name",
+        type: "text",
+        placeholder: "services",
+      },
+      { key: "limit", label: "Show", type: "select", options: ["all", "3", "6", "9", "12"] },
+      { key: "viewAllLabel", label: "View-all label", type: "text" },
+      { key: "viewAllHref", label: "View-all link", type: "text" },
+    ],
+    defaults: {
+      label: "",
+      heading: "Services",
+      source: "services",
+      limit: "all",
+      viewAllLabel: "",
+      viewAllHref: "",
+    },
+  },
+
   pricing: {
     type: "pricing",
     name: "Pricing",
     description: "Tiered pricing cards.",
     component: Pricing,
     fields: [
+      { key: "label", label: "Eyebrow label", type: "text" },
+      { key: "heading", label: "Heading", type: "text" },
       {
         key: "tiers",
         label: "Tiers",
@@ -101,6 +140,8 @@ export const REGISTRY: Record<string, BlockDef> = {
       },
     ],
     defaults: {
+      label: "Pricing",
+      heading: "Pick the plan that ships with you.",
       tiers: [
         { name: "Starter", price: "$0", period: "/forever", href: "#", features: ["Core features", "Community support"] },
         { name: "Pro", price: "$19", period: "/month", featured: true, href: "#", features: ["Everything in Starter", "Priority support", "Advanced features"] },
@@ -191,7 +232,16 @@ export const REGISTRY: Record<string, BlockDef> = {
 
 // Palette order.
 export const BLOCK_ORDER = [
-  "stats", "featureGrid", "pricing", "testimonials", "faq", "cta",
+  "stats", "featureGrid", "collection", "pricing", "testimonials", "faq", "cta",
+];
+
+// The item shape inside a shared collection (the generic card). The builder's
+// inspector edits collections[source] with this schema; blocks read these keys.
+export const COLLECTION_ITEM_FIELDS: Field[] = [
+  { key: "title", label: "Title", type: "text" },
+  { key: "blurb", label: "Blurb", type: "textarea" },
+  { key: "icon", label: "Icon", type: "select", options: ICONS },
+  { key: "href", label: "Link", type: "text" },
 ];
 
 // New block instance with a fresh id + a deep copy of its defaults (so edits
@@ -238,9 +288,23 @@ export const DEFAULT_CONFIG: PageConfig = {
       },
     },
     {
+      id: "services-featured-seed",
+      type: "collection",
+      props: {
+        label: "What we do",
+        heading: "A few services, previewed on the landing page.",
+        source: "services",
+        limit: "3",
+        viewAllLabel: "View all services",
+        viewAllHref: "/services",
+      },
+    },
+    {
       id: "pricing-seed",
       type: "pricing",
       props: {
+        label: "Pricing",
+        heading: "Pick the plan that ships with you.",
         tiers: [
           { name: "Solo", price: "$0", period: "/forever", href: "/#gallery", features: ["Clone any 1 template", "Brand Kit export, client-side", "Self-host on your own Convex", "Community support"] },
           { name: "Studio", price: "$24", period: "/month", featured: true, href: "/#gallery", features: ["All production templates", "Unlimited Brand Kits", "One-command deploy guide", "Priority issue triage", "Convex schema migrations"] },
@@ -277,6 +341,16 @@ export const DEFAULT_CONFIG: PageConfig = {
       },
     },
     {
+      id: "services-all-seed",
+      type: "collection",
+      props: {
+        label: "Services",
+        heading: "The same source, rendered in full on its own page.",
+        source: "services",
+        limit: "all",
+      },
+    },
+    {
       id: "cta-seed",
       type: "cta",
       props: {
@@ -289,4 +363,16 @@ export const DEFAULT_CONFIG: PageConfig = {
       },
     },
   ],
+  // One shared source. Both collection blocks above read `services`, so editing
+  // an item once updates the landing preview AND the full list together.
+  collections: {
+    services: [
+      { title: "Product strategy", blurb: "From positioning to roadmap, shaped around what your users actually do.", icon: "brand", href: "/services" },
+      { title: "Design systems", blurb: "A token-driven UI kit your team can extend without breaking the brand.", icon: "design", href: "/services" },
+      { title: "Full-stack build", blurb: "Typed end to end, reactive data, shipped on Vercel or self-host.", icon: "code", href: "/services" },
+      { title: "Performance audit", blurb: "Find the slow paths, fix the Core Web Vitals, prove it with numbers.", icon: "performance", href: "/services" },
+      { title: "Auth and accounts", blurb: "Real sign-in, sessions, and per-user ownership wired from day one.", icon: "auth", href: "/services" },
+      { title: "Analytics setup", blurb: "Event tracking and dashboards that answer the questions you ask.", icon: "analytics", href: "/services" },
+    ],
+  },
 };

@@ -27,6 +27,10 @@ export interface BlockDef {
   component: ComponentType<any>;
   fields: Field[];
   defaults: Record<string, unknown>; // starting props for a freshly added block
+  // When true the block holds NO items in its own props: it reads them from
+  // PageConfig.collections[props.source] (injected as `items` by BlockRenderer).
+  // Two such blocks pointing at the same source render ONE shared list.
+  collection?: boolean;
 }
 
 export interface BlockInstance {
@@ -38,4 +42,8 @@ export interface BlockInstance {
 export interface PageConfig {
   version: 1;
   blocks: BlockInstance[];
+  // Named shared item arrays. A `collection` block references one by name, so a
+  // landing preview block and a dedicated full-page block render from ONE source:
+  // edit the items once and every block (and page) using that name stays in sync.
+  collections?: Record<string, Record<string, unknown>[]>;
 }

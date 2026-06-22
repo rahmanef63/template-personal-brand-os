@@ -4,6 +4,10 @@ interface Stat {
 }
 
 export interface StatsProps {
+  /** Optional small mono label above the strip. Omit for none. */
+  label?: string;
+  /** Optional section heading above the strip. Omit for none. */
+  heading?: string;
   /** The figures to display. 2 to 4 read best in the divider strip. */
   stats: Stat[];
 }
@@ -13,9 +17,23 @@ export interface StatsProps {
  * rail, separated by hairline dividers (two-up on mobile, a single divided
  * row from sm up). Big foreground numbers, mono uppercase muted labels.
  */
-export default function Stats({ stats = [] }: StatsProps) {
+export default function Stats({ label, heading, stats = [] }: StatsProps) {
   return (
     <section className="reveal mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+      {(label || heading) && (
+        <div className="mb-10 flex flex-col gap-2">
+          {label && (
+            <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
+              {label}
+            </p>
+          )}
+          {heading && (
+            <h2 className="max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
+              {heading}
+            </h2>
+          )}
+        </div>
+      )}
       <dl className="grid grid-cols-2 divide-x divide-y divide-border overflow-hidden rounded-xl border border-border bg-muted/30 sm:flex sm:divide-y-0">
         {stats.map((stat) => (
           <div key={stat.label} className="flex flex-1 flex-col gap-2 px-6 py-10 sm:px-8">
