@@ -56,7 +56,8 @@ interface Deps {
  */
 export function renderLanding(section: LandingSection, deps: Deps) {
   switch (section.kind) {
-    case "hero":
+    case "hero": {
+      const cfg = parseConfigObject(section.config);
       return (
         <LandingSectionShell section={section}>
           <Hero
@@ -66,9 +67,14 @@ export function renderLanding(section: LandingSection, deps: Deps) {
             image={section.imageUrl ? { url: section.imageUrl, ratio: section.imageRatio } : undefined}
             layers={section.layers}
             shade={section.shade}
+            ctaPrimaryLabel={cfgString(cfg, "ctaPrimaryLabel")}
+            ctaPrimaryHref={cfgString(cfg, "ctaPrimaryHref")}
+            ctaSecondaryLabel={cfgString(cfg, "ctaSecondaryLabel")}
+            ctaSecondaryHref={cfgString(cfg, "ctaSecondaryHref")}
           />
         </LandingSectionShell>
       );
+    }
 
     case "stats":
       return (

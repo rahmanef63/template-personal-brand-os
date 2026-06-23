@@ -32,6 +32,14 @@ export interface HeroProps {
   /** Readability scrim + brand glow. Off by default → image shows in full
    *  real color; on → gradient + glow for legibility. */
   shade?: boolean;
+  /** Primary CTA label. Defaults to the original copy when unset. */
+  ctaPrimaryLabel?: string;
+  /** Primary CTA href. Defaults to the services page when unset. */
+  ctaPrimaryHref?: string;
+  /** Secondary CTA label. Defaults to the original copy when unset. */
+  ctaSecondaryLabel?: string;
+  /** Secondary CTA href. Defaults to the portfolio page when unset. */
+  ctaSecondaryHref?: string;
 }
 
 const DEFAULTS = {
@@ -42,7 +50,19 @@ const DEFAULTS = {
   trust: "Trusted by — Acme · Foobar · Beta Labs · Gamma · Delta · Zeta",
 } as const;
 
-export function Hero({ title, subtitle, badge, trust, image, layers, shade }: HeroProps = {}) {
+export function Hero({
+  title,
+  subtitle,
+  badge,
+  trust,
+  image,
+  layers,
+  shade,
+  ctaPrimaryLabel,
+  ctaPrimaryHref,
+  ctaSecondaryLabel,
+  ctaSecondaryHref,
+}: HeroProps = {}) {
   const t = title?.trim() || DEFAULTS.title;
   const s = subtitle?.trim() || DEFAULTS.subtitle;
   const b = badge?.trim() || DEFAULTS.badge;
@@ -96,13 +116,13 @@ export function Hero({ title, subtitle, badge, trust, image, layers, shade }: He
             style={{ "--d": "0.18s" } as React.CSSProperties}
           >
             <Button size="lg" asChild className="group shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)]">
-              <Link href={`${PUBLIC_BASE}/services`}>
-                Lihat layanan{" "}
+              <Link href={ctaPrimaryHref ?? `${PUBLIC_BASE}/services`}>
+                {ctaPrimaryLabel ?? "Lihat layanan"}{" "}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href={`${PUBLIC_BASE}/portfolio`}>Karya terpilih</Link>
+              <Link href={ctaSecondaryHref ?? `${PUBLIC_BASE}/portfolio`}>{ctaSecondaryLabel ?? "Karya terpilih"}</Link>
             </Button>
           </div>
           <p

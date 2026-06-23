@@ -90,7 +90,13 @@ const KIND_SCHEMA: Record<string, KindSchema> = {
   // Scalar-only kinds — section title/subtitle stay on the section itself; these
   // are the extra config knobs each kind reads (badge, copy, item caps, CTAs).
   hero: {
-    scalars: [{ k: "badge", label: "Eyebrow badge" }],
+    scalars: [
+      { k: "badge", label: "Eyebrow badge" },
+      { k: "ctaPrimaryLabel", label: "Primary button label" },
+      { k: "ctaPrimaryHref", label: "Primary button link" },
+      { k: "ctaSecondaryLabel", label: "Secondary button label" },
+      { k: "ctaSecondaryHref", label: "Secondary button link" },
+    ],
   },
   newsletter: {
     scalars: [
