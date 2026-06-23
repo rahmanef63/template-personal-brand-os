@@ -1,15 +1,14 @@
+import { TESTIMONIALS as LC_TESTIMONIALS } from "@/convex/landingContent";
+
 export const HERO_IMG = "/hero.webp";
 
-export const STATS = [
-  { value: "120+", label: "Klien & student" },
-  { value: "8 thn", label: "Praktek industri" },
-  { value: "60K", label: "Newsletter readers" },
-  { value: "4.9", label: "Avg rating sesi" },
-];
-
-export const TESTIMONIALS = [
-  { quote: "Sesi strategi 90 menit lebih berguna dari tiga bulan kami muter sendiri. Roadmap-nya langsung kepakai.", name: "Asep Wijaya", role: "CEO, Sinar Ventures" },
-  { quote: "Mentorship-nya bikin engineer kami naik level cepat — arah karier jelas, technical depth-nya kebangun.", name: "Putri Maharani", role: "Head of Product, Nusantara Labs" },
-  { quote: "Workshop go-to-market-nya nge-reframe cara kami lihat pasar. Worth tiap menitnya.", name: "Bayu Setiawan", role: "Founder, Kode Kolektif" },
-  { quote: "Esai dan catatannya jadi bacaan wajib tim produk kami tiap minggu.", name: "Linda Hartono", role: "VP Engineering, Padi Digital" },
-];
+/** Testimonials render fallback, derived from the single source
+ *  (convex/landingContent.ts). The seed writes the same items into the
+ *  testimonials section config; here we map the module's `author` field to the
+ *  `name` key this template's TestimonialsGrid expects. Edit content in the
+ *  module, not here. */
+export const TESTIMONIALS = LC_TESTIMONIALS.map((t) => ({
+  quote: t.quote,
+  name: t.author,
+  role: t.role,
+}));

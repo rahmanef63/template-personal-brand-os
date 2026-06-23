@@ -1,20 +1,20 @@
 import type { LandingSection } from "@/features/_shared/landing/types";
+import { HERO, STATS, CLIENTS, FEATURES, PRICING, FAQS, TESTIMONIALS } from "@/convex/landingContent";
 
 export const SEED_LANDING_SECTIONS: LandingSection[] = [
   {
     id: "ls-hero",
     order: 10,
     kind: "hero",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
-    subtitle:
-      "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.",
+    title: HERO.title,
+    subtitle: HERO.subtitle,
     enabled: true,
-    config: '{"badge":"2026 mentorship cohort open"}',
+    config: JSON.stringify({ badge: HERO.badge }),
     layers: [
       { id: "hero-photo", type: "image", placement: "background", opacity: 100, enabled: true, url: "/hero.webp" },
     ],
   },
-  { id: "ls-stats",        order: 20, kind: "stats",        title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
+  { id: "ls-stats",        order: 20, kind: "stats",        title: "Rekam jejak singkat", subtitle: "Angka yang menggambarkan praktik dan jangkauan kerja sampai hari ini.", enabled: true, config: JSON.stringify({ stats: STATS, clients: CLIENTS }) },
   {
     id: "ls-features",
     order: 25,
@@ -22,6 +22,7 @@ export const SEED_LANDING_SECTIONS: LandingSection[] = [
     title: "Fokus yang saya kerjakan",
     subtitle: "Empat jalur utama: strategi produk, mentorship engineering, tulisan, dan sesi untuk tim.",
     enabled: true,
+    config: JSON.stringify({ items: FEATURES }),
   },
   { id: "ls-blog",         order: 30, kind: "blog",         title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
   { id: "ls-portfolio",    order: 40, kind: "portfolio",    title: "Karya pilihan", subtitle: "Proyek yang menggambarkan cara saya bekerja.", enabled: true },
@@ -36,8 +37,9 @@ export const SEED_LANDING_SECTIONS: LandingSection[] = [
     title: "Model kerja sama",
     subtitle: "Mulai dari sesi konsultasi tunggal sampai retainer bulanan.",
     enabled: false,
+    config: JSON.stringify({ tiers: PRICING }),
   },
-  { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true },
+  { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true, config: JSON.stringify({ items: TESTIMONIALS }) },
   {
     id: "ls-faq",
     order: 62,
@@ -45,6 +47,7 @@ export const SEED_LANDING_SECTIONS: LandingSection[] = [
     title: "Pertanyaan yang sering masuk",
     subtitle: "Soal kolaborasi, jasa, timeline, dan harga — sebelum kamu kirim email.",
     enabled: true,
+    config: JSON.stringify({ items: FAQS }),
   },
   {
     id: "ls-cta",
@@ -62,21 +65,21 @@ import type { Post, PortfolioItem, Resource, Service, State } from "./types";
 const now = Date.now();
 const day = (n: number) => now - n * 24 * 60 * 60 * 1000;
 
-const LOREM_LONG =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.\n\nAenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum.\n\nSed cursus turpis vitae tortor. Donec posuere vulputate arcu. Phasellus accumsan cursus velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam, nisi quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci.";
+const BODY_LONG = (heading: string) =>
+  `## ${heading}\n\nCatatan dari praktik kerja sama dengan founder dan tim produk Indonesia. Tulisan ini merangkum kerangka yang saya pakai berulang kali di sesi strategi, sprint, dan mentoring.\n\nIntinya: outcome di atas output. Sebelum menentukan apa yang dikerjakan, sepakati dulu hasil yang ingin dicapai dan bagaimana mengukurnya. Sisanya — prioritas, eksekusi, review — mengikuti dari sana.\n\nEdit isi lengkap dan ganti contoh ini dengan tulisanmu sendiri lewat panel admin → Blog.`;
 
 export const SEED_POSTS: Post[] = [
   {
     id: "post-1",
-    slug: "lorem-ipsum-pertama",
-    title: "Lorem ipsum dolor sit amet, consectetur",
+    slug: "outcome-over-output",
+    title: "Outcome di Atas Output: Cara Memprioritaskan Roadmap",
     excerpt:
-      "Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
-    body: LOREM_LONG,
+      "Kenapa tim sering sibuk tapi tidak bergerak — dan kerangka prioritas yang saya pakai bareng founder.",
+    body: BODY_LONG("Outcome di Atas Output"),
     cover:
       "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1400&q=70",
     tag: "Strategy",
-    author: "Lorem D.",
+    author: "Owner",
     status: "published",
     publishedAt: day(1),
     views: 3812,
@@ -84,15 +87,15 @@ export const SEED_POSTS: Post[] = [
   },
   {
     id: "post-2",
-    slug: "kedua-quis-nostrud",
-    title: "Quis nostrud exercitation ullamco laboris",
+    slug: "mentorship-engineer-naik-level",
+    title: "Pola Mentorship yang Bikin Engineer Naik Level Cepat",
     excerpt:
-      "Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.",
-    body: LOREM_LONG,
+      "Tiga kebiasaan kerja yang membedakan engineer mid dari senior — dari pengalaman mentoring 1-on-1.",
+    body: BODY_LONG("Pola Mentorship yang Bikin Engineer Naik Level"),
     cover:
       "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1400&q=70",
     tag: "Engineering",
-    author: "Lorem D.",
+    author: "Owner",
     status: "published",
     publishedAt: day(9),
     views: 2417,
@@ -100,15 +103,15 @@ export const SEED_POSTS: Post[] = [
   },
   {
     id: "post-3",
-    slug: "ketiga-excepteur-sint",
-    title: "Excepteur sint occaecat cupidatat non proident",
+    slug: "riset-go-to-market-lokal",
+    title: "Riset Go-to-Market untuk Pasar Indonesia",
     excerpt:
-      "Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error.",
-    body: LOREM_LONG,
+      "Cara menemukan ICP yang benar sebelum membakar budget — kerangka JTBD yang ringkas dan bisa langsung dipakai.",
+    body: BODY_LONG("Riset Go-to-Market untuk Pasar Indonesia"),
     cover:
       "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=70",
     tag: "Notes",
-    author: "Lorem D.",
+    author: "Owner",
     status: "published",
     publishedAt: day(22),
     views: 1908,
@@ -116,14 +119,14 @@ export const SEED_POSTS: Post[] = [
   },
   {
     id: "post-4",
-    slug: "draft-sed-perspiciatis",
-    title: "Sed ut perspiciatis unde omnis iste natus",
-    excerpt: "Doloremque laudantium totam rem aperiam — work-in-progress.",
-    body: LOREM_LONG,
+    slug: "menulis-rutin-tanpa-burnout",
+    title: "Menulis Rutin Tanpa Burnout",
+    excerpt: "Sistem terbit mingguan yang ringan untuk operator sibuk — masih draf.",
+    body: BODY_LONG("Menulis Rutin Tanpa Burnout"),
     cover:
       "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1400&q=70",
     tag: "Strategy",
-    author: "Lorem D.",
+    author: "Owner",
     status: "draft",
     publishedAt: 0,
     views: 0,
@@ -134,56 +137,56 @@ export const SEED_POSTS: Post[] = [
 export const SEED_PORTFOLIO: PortfolioItem[] = [
   {
     id: "case-1",
-    slug: "acme-rebrand",
-    title: "Acme — Lorem case study",
+    slug: "sinar-ventures-activation",
+    title: "Sinar Ventures — Perbaikan Aktivasi",
     category: "Product",
     cover:
       "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1600&q=70",
-    blurb: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
+    blurb: "Onboarding di-redesign, aktivasi naik 31%.",
     problem:
-      "Acme menghadapi penurunan retensi 18% selama 2 kuartal. Hipotesis: onboarding yang membingungkan.",
+      "Retensi turun 18% dalam dua kuartal. Hipotesis: onboarding yang membingungkan.",
     approach:
-      "Audit funnel + 14 wawancara user. Kerangka ulang aktivasi: 4-langkah → 1-langkah dengan bantuan AI.",
+      "Audit funnel + 14 wawancara user. Aktivasi diringkas dari 4 langkah jadi 1 langkah dengan bantuan AI.",
     result:
       "Aktivasi naik 31%. Retensi minggu-2 naik 12%. ARR proyeksi +Rp 4.2 milyar.",
     publishedAt: day(40),
   },
   {
     id: "case-2",
-    slug: "foobar-rebrand",
-    title: "Foobar — Ipsum rebrand",
+    slug: "nusantara-labs-reposition",
+    title: "Nusantara Labs — Reposisi Brand",
     category: "Brand",
     cover:
       "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&q=70",
-    blurb: "Accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.",
-    problem: "Brand mismatch — pasar persepsikan startup, klien beli enterprise.",
-    approach: "Workshop pemegang saham. Brand archetype + visual reposition.",
+    blurb: "Avg deal size naik 2.4× setelah reposisi.",
+    problem: "Persepsi pasar startup, padahal klien membeli enterprise.",
+    approach: "Workshop pemegang saham. Brand archetype + reposisi visual.",
     result: "Avg deal size naik 2.4×. Sales cycle turun dari 90 hari ke 54.",
     publishedAt: day(70),
   },
   {
     id: "case-3",
-    slug: "beta-gtm",
-    title: "Beta Labs — Dolor GTM",
+    slug: "kode-kolektif-gtm",
+    title: "Kode Kolektif — Strategi Go-to-Market",
     category: "Strategy",
     cover:
       "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=70",
-    blurb: "Quae ab illo inventore veritatis et quasi architecto beatae vitae.",
-    problem: "Launch tertunda 3× — tim ga sepakat ICP.",
-    approach: "Force-rank ICP via JTBD. Prune 5 segment ke 2.",
-    result: "Launch on-time. 60-day MRR Rp 380jt vs target Rp 200jt.",
+    blurb: "Launch on-time, MRR 60 hari lampaui target.",
+    problem: "Launch tertunda tiga kali — tim belum sepakat ICP.",
+    approach: "Force-rank ICP via JTBD. Pangkas 5 segmen jadi 2.",
+    result: "Launch tepat waktu. MRR 60 hari Rp 380jt vs target Rp 200jt.",
     publishedAt: day(110),
   },
   {
     id: "case-4",
-    slug: "gamma-workshop",
-    title: "Gamma — Amet workshop",
+    slug: "padi-digital-workshop",
+    title: "Padi Digital — Workshop Alignment",
     category: "Workshop",
     cover:
       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=70",
-    blurb: "Dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit.",
+    blurb: "Sprint planning 2× lebih cepat, engineering NPS +18.",
     problem: "Tim engineering bingung product strategy. Roadmap berubah tiap sprint.",
-    approach: "2-hari workshop alignment. Rumus: Outcome > Output > Activity.",
+    approach: "Workshop alignment 2 hari. Rumus: Outcome > Output > Activity.",
     result: "Sprint planning 2× lebih cepat. Engineering NPS +18.",
     publishedAt: day(160),
   },
@@ -192,13 +195,13 @@ export const SEED_PORTFOLIO: PortfolioItem[] = [
 export const SEED_SERVICES: Service[] = [
   {
     id: "svc-1",
-    slug: "mentoring",
-    name: "1-on-1 Mentoring",
+    slug: "monthly-retainer",
+    name: "Monthly Retainer",
     description:
-      "Lorem ipsum dolor sit amet consectetur. 4 sesi per bulan, fokus karir + technical depth.",
+      "Pendampingan berkelanjutan — mentoring atau advisory bulanan, fokus karier + technical depth.",
     priceLabel: "Rp 4.5jt",
     period: "/bulan",
-    bullets: ["Weekly 60-min call", "Async review unlimited", "Resource library access"],
+    bullets: ["Call mingguan 60 menit", "Async review tanpa batas", "Akses resource library"],
     featured: false,
   },
   {
@@ -206,10 +209,10 @@ export const SEED_SERVICES: Service[] = [
     slug: "strategy-sprint",
     name: "Strategy Sprint",
     description:
-      "Adipiscing elit ut tellus dignissim. Intensive 5-hari deliverable: roadmap + prioritization matrix.",
+      "Sprint intensif lima hari dengan deliverable jelas: roadmap + matriks prioritas.",
     priceLabel: "Rp 18jt",
     period: "/sprint",
-    bullets: ["Stakeholder interviews", "Workshop fasilitasi", "Final deck + recording"],
+    bullets: ["Wawancara stakeholder", "Fasilitasi workshop", "Deck akhir + recording"],
     featured: true,
     priceNumber: 18_000_000,
   },
@@ -218,10 +221,10 @@ export const SEED_SERVICES: Service[] = [
     slug: "office-hours",
     name: "Office Hours",
     description:
-      "Curabitur ac eros vitae elit. Slot 30-menit untuk konsultasi cepat — pricing, hiring, eksekusi.",
+      "Sesi 30–60 menit untuk pertanyaan spesifik — pricing, hiring, atau eksekusi.",
     priceLabel: "Rp 750k",
     period: "/sesi",
-    bullets: ["Same-week booking", "Prep brief by email", "Follow-up notes"],
+    bullets: ["Booking minggu yang sama", "Prep brief via email", "Catatan follow-up"],
     featured: false,
     priceNumber: 750_000,
   },
@@ -230,24 +233,24 @@ export const SEED_SERVICES: Service[] = [
 export const SEED_RESOURCES: Resource[] = [
   {
     id: "res-1",
-    title: "Lorem Playbook 2026",
-    description: "Framework lengkap GTM lokal untuk early-stage founder.",
+    title: "GTM Playbook Lokal 2026",
+    description: "Kerangka lengkap go-to-market untuk founder early-stage di pasar Indonesia.",
     fileLabel: "PDF · 38 hal",
     gated: true,
     downloads: 412,
   },
   {
     id: "res-2",
-    title: "Ipsum Pricing Calculator",
-    description: "Template spreadsheet — variabel + simulator harga.",
+    title: "Pricing Calculator",
+    description: "Template spreadsheet — variabel harga + simulator paket.",
     fileLabel: "Notion template",
     gated: false,
     downloads: 1280,
   },
   {
     id: "res-3",
-    title: "Dolor Hiring Rubric",
-    description: "Scoring + interview prompts untuk hire engineer + designer.",
+    title: "Hiring Rubric",
+    description: "Scoring + prompt wawancara untuk merekrut engineer dan designer.",
     fileLabel: "Spreadsheet",
     gated: true,
     downloads: 96,
@@ -263,8 +266,8 @@ export const SEED_STATE: State = {
     {
       id: "lead-1",
       name: "Asep Wijaya",
-      email: "asep@acme.id",
-      topic: "1-on-1 Mentoring",
+      email: "asep@sinarventures.id",
+      topic: "Monthly Retainer",
       source: "Contact form",
       ts: now - 12 * 60 * 1000,
       status: "new",
@@ -272,8 +275,8 @@ export const SEED_STATE: State = {
     {
       id: "lead-2",
       name: "Putri Maharani",
-      email: "putri@foobar.com",
-      topic: "Strategy sprint",
+      email: "putri@nusantaralabs.com",
+      topic: "Strategy Sprint",
       source: "Newsletter",
       ts: now - 60 * 60 * 1000,
       status: "new",
@@ -281,9 +284,9 @@ export const SEED_STATE: State = {
     {
       id: "lead-3",
       name: "Bayu Setiawan",
-      email: "bayu@beta.io",
-      topic: "Office hours",
-      source: "Lead magnet: Lorem Playbook 2026",
+      email: "bayu@kodekolektif.io",
+      topic: "Office Hours",
+      source: "Lead magnet: GTM Playbook Lokal 2026",
       ts: now - 3 * 60 * 60 * 1000,
       status: "contacted",
     },

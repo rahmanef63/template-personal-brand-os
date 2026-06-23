@@ -15,7 +15,7 @@ import {
   cfgArray,
   parseConfigObject,
 } from "@/features/_shared/landing/sections";
-import { BRAND_FEATURES } from "./LandingExtras";
+import { FEATURES } from "@/convex/landingContent";
 
 const FEATURE_ICONS: Record<string, NonNullable<FeatureItem["icon"]>> = {
   Compass,
@@ -24,6 +24,15 @@ const FEATURE_ICONS: Record<string, NonNullable<FeatureItem["icon"]>> = {
   Mic,
   Sparkles,
 };
+
+// Render fallback, derived from the single source (convex/landingContent.ts).
+// The seed writes the same FEATURES (icon NAMES) into Convex config; here the
+// names map back to lucide components for the local fallback.
+export const BRAND_FEATURES: FeatureItem[] = FEATURES.map((f) => ({
+  icon: FEATURE_ICONS[f.icon] ?? Sparkles,
+  title: f.title,
+  blurb: f.blurb,
+}));
 
 type FeatureConfigItem = { icon?: string; title: string; blurb: string };
 

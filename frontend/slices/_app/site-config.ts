@@ -29,17 +29,17 @@ export const TEMPLATE_SLUG = "personal-brand-os";
 const paths = buildTemplatePaths(TEMPLATE_SLUG);
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
-  brandLetter: "L",
-  brandName: "lorem.dev",
+  brandLetter: "A",
+  brandName: "arda.studio",
   tagline: "Personal brand operating system",
-  ownerName: "Lorem Dolor",
+  ownerName: "Arda Pratama",
   ownerRole: "owner",
-  ownerInitials: "LD",
+  ownerInitials: "AP",
   description:
-    "Lorem ipsum dolor sit amet — strategist, writer, and educator. Public site + admin dashboard powered by Personal Brand OS.",
-  baseUrl: "https://lorem.dev",
-  twitter: "@loremdev",
-  email: "halo@lorem.dev",
+    "Arda Pratama — product strategist, engineering mentor, dan penulis. Public site + admin dashboard powered by Personal Brand OS.",
+  baseUrl: "https://arda.studio",
+  twitter: "@ardastudio",
+  email: "halo@arda.studio",
   bookCallHref: `${paths.publicBase}/services`,
   defaultLocale: "id-ID",
   themeColor: "#0a0a0a",

@@ -28,10 +28,10 @@ const SUGGESTIONS = [
 ];
 
 const FAKE_REPLIES = [
-  "Lorem ipsum — strategy sprint Rp 18jt/sprint, durasi 5 hari. Mau saya kirimkan brief contohnya?",
+  "Strategy sprint Rp 18jt/sprint, durasi 5 hari, deliverable roadmap + matriks prioritas. Mau saya kirimkan brief contohnya?",
   "Tentu — saya akan kirim ke email kamu. Bisa share email-nya di sini?",
-  "Sed ut perspiciatis unde omnis iste — biasanya saya bahas pricing, hiring, dan eksekusi roadmap.",
-  "Adipiscing elit, mau saya jadwalkan office hours? 30 menit, gratis untuk first-timer.",
+  "Di office hours biasanya saya bahas pricing, hiring, dan eksekusi roadmap. 30 menit, fokus satu masalah.",
+  "Mau saya jadwalkan office hours? 30 menit, gratis untuk first-timer.",
 ];
 
 export function ChatFab() {
@@ -63,7 +63,7 @@ export function ChatFab() {
           {
             id: nid("msg"),
             role: "assistant",
-            content: "Hai 👋 saya AI Lorem — boleh tau ada yang bisa dibantu?",
+            content: "Hai 👋 saya AI Mentor — boleh tau ada yang bisa dibantu?",
             ts: Date.now(),
           },
         ],
@@ -106,7 +106,7 @@ export function ChatFab() {
         aria-label="Open chatbot"
       >
         <MessageCircle className="size-4" />
-        Tanya AI Lorem
+        Tanya AI Mentor
       </Button>
 
       {open && (
@@ -117,7 +117,7 @@ export function ChatFab() {
                 <Bot className="size-3.5" />
               </span>
               <div>
-                <p className="text-sm font-medium leading-tight">AI Lorem</p>
+                <p className="text-sm font-medium leading-tight">AI Mentor</p>
                 <p className="text-[10px] text-muted-foreground">model: claude-sonnet-4-6 · vector-aware</p>
               </div>
             </div>

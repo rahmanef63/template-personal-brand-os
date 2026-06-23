@@ -2,6 +2,7 @@ import { mutation, internalMutation } from "./_generated/server";
 import { ConvexError } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { requireUser } from "./_shared/auth";
+import { HERO, STATS, CLIENTS, FEATURES, PRICING, FAQS, TESTIMONIALS } from "./landingContent";
 
 // Demo seed for Personal Brand OS.
 // - `seed:run`        — CLI/power use: wipes content then inserts (npx convex run seed:run).
@@ -10,19 +11,24 @@ import { requireUser } from "./_shared/auth";
 const now = 1_780_000_000_000;
 const day = 86_400_000;
 
-// Keep in sync with components/templates/personal-brand/shared/seed.ts
-// SEED_LANDING_SECTIONS. `syncLanding` below pushes additions/order to an
-// already-seeded deployment without touching admin-edited copy.
+// Keep in sync with frontend/slices/_app/seed.ts SEED_LANDING_SECTIONS.
+// `syncLanding` below pushes additions/order to an already-seeded deployment
+// without touching admin-edited copy.
+// Item-bearing sections (stats/features/pricing/testimonials/faq) seed their
+// example content into `config` from convex/landingContent.ts — the SAME module
+// the frontend render falls back to — so a fresh clone gets editable example
+// data and there is no convex<->render drift. Table-backed kinds (portfolio/
+// services/blog) render from their own tables and carry no config here.
 const LANDING = [
-  { id: "ls-hero", order: 10, kind: "hero", title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.", subtitle: "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.", enabled: true, config: '{"badge":"2026 mentorship cohort open"}', layers: [{ id: "hero-photo", type: "image", placement: "background", opacity: 100, enabled: true, url: "/hero.webp" }] },
-  { id: "ls-stats", order: 20, kind: "stats", title: "Numbers", subtitle: "Quick credibility strip.", enabled: true },
-  { id: "ls-features", order: 25, kind: "features", title: "Fokus yang saya kerjakan", subtitle: "Empat jalur utama: strategi produk, mentorship engineering, tulisan, dan sesi untuk tim.", enabled: true },
+  { id: "ls-hero", order: 10, kind: "hero", title: HERO.title, subtitle: HERO.subtitle, enabled: true, config: JSON.stringify({ badge: HERO.badge }), layers: [{ id: "hero-photo", type: "image", placement: "background", opacity: 100, enabled: true, url: "/hero.webp" }] },
+  { id: "ls-stats", order: 20, kind: "stats", title: "Rekam jejak singkat", subtitle: "Angka yang menggambarkan praktik dan jangkauan kerja sampai hari ini.", enabled: true, config: JSON.stringify({ stats: STATS, clients: CLIENTS }) },
+  { id: "ls-features", order: 25, kind: "features", title: "Fokus yang saya kerjakan", subtitle: "Empat jalur utama: strategi produk, mentorship engineering, tulisan, dan sesi untuk tim.", enabled: true, config: JSON.stringify({ items: FEATURES }) },
   { id: "ls-blog", order: 30, kind: "blog", title: "Tulisan terbaru", subtitle: "Catatan singkat tentang produk, riset, dan delivery.", enabled: true },
   { id: "ls-portfolio", order: 40, kind: "portfolio", title: "Karya pilihan", subtitle: "Proyek yang menggambarkan cara saya bekerja.", enabled: true },
   { id: "ls-services", order: 50, kind: "services", title: "Layanan", subtitle: "Tiga jalur kerja sama.", enabled: true },
-  { id: "ls-pricing", order: 55, kind: "pricing", title: "Model kerja sama", subtitle: "Mulai dari sesi konsultasi tunggal sampai retainer bulanan.", enabled: false },
-  { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true },
-  { id: "ls-faq", order: 62, kind: "faq", title: "Pertanyaan yang sering masuk", subtitle: "Soal kolaborasi, jasa, timeline, dan harga — sebelum kamu kirim email.", enabled: true },
+  { id: "ls-pricing", order: 55, kind: "pricing", title: "Model kerja sama", subtitle: "Mulai dari sesi konsultasi tunggal sampai retainer bulanan.", enabled: false, config: JSON.stringify({ tiers: PRICING }) },
+  { id: "ls-testimonials", order: 60, kind: "testimonials", title: "Apa kata mereka", subtitle: "Dari founder dan tim yang sudah bekerja sama.", enabled: true, config: JSON.stringify({ items: TESTIMONIALS }) },
+  { id: "ls-faq", order: 62, kind: "faq", title: "Pertanyaan yang sering masuk", subtitle: "Soal kolaborasi, jasa, timeline, dan harga — sebelum kamu kirim email.", enabled: true, config: JSON.stringify({ items: FAQS }) },
   { id: "ls-cta", order: 65, kind: "cta", title: "Punya proyek atau butuh sparring partner?", subtitle: "Ceritakan konteksmu — dibalas dalam 1×24 jam kerja.", enabled: true },
   { id: "ls-newsletter", order: 70, kind: "newsletter", title: "Newsletter", subtitle: "Sekali sebulan, kabar produk + sumber bacaan.", enabled: true },
 ];
@@ -30,14 +36,14 @@ const LANDING = [
 // All demo content inserts (no wipe). Shared by `run` and `seedSample`.
 async function insertAll(ctx: any, opts: { landing?: boolean } = {}) {
   const posts = [
-    { slug: "designing-with-intent", title: "Designing With Intent", excerpt: "How constraints sharpen creative work.", tag: "Design", cover: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1400&q=70" },
-    { slug: "building-a-personal-brand", title: "Building a Personal Brand That Lasts", excerpt: "Consistency beats virality over time.", tag: "Strategy", cover: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1400&q=70" },
-    { slug: "shipping-side-projects", title: "Shipping Side Projects", excerpt: "A pragmatic loop for finishing things.", tag: "Build", cover: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1400&q=70" },
+    { slug: "outcome-over-output", title: "Outcome di Atas Output: Cara Memprioritaskan Roadmap", excerpt: "Kenapa tim sering sibuk tapi tidak bergerak — dan kerangka prioritas yang saya pakai bareng founder.", tag: "Strategy", cover: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1400&q=70" },
+    { slug: "mentorship-engineer-naik-level", title: "Pola Mentorship yang Bikin Engineer Naik Level Cepat", excerpt: "Tiga kebiasaan kerja yang membedakan engineer mid dari senior — dari pengalaman mentoring 1-on-1.", tag: "Engineering", cover: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1400&q=70" },
+    { slug: "riset-go-to-market-lokal", title: "Riset Go-to-Market untuk Pasar Indonesia", excerpt: "Cara menemukan ICP yang benar sebelum membakar budget — kerangka JTBD yang ringkas dan bisa langsung dipakai.", tag: "Notes", cover: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1400&q=70" },
   ];
   for (let i = 0; i < posts.length; i++) {
     await ctx.db.insert("posts", {
       ...posts[i],
-      body: "## Lorem ipsum\n\nDemo content. Edit in the admin panel.",
+      body: `## ${posts[i].title}\n\nCatatan singkat dari praktik kerja sama dengan founder dan tim produk. Edit isi lengkapnya lewat panel admin → Blog.`,
       author: "Owner",
       status: "published",
       publishedAt: now - i * day,
@@ -47,9 +53,9 @@ async function insertAll(ctx: any, opts: { landing?: boolean } = {}) {
   }
 
   const portfolio = [
-    { slug: "brand-refresh", title: "Brand Refresh", category: "Branding", blurb: "Full identity system." },
-    { slug: "saas-dashboard", title: "SaaS Dashboard", category: "Product", blurb: "Analytics UI for a B2B tool." },
-    { slug: "campaign-site", title: "Campaign Microsite", category: "Web", blurb: "Launch site in two weeks." },
+    { slug: "sinar-ventures-activation", title: "Sinar Ventures — Perbaikan Aktivasi", category: "Product", blurb: "Onboarding di-redesign, aktivasi naik 31%.", problem: "Retensi turun 18% dalam dua kuartal; hipotesis: onboarding membingungkan.", approach: "Audit funnel + 14 wawancara user. Aktivasi diringkas dari 4 langkah jadi 1 langkah dengan bantuan AI.", result: "Aktivasi naik 31%. Retensi minggu-2 naik 12%. ARR proyeksi +Rp 4.2 milyar." },
+    { slug: "nusantara-labs-reposition", title: "Nusantara Labs — Reposisi Brand", category: "Brand", blurb: "Avg deal size naik 2.4× setelah reposisi.", problem: "Persepsi pasar startup, padahal klien membeli enterprise.", approach: "Workshop pemegang saham. Brand archetype + reposisi visual.", result: "Avg deal size naik 2.4×. Sales cycle turun dari 90 hari ke 54." },
+    { slug: "kode-kolektif-gtm", title: "Kode Kolektif — Strategi Go-to-Market", category: "Strategy", blurb: "Launch on-time, MRR 60 hari lampaui target.", problem: "Launch tertunda tiga kali — tim belum sepakat ICP.", approach: "Force-rank ICP via JTBD. Pangkas 5 segmen jadi 2.", result: "Launch tepat waktu. MRR 60 hari Rp 380jt vs target Rp 200jt." },
   ];
   for (let i = 0; i < portfolio.length; i++) {
     await ctx.db.insert("portfolio", {
@@ -59,27 +65,25 @@ async function insertAll(ctx: any, opts: { landing?: boolean } = {}) {
         "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1400&q=70",
         "https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=1400&q=70",
       ][i],
-      problem: "Demo problem statement.",
-      approach: "Demo approach.",
-      result: "Demo outcome.",
       publishedAt: now - i * day,
     });
   }
 
   // priceNumber = fixed IDR amount → purchasable via guest checkout. Services
-  // without it (Monthly Retainer) are book-only (lead.create), never carted.
+  // without it (Retainer) are book-only (lead.create), never carted.
   const services = [
-    { slug: "consulting", name: "Consulting", priceLabel: "$2k", period: "/project", featured: true, bullets: ["Strategy session", "Roadmap", "Async support"], priceNumber: 2_000_000 },
-    { slug: "design-sprint", name: "Design Sprint", priceLabel: "$5k", period: "/week", featured: false, bullets: ["5-day sprint", "Prototype", "User test"], priceNumber: 5_000_000 },
-    { slug: "retainer", name: "Monthly Retainer", priceLabel: "$3k", period: "/mo", featured: false, bullets: ["Ongoing work", "Priority", "Monthly review"] },
+    { slug: "office-hours", name: "Office Hours", priceLabel: "Rp 750k", period: "/sesi", featured: false, bullets: ["Booking minggu yang sama", "Prep brief via email", "Catatan follow-up"], priceNumber: 750_000, description: "Sesi 30–60 menit untuk pertanyaan spesifik — pricing, hiring, atau eksekusi." },
+    { slug: "strategy-sprint", name: "Strategy Sprint", priceLabel: "Rp 18jt", period: "/sprint", featured: true, bullets: ["Wawancara stakeholder", "Fasilitasi workshop", "Deck akhir + recording"], priceNumber: 18_000_000, description: "Sprint intensif lima hari dengan deliverable jelas: roadmap + matriks prioritas." },
+    { slug: "monthly-retainer", name: "Monthly Retainer", priceLabel: "Rp 4.5jt", period: "/bulan", featured: false, bullets: ["Call mingguan 60 menit", "Async review tanpa batas", "Akses resource library"], description: "Pendampingan berkelanjutan — mentoring atau advisory bulanan." },
   ];
   for (const s of services) {
-    await ctx.db.insert("services", { ...s, description: "Demo service description." });
+    await ctx.db.insert("services", s);
   }
 
   const resources = [
-    { title: "Brand Checklist", description: "A starter checklist.", fileLabel: "PDF", gated: false, downloads: 42 },
-    { title: "Pricing Template", description: "Spreadsheet template.", fileLabel: "XLSX", gated: true, downloads: 18 },
+    { title: "GTM Playbook Lokal 2026", description: "Kerangka lengkap go-to-market untuk founder early-stage di pasar Indonesia.", fileLabel: "PDF · 38 hal", gated: true, downloads: 412 },
+    { title: "Pricing Calculator", description: "Template spreadsheet — variabel harga + simulator paket.", fileLabel: "Notion template", gated: false, downloads: 1280 },
+    { title: "Hiring Rubric", description: "Scoring + prompt wawancara untuk merekrut engineer dan designer.", fileLabel: "Spreadsheet", gated: true, downloads: 96 },
   ];
   for (const r of resources) await ctx.db.insert("resources", r);
 
@@ -160,9 +164,9 @@ export const syncServicesCommerce = mutation({
   handler: async (ctx) => {
     await requireUser(ctx);
     const SEED_SERVICES = [
-      { slug: "consulting", name: "Consulting", priceNumber: 2_000_000 },
-      { slug: "design-sprint", name: "Design Sprint", priceNumber: 5_000_000 },
-      { slug: "retainer", name: "Monthly Retainer" },
+      { slug: "office-hours", name: "Office Hours", priceNumber: 750_000 },
+      { slug: "strategy-sprint", name: "Strategy Sprint", priceNumber: 18_000_000 },
+      { slug: "monthly-retainer", name: "Monthly Retainer" },
     ];
     let patched = 0;
     const rows = await ctx.db.query("services").collect();
