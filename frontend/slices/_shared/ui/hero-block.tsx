@@ -41,6 +41,7 @@ export function HeroBlock({
   primaryCta,
   secondaryCta,
   variant = "centered",
+  align = "left",
   sidekick,
   image,
   glow = false,
@@ -55,6 +56,9 @@ export function HeroBlock({
   primaryCta?: Cta;
   secondaryCta?: Cta;
   variant?: "centered" | "split";
+  /** Text alignment of the content column. "center" only applies to the
+   *  non-split layout (split keeps text left, image right). */
+  align?: "left" | "center";
   sidekick?: React.ReactNode;
   /** Foreground illustration. Auto-promotes variant to "split" when set
    *  and no sidekick is provided. */
@@ -72,6 +76,7 @@ export function HeroBlock({
 }) {
   const effectiveVariant =
     variant === "split" || (image && !sidekick) ? "split" : "centered";
+  const centered = align === "center" && effectiveVariant === "centered";
   const imageSidekick = image && !sidekick ? <HeroImage image={image} /> : null;
   const rightCol = sidekick ?? imageSidekick;
   // Entrance: root scope flips on mount (hero sits above the fold), children
@@ -111,9 +116,9 @@ export function HeroBlock({
           effectiveVariant === "split" ? "md:grid-cols-12" : "",
         )}
       >
-        <div className={effectiveVariant === "split" ? "md:col-span-7" : ""}>
+        <div className={cn(effectiveVariant === "split" ? "md:col-span-7" : "", centered && "text-center")}>
           {badge && (
-            <div data-reveal="fade-up">
+            <div data-reveal="fade-up" className={cn(centered && "flex justify-center")}>
               <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-[11px]">
                 <Sparkles className="mr-1 size-3" /> {badge}
               </Badge>
@@ -138,7 +143,10 @@ export function HeroBlock({
             <p
               data-reveal="fade-up"
               style={delayAt(180)}
-              className="mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl"
+              className={cn(
+                "mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl",
+                centered && "mx-auto",
+              )}
             >
               {subtitle}
             </p>
@@ -147,7 +155,10 @@ export function HeroBlock({
             <div
               data-reveal="fade-up"
               style={delayAt(270)}
-              className="mt-8 flex flex-wrap items-center gap-3"
+              className={cn(
+                "mt-8 flex flex-wrap items-center gap-3",
+                centered && "justify-center",
+              )}
             >
               {primaryCta && (
                 <Button asChild size="lg">

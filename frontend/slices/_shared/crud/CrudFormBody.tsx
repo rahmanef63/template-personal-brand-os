@@ -28,17 +28,29 @@ export function CrudFormBody<T>({
   ctx?: { total: number; editing: boolean };
 }) {
   const row = draft as Record<string, unknown>;
+  const visible = fields.filter((f) => (f.when ? f.when(row) : true));
+  const content = visible.filter((f) => f.group !== "advanced");
+  const advanced = visible.filter((f) => f.group === "advanced");
+  const render = (f: FieldDef<T>) => (
+    <FieldRender
+      key={f.key}
+      field={f}
+      value={row[f.key]}
+      onChange={(v) => onChange(f.key as keyof T & string, v)}
+      ctx={ctx ? { ...ctx, row } : { total: 0, editing: true, row }}
+    />
+  );
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      {fields.filter((f) => (f.when ? f.when(row) : true)).map((f) => (
-        <FieldRender
-          key={f.key}
-          field={f}
-          value={row[f.key]}
-          onChange={(v) => onChange(f.key as keyof T & string, v)}
-          ctx={ctx ? { ...ctx, row } : { total: 0, editing: true, row }}
-        />
-      ))}
+    <div className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2">{content.map(render)}</div>
+      {advanced.length > 0 && (
+        <details className="rounded-md border border-border/60 bg-muted/20 px-3 py-2">
+          <summary className="cursor-pointer select-none text-xs font-medium text-muted-foreground">
+            Advanced
+          </summary>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">{advanced.map(render)}</div>
+        </details>
+      )}
     </div>
   );
 }

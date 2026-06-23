@@ -65,70 +65,6 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     rows: 3,
     hint: "Supporting copy under the title. Keep ~1–2 sentences for hero, ~1 line for other sections.",
   },
-
-  {
-    kind: "image",
-    key: "imageUrl",
-    label: "Foreground image",
-    wide: true,
-    placeholder: "https://images.unsplash.com/… or /covers/hero.jpg",
-    hint: "Hero illustration, feature graphic, portfolio cover, etc. URL or /public path. Leave blank for text-only sections.",
-  },
-  {
-    kind: "select",
-    key: "imageRatio",
-    label: "Image aspect ratio",
-    options: [
-      { value: "16:9", label: "16:9 (widescreen, default)" },
-      { value: "4:3", label: "4:3 (classic)" },
-      { value: "1:1", label: "1:1 (square)" },
-      { value: "3:2", label: "3:2 (photo)" },
-      { value: "21:9", label: "21:9 (ultrawide)" },
-      { value: "auto", label: "auto (use the image's natural ratio)" },
-    ],
-    hint: "Controls how the foreground image is cropped. \"auto\" keeps the natural ratio.",
-  },
-  {
-    kind: "image",
-    key: "bgImageUrl",
-    label: "Background image",
-    wide: true,
-    placeholder: "https://… (subtle textures work best)",
-    hint: "Full-bleed background behind the section. A soft gradient scrim keeps text readable.",
-  },
-  {
-    kind: "custom",
-    key: "layers",
-    label: "Hero layers (background / foreground)",
-    wide: true,
-    when: (row) => row.kind === "hero",
-    hint:
-      "Stack images + custom HTML/CSS behind or in front of the hero, each with its own opacity slider and on/off toggle. " +
-      "Empty = the template's built-in hero background. Only the hero section renders these.",
-    render: (value, onChange, ctx) =>
-      React.createElement(HeroLayersField, {
-        value,
-        onChange,
-        kind: (ctx?.row as Record<string, unknown> | undefined)?.kind as string | undefined,
-      }),
-  },
-  {
-    kind: "switch",
-    key: "shade",
-    label: "Hero shade (readability overlay)",
-    when: (row) => row.kind === "hero",
-    hint: "Off = hero image shows in full real color. On = adds a gradient scrim + brand glow so text stays legible over busy images. Hero section only.",
-  },
-
-  {
-    kind: "text",
-    key: "className",
-    label: "Custom style (Tailwind classNames)",
-    wide: true,
-    mono: true,
-    placeholder: "py-24 bg-gradient-to-b from-background to-muted/40",
-    hint: "Appended to the section wrapper. Use for one-off spacing / color / typography tweaks. Standard Tailwind utilities — same syntax as className= in JSX.",
-  },
   {
     kind: "custom",
     key: "config",
@@ -145,5 +81,75 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
         kind: (ctx?.row as Record<string, unknown> | undefined)?.kind as string | undefined,
         onChange,
       }),
+  },
+
+  {
+    kind: "image",
+    key: "imageUrl",
+    label: "Foreground image",
+    wide: true,
+    group: "advanced",
+    placeholder: "https://images.unsplash.com/… or /covers/hero.jpg",
+    hint: "Hero illustration, feature graphic, portfolio cover, etc. URL or /public path. Leave blank for text-only sections.",
+  },
+  {
+    kind: "select",
+    key: "imageRatio",
+    label: "Image aspect ratio",
+    group: "advanced",
+    options: [
+      { value: "16:9", label: "16:9 (widescreen, default)" },
+      { value: "4:3", label: "4:3 (classic)" },
+      { value: "1:1", label: "1:1 (square)" },
+      { value: "3:2", label: "3:2 (photo)" },
+      { value: "21:9", label: "21:9 (ultrawide)" },
+      { value: "auto", label: "auto (use the image's natural ratio)" },
+    ],
+    hint: "Controls how the foreground image is cropped. \"auto\" keeps the natural ratio.",
+  },
+  {
+    kind: "image",
+    key: "bgImageUrl",
+    label: "Background image",
+    wide: true,
+    group: "advanced",
+    placeholder: "https://… (subtle textures work best)",
+    hint: "Full-bleed background behind the section. A soft gradient scrim keeps text readable.",
+  },
+  {
+    kind: "custom",
+    key: "layers",
+    label: "Hero layers (background / foreground)",
+    wide: true,
+    group: "advanced",
+    when: (row) => row.kind === "hero",
+    hint:
+      "Stack images + custom HTML/CSS behind or in front of the hero, each with its own opacity slider and on/off toggle. " +
+      "Empty = the template's built-in hero background. Only the hero section renders these.",
+    render: (value, onChange, ctx) =>
+      React.createElement(HeroLayersField, {
+        value,
+        onChange,
+        kind: (ctx?.row as Record<string, unknown> | undefined)?.kind as string | undefined,
+      }),
+  },
+  {
+    kind: "switch",
+    key: "shade",
+    label: "Hero shade (readability overlay)",
+    group: "advanced",
+    when: (row) => row.kind === "hero",
+    hint: "Off = hero image shows in full real color. On = adds a gradient scrim + brand glow so text stays legible over busy images. Hero section only.",
+  },
+
+  {
+    kind: "text",
+    key: "className",
+    label: "Custom style (Tailwind classNames)",
+    wide: true,
+    mono: true,
+    group: "advanced",
+    placeholder: "py-24 bg-gradient-to-b from-background to-muted/40",
+    hint: "Appended to the section wrapper. Use for one-off spacing / color / typography tweaks. Standard Tailwind utilities — same syntax as className= in JSX.",
   },
 ];

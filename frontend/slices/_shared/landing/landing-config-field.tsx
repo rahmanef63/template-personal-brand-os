@@ -20,7 +20,7 @@ type ItemField = { k: string; label: string; type?: "text" | "textarea" | "numbe
 type StringList = { key: string; singular: string; placeholder?: string; multiline?: boolean };
 // A single top-level config scalar (hero badge, newsletter copy, blog limit, cta
 // label/href). Empty input deletes the key so the public renderer keeps the default.
-type ScalarField = { k: string; label: string; type?: "text" | "number"; placeholder?: string };
+type ScalarField = { k: string; label: string; type?: "text" | "number" | "select"; placeholder?: string; options?: string[] };
 type KindSchema = { key?: string; singular?: string; fields?: ItemField[]; lists?: StringList[]; scalars?: ScalarField[] };
 
 const KIND_SCHEMA: Record<string, KindSchema> = {
@@ -91,7 +91,8 @@ const KIND_SCHEMA: Record<string, KindSchema> = {
   // are the extra config knobs each kind reads (badge, copy, item caps, CTAs).
   hero: {
     scalars: [
-      { k: "badge", label: "Eyebrow badge" },
+      { k: "badge", label: "Eyebrow label" },
+      { k: "align", label: "Align", type: "select", options: ["left", "center"] },
       { k: "ctaPrimaryLabel", label: "Primary button label" },
       { k: "ctaPrimaryHref", label: "Primary button link" },
       { k: "ctaSecondaryLabel", label: "Secondary button label" },
@@ -181,7 +182,7 @@ export function LandingConfigField({
       {schema?.scalars && schema.scalars.length > 0 && (
         <div className="grid gap-2 sm:grid-cols-2">
           {schema.scalars.map((s) => (
-            <div key={s.k} className={s.type === "number" ? "" : "sm:col-span-2"}>
+            <div key={s.k} className={s.type === "number" || s.type === "select" ? "" : "sm:col-span-2"}>
               <Label className="text-[10px] text-muted-foreground">{s.label}</Label>
               {s.type === "number" ? (
                 <Input
@@ -191,6 +192,17 @@ export function LandingConfigField({
                   className="mt-1 text-xs"
                   placeholder={s.placeholder}
                 />
+              ) : s.type === "select" ? (
+                <select
+                  value={typeof obj[s.k] === "string" ? (obj[s.k] as string) : ""}
+                  onChange={(e) => setScalar(s.k, e.target.value === "" ? undefined : e.target.value)}
+                  className="mt-1 flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                >
+                  <option value="">{s.placeholder ?? "default"}</option>
+                  {s.options?.map((o) => (
+                    <option key={o} value={o}>{o}</option>
+                  ))}
+                </select>
               ) : (
                 <Input
                   value={typeof obj[s.k] === "string" ? (obj[s.k] as string) : ""}

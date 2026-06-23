@@ -40,6 +40,9 @@ export interface HeroProps {
   ctaSecondaryLabel?: string;
   /** Secondary CTA href. Defaults to the portfolio page when unset. */
   ctaSecondaryHref?: string;
+  /** Content alignment. "center" only applies when there is no foreground
+   *  image (with an image the layout is a left text + right image split). */
+  align?: "left" | "center";
 }
 
 const DEFAULTS = {
@@ -62,12 +65,14 @@ export function Hero({
   ctaPrimaryHref,
   ctaSecondaryLabel,
   ctaSecondaryHref,
+  align = "left",
 }: HeroProps = {}) {
   const t = title?.trim() || DEFAULTS.title;
   const s = subtitle?.trim() || DEFAULTS.subtitle;
   const b = badge?.trim() || DEFAULTS.badge;
   const tr = trust?.trim() || DEFAULTS.trust;
   const hasImage = Boolean(image?.url);
+  const centered = align === "center" && !hasImage;
   const ratioClass = ASPECT_RATIO_CLASS[image?.ratio ?? "16:9"];
   return (
     <section className="relative isolate overflow-hidden">
@@ -92,7 +97,7 @@ export function Hero({
           hasImage && "grid items-center md:grid-cols-12",
         )}
       >
-        <div className={hasImage ? "md:col-span-7" : ""}>
+        <div className={cn(hasImage ? "md:col-span-7" : "", centered && "text-center")}>
           <Badge
             variant="secondary"
             className="reveal rounded-full border-brand/30 bg-brand/5 px-3 py-1 text-[11px] text-brand"
@@ -100,19 +105,28 @@ export function Hero({
             <Sparkles className="mr-1 size-3" /> {b}
           </Badge>
           <h1
-            className="reveal mt-6 max-w-4xl text-[2.6rem] font-semibold leading-[1.03] tracking-tight md:text-[4.25rem]"
+            className={cn(
+              "reveal mt-6 max-w-4xl text-[2.6rem] font-semibold leading-[1.03] tracking-tight md:text-[4.25rem]",
+              centered && "mx-auto",
+            )}
             style={{ "--d": "0.06s" } as React.CSSProperties}
           >
             {t}
           </h1>
           <p
-            className="reveal mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl"
+            className={cn(
+              "reveal mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl",
+              centered && "mx-auto",
+            )}
             style={{ "--d": "0.12s" } as React.CSSProperties}
           >
             {s}
           </p>
           <div
-            className="reveal mt-9 flex flex-wrap gap-3"
+            className={cn(
+              "reveal mt-9 flex flex-wrap gap-3",
+              centered && "justify-center",
+            )}
             style={{ "--d": "0.18s" } as React.CSSProperties}
           >
             <Button size="lg" asChild className="group shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)]">

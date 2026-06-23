@@ -24,8 +24,13 @@ export type ColumnDef<T> = {
  *  span both columns (sm:col-span-2). textarea / tags are always wide.
  *  `hint?` renders as muted helper text below the input.
  *  `when?` is a predicate over the live draft row — return false to hide the
- *  field for the current values (e.g. hero-only fields on non-hero kinds). */
-type FieldWhen = { when?: (row: Record<string, unknown>) => boolean };
+ *  field for the current values (e.g. hero-only fields on non-hero kinds).
+ *  `group: "advanced"` tucks the field behind a collapsible <details> so the
+ *  form leads with the essentials; default ("content") renders up top. */
+type FieldCommon = {
+  when?: (row: Record<string, unknown>) => boolean;
+  group?: "content" | "advanced";
+};
 export type FieldDef<T> = (
   | { kind: "text"; key: keyof T & string; label: string; mono?: boolean; placeholder?: string; hint?: string; wide?: boolean }
   | { kind: "textarea"; key: keyof T & string; label: string; rows?: number; mono?: boolean; placeholder?: string; hint?: string }
@@ -57,7 +62,7 @@ export type FieldDef<T> = (
         ctx?: { total: number; editing: boolean; row?: Record<string, unknown> },
       ) => React.ReactNode;
     }
-) & FieldWhen;
+) & FieldCommon;
 
 /** Adapter the template wires from its store dispatch. Generic CRUD
  *  components consume this — no direct store coupling.

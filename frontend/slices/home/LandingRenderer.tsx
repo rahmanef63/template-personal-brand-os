@@ -61,6 +61,7 @@ export function renderLanding(section: LandingSection, deps: Deps) {
       return (
         <LandingSectionShell section={section}>
           <Hero
+            align={cfgString(cfg, "align") === "center" ? "center" : "left"}
             title={section.title}
             subtitle={section.subtitle}
             badge={parseConfigBadge(section.config)}
