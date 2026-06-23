@@ -14,7 +14,7 @@ import { PUBLIC_BASE } from "@/features/_app/nav-config";
 import { HERO_IMG } from "./home-data";
 
 export interface HeroProps {
-  /** Headline. Defaults to the original lorem copy when unset. */
+  /** Headline. Defaults to the built-in copy when unset. */
   title?: string;
   /** Sub-headline / lead paragraph. */
   subtitle?: string;
@@ -43,11 +43,11 @@ export interface HeroProps {
 }
 
 const DEFAULTS = {
-  title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
+  title: "Bantu founder & tim produk Indonesia ambil keputusan yang tepat — lebih cepat.",
   subtitle:
-    "Tempor incididunt ut labore et dolore magna aliqua — strategi produk, mentorship engineer, dan riset go-to-market untuk founder & tim Indonesia.",
+    "Strategi produk, mentorship engineering, dan riset go-to-market. Esai panjang dan catatan singkat, terbit rutin di blog dan newsletter.",
   badge: "2026 mentorship cohort open",
-  trust: "Trusted by — Acme · Foobar · Beta Labs · Gamma · Delta · Zeta",
+  trust: "Dipercaya tim di — Sinar Ventures · Nusantara Labs · Kode Kolektif · Padi Digital · Terra Studio",
 } as const;
 
 export function Hero({

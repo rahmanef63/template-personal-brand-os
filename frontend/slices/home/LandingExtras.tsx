@@ -32,12 +32,12 @@ export const BRAND_STATS: StatItem[] = [
 ];
 
 export const BRAND_CLIENTS = [
-  "Acme Indonesia",
-  "Foobar",
-  "Beta Labs",
-  "Gamma",
-  "Lorem Weekly",
-  "Ipsum Conf",
+  "Sinar Ventures",
+  "Nusantara Labs",
+  "Kode Kolektif",
+  "Padi Digital",
+  "Terra Studio",
+  "Lumina Tech",
 ];
 
 export const BRAND_FEATURES: FeatureItem[] = [

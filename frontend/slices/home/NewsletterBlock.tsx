@@ -12,7 +12,7 @@ import { nid, useStore } from "@/features/_app/store";
 export function NewsletterBlock({
   source = "home-cta",
   title = "Catatan mingguan — tulisan, sumber, refleksi.",
-  subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bebas spam, unsubscribe satu klik.",
+  subtitle = "Satu email tiap minggu — catatan produk, engineering, dan karier. Bebas spam, unsubscribe satu klik.",
   placeholder = "kamu@example.com",
   buttonLabel = "Subscribe",
 }: {

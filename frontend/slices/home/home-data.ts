@@ -8,8 +8,8 @@ export const STATS = [
 ];
 
 export const TESTIMONIALS = [
-  { quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.", name: "Asep Wijaya", role: "CEO, Acme Indonesia" },
-  { quote: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", name: "Putri Maharani", role: "Head of Product, Foobar" },
-  { quote: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.", name: "Bayu Setiawan", role: "Founder, Beta Labs" },
-  { quote: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", name: "Linda Hartono", role: "VP Engineering, Gamma" },
+  { quote: "Sesi strategi 90 menit lebih berguna dari tiga bulan kami muter sendiri. Roadmap-nya langsung kepakai.", name: "Asep Wijaya", role: "CEO, Sinar Ventures" },
+  { quote: "Mentorship-nya bikin engineer kami naik level cepat — arah karier jelas, technical depth-nya kebangun.", name: "Putri Maharani", role: "Head of Product, Nusantara Labs" },
+  { quote: "Workshop go-to-market-nya nge-reframe cara kami lihat pasar. Worth tiap menitnya.", name: "Bayu Setiawan", role: "Founder, Kode Kolektif" },
+  { quote: "Esai dan catatannya jadi bacaan wajib tim produk kami tiap minggu.", name: "Linda Hartono", role: "VP Engineering, Padi Digital" },
 ];
