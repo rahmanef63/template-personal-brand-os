@@ -30,7 +30,7 @@ export function CrudFormBody<T>({
   const row = draft as Record<string, unknown>;
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {fields.map((f) => (
+      {fields.filter((f) => (f.when ? f.when(row) : true)).map((f) => (
         <FieldRender
           key={f.key}
           field={f}

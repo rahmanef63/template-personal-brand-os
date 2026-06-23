@@ -101,6 +101,7 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     key: "layers",
     label: "Hero layers (background / foreground)",
     wide: true,
+    when: (row) => row.kind === "hero",
     hint:
       "Stack images + custom HTML/CSS behind or in front of the hero, each with its own opacity slider and on/off toggle. " +
       "Empty = the template's built-in hero background. Only the hero section renders these.",
@@ -115,6 +116,7 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     kind: "switch",
     key: "shade",
     label: "Hero shade (readability overlay)",
+    when: (row) => row.kind === "hero",
     hint: "Off = hero image shows in full real color. On = adds a gradient scrim + brand glow so text stays legible over busy images. Hero section only.",
   },
 
