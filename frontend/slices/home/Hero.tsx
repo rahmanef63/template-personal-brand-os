@@ -29,6 +29,9 @@ export interface HeroProps {
    *  layer is set it replaces the default HERO_IMG; otherwise HERO_IMG is
    *  the fallback. */
   layers?: HeroLayer[];
+  /** Section background image (admin `bgImageUrl`). The hero background when
+   *  no layers are set; falls back to HERO_IMG when blank. */
+  background?: string;
   /** Readability scrim + brand glow. Off by default → image shows in full
    *  real color; on → gradient + glow for legibility. */
   shade?: boolean;
@@ -60,6 +63,7 @@ export function Hero({
   trust,
   image,
   layers,
+  background,
   shade,
   ctaPrimaryLabel,
   ctaPrimaryHref,
@@ -78,7 +82,7 @@ export function Hero({
     <section className="relative isolate overflow-hidden">
       {/* Background image band — admin layers, or HERO_IMG fallback (full
           opacity = real colors). */}
-      <HeroLayers placement="background" layers={layers} fallbackImg={HERO_IMG} />
+      <HeroLayers placement="background" layers={layers} fallbackImg={background || HERO_IMG} />
       {/* Readability scrim + brand glow — opt-in via the `shade` toggle so
           the image can show in full real color by default. */}
       {shade && (

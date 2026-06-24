@@ -46,6 +46,7 @@ export function HeroBlock({
   image,
   glow = false,
   layers,
+  background,
   shade = false,
   className,
 }: {
@@ -69,6 +70,9 @@ export function HeroBlock({
   /** Admin-composed background / foreground layers. A background layer
    *  replaces the HERO_IMG fallback; otherwise HERO_IMG is the fallback. */
   layers?: HeroLayer[];
+  /** Section background image (admin `bgImageUrl`). Becomes the background
+   *  when no layers are set; falls back to HERO_IMG when blank. */
+  background?: string;
   /** Readability scrim + brand glow. Off by default → image shows in full
    *  real color; on → gradient + glow blobs for legibility. */
   shade?: boolean;
@@ -95,7 +99,7 @@ export function HeroBlock({
         <>
           {/* Background image band — admin layers, or HERO_IMG fallback at
               full opacity (real colors). */}
-          <HeroLayers placement="background" layers={layers} fallbackImg={HERO_IMG} />
+          <HeroLayers placement="background" layers={layers} fallbackImg={background || HERO_IMG} />
           {/* Readability scrim + brand glow — opt-in via `shade` so the image
               shows in full real color by default. */}
           {shade && (

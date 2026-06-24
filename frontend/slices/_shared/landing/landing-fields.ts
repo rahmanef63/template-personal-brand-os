@@ -86,10 +86,9 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
   {
     kind: "imagePicker",
     key: "imageUrl",
-    label: "Foreground image",
+    label: "Image (beside the text)",
     wide: true,
-    group: "advanced",
-    hint: "Hero illustration, feature graphic, portfolio cover, etc. Upload a file, paste a URL, or pick from Unsplash. Leave blank for text-only sections.",
+    hint: "Optional. The picture shown next to the text — hero illustration, feature graphic, portfolio cover. Upload, paste a URL, or pick from Unsplash. Leave blank for text-only.",
   },
   {
     kind: "select",
@@ -109,21 +108,20 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
   {
     kind: "imagePicker",
     key: "bgImageUrl",
-    label: "Background image",
+    label: "Background image (full-bleed)",
     wide: true,
-    group: "advanced",
-    hint: "Full-bleed background behind the section. Upload a file, paste a URL, or pick from Unsplash. A soft gradient scrim keeps text readable.",
+    hint: "Optional. A full-bleed photo behind this whole section. Upload, paste a URL, or pick from Unsplash. A soft scrim keeps text readable. Leave blank for the default background.",
   },
   {
     kind: "custom",
     key: "layers",
-    label: "Hero layers (background / foreground)",
+    label: "Background layers (advanced — optional)",
     wide: true,
     group: "advanced",
     when: (row) => row.kind === "hero",
     hint:
-      "Stack images + custom HTML/CSS behind or in front of the hero, each with its own opacity slider and on/off toggle. " +
-      "Empty = the template's built-in hero background. Only the hero section renders these.",
+      "Optional, advanced. Most heroes only need the Background image above — use layers only to STACK several images or HTML/CSS effects, " +
+      "each with its own opacity + on/off toggle. Empty = uses the Background image (or the template default). Hero section only.",
     render: (value, onChange, ctx) =>
       React.createElement(HeroLayersField, {
         value,
