@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { ImagePickerButton } from "@/components/image-picker";
 import type { FieldDef } from "./types";
 
 // Upload a File to Convex storage -> served URL string. Used by both the plain
@@ -231,5 +232,33 @@ export function CrudFieldInput<T>({
           onUpload={onUpload}
         />
       );
+    case "imagePicker": {
+      // Rich picker (gallery · upload · link · curated Unsplash). Stores the
+      // plain value string (URL for upload/link/unsplash, CSS for color/gradient)
+      // so it renders straight into <img src>/background. No /api/unsplash route
+      // here → curated set only (matches this template's ImageField).
+      const cover = String(value ?? "");
+      return (
+        <div className="flex items-center justify-between gap-2">
+          <ImagePickerButton
+            label={cover ? "Ganti gambar" : "Pilih gambar"}
+            title={field.label}
+            onUpload={onUpload}
+            onChange={(img) => onChange(img?.value ?? "")}
+          />
+          {cover ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={cover}
+              alt=""
+              className="h-12 w-20 rounded-md border border-border/60 object-cover"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
+          ) : null}
+        </div>
+      );
+    }
   }
 }

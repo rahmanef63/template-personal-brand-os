@@ -2,6 +2,10 @@
 
 import * as React from "react";
 import { Plus, Trash2 } from "lucide-react";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { optimizeImage } from "@/lib/optimize-image";
+import { ImagePickerButton, unsplashSearchVia } from "@/components/image-picker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +20,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { HeroLayer } from "./types";
+
+// Upload a File to Convex storage -> served URL (WebP-optimized). Mirrors
+// CrudFieldInput's hook so hero layers get the same upload + Unsplash picker.
+function useConvexUpload() {
+  const genUploadUrl = useMutation(api.files.generateUploadUrl);
+  const getFileUrl = useMutation(api.files.getUrl);
+  return React.useCallback(
+    async (file: File): Promise<string> => {
+      const upload = await optimizeImage(file);
+      const uploadUrl = await genUploadUrl();
+      const res = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": upload.type },
+        body: upload,
+      });
+      const { storageId } = (await res.json()) as { storageId: string };
+      return ((await getFileUrl({ storageId: storageId as never })) as string) ?? "";
+    },
+    [genUploadUrl, getFileUrl],
+  );
+}
 
 /**
  * Structured editor for a hero section's `layers` array. Each layer is an
@@ -33,6 +58,7 @@ export function HeroLayersField({
   kind?: string;
 }) {
   const layers: HeroLayer[] = Array.isArray(value) ? (value as HeroLayer[]) : [];
+  const onUpload = useConvexUpload();
 
   if (kind !== "hero") {
     return (
@@ -138,15 +164,33 @@ export function HeroLayersField({
           </div>
 
           {l.type === "image" ? (
-            <div>
-              <Label className="text-[10px] text-muted-foreground">
-                Image URL or /path
-              </Label>
+            <div className="space-y-2">
+              <Label className="text-[10px] text-muted-foreground">Image</Label>
+              <div className="flex items-center gap-2">
+                <ImagePickerButton
+                  label={l.url ? "Change image" : "Pick image"}
+                  title="Hero layer image"
+                  onUpload={onUpload}
+                  searchUnsplash={unsplashSearchVia("/api/unsplash")}
+                  onChange={(img) => patch(i, { url: img?.value ?? "" })}
+                />
+                {l.url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={l.url}
+                    alt=""
+                    className="h-10 w-16 rounded border border-border/60 object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                ) : null}
+              </div>
               <Input
                 value={l.url ?? ""}
                 onChange={(e) => patch(i, { url: e.target.value })}
-                placeholder="/hero.webp or https://…"
-                className="mt-1 font-mono text-xs"
+                placeholder="/hero.webp or https://… (or use Pick image)"
+                className="font-mono text-xs"
               />
             </div>
           ) : (

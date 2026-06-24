@@ -84,13 +84,12 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
   },
 
   {
-    kind: "image",
+    kind: "imagePicker",
     key: "imageUrl",
     label: "Foreground image",
     wide: true,
     group: "advanced",
-    placeholder: "https://images.unsplash.com/… or /covers/hero.jpg",
-    hint: "Hero illustration, feature graphic, portfolio cover, etc. URL or /public path. Leave blank for text-only sections.",
+    hint: "Hero illustration, feature graphic, portfolio cover, etc. Upload a file, paste a URL, or pick from Unsplash. Leave blank for text-only sections.",
   },
   {
     kind: "select",
@@ -108,13 +107,12 @@ export const LANDING_FIELDS: FieldDef<LandingSection>[] = [
     hint: "Controls how the foreground image is cropped. \"auto\" keeps the natural ratio.",
   },
   {
-    kind: "image",
+    kind: "imagePicker",
     key: "bgImageUrl",
     label: "Background image",
     wide: true,
     group: "advanced",
-    placeholder: "https://… (subtle textures work best)",
-    hint: "Full-bleed background behind the section. A soft gradient scrim keeps text readable.",
+    hint: "Full-bleed background behind the section. Upload a file, paste a URL, or pick from Unsplash. A soft gradient scrim keeps text readable.",
   },
   {
     kind: "custom",
