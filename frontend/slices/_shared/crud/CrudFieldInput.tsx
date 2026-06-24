@@ -4,6 +4,7 @@ import * as React from "react";
 import { Upload } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { optimizeImage } from "@/lib/optimize-image";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -24,11 +25,12 @@ function useConvexUpload() {
   const getFileUrl = useMutation(api.files.getUrl);
   return React.useCallback(
     async (file: File): Promise<string> => {
+      const upload = await optimizeImage(file);
       const uploadUrl = await genUploadUrl();
       const res = await fetch(uploadUrl, {
         method: "POST",
-        headers: { "Content-Type": file.type },
-        body: file,
+        headers: { "Content-Type": upload.type },
+        body: upload,
       });
       const { storageId } = (await res.json()) as { storageId: string };
       return ((await getFileUrl({ storageId: storageId as never })) as string) ?? "";
