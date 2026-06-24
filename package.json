@@ -49,9 +49,11 @@
     "radix-ui": "^1.1.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-is": "^19.2.7",
     "recharts": "^3.8.0",
     "sonner": "^1.7.4",
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": "^2.5.5",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
