@@ -67,22 +67,8 @@ export const get = query({
   args: {},
   handler: async (ctx) => {
     // Admin-only: exposes workspace settings / webhook endpoints / AI config.
+    // Anon callers throw; their binding falls back to the SEED shape client-side.
     if (!(await getAuthUserId(ctx))) throw new ConvexError("Admin only.");
-    // Admin-only read. Anon callers get the harmless SEED shape (same value the
-    // binding falls back to) rather than the real persisted AI config / prompts.
-    const userId = await getAuthUserId(ctx);
-    if (!userId) {
-      return {
-        config: SEED_CONFIG,
-        moderation: SEED_MODERATION.map((seed) => ({
-          id: seed.ruleId,
-          label: seed.label,
-          description: seed.description,
-          enabled: seed.enabled,
-          threshold: seed.threshold,
-        })),
-      };
-    }
 
     const configRow = await ctx.db.query("adminAiConfig").first();
     const config = configRow
