@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminTopbar } from "./admin-topbar";
+import { CommandPalette } from "./command-palette";
 import type { AdminNavGroup, AdminNavItem, Brand, User } from "../types/common";
 
 /**
@@ -69,6 +70,11 @@ export function DashboardShell({
           searchPlaceholder={searchPlaceholder}
           notifCount={notifCount}
           actions={topbarActions}
+        />
+        <CommandPalette
+          primary={topbarNav}
+          settings={settingsNav}
+          placeholder={searchPlaceholder}
         />
         <main className="flex-1 overflow-auto p-4 md:p-6 min-w-0">{children}</main>
       </SidebarInset>

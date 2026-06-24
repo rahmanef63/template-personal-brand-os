@@ -3,7 +3,6 @@
 import * as React from "react";
 import { Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { AdminSidebarMobileTrigger } from "./admin-sidebar";
 import type { AdminNavItem, Brand, User } from "../types/common";
 
@@ -45,10 +44,18 @@ export function AdminTopbar({
         settingsNav={settingsNav}
         user={user}
       />
-      <div className="relative max-w-md flex-1">
-        <Search className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-        <Input placeholder={searchPlaceholder} className="pl-8" />
-      </div>
+      <button
+        type="button"
+        onClick={() => window.dispatchEvent(new Event("cmdk:open"))}
+        className="relative flex max-w-md flex-1 items-center gap-2 rounded-md border border-border/60 bg-background px-2.5 py-2 text-left text-sm text-muted-foreground transition-colors hover:bg-accent/40"
+        aria-label="Open command palette"
+      >
+        <Search className="size-4 shrink-0" />
+        <span className="flex-1 truncate">{searchPlaceholder}</span>
+        <kbd className="pointer-events-none hidden select-none rounded border border-border/60 bg-muted px-1.5 font-mono text-[10px] sm:inline">
+          ⌘K
+        </kbd>
+      </button>
       <div className="flex items-center gap-1.5">
         {actions}
         <Button size="icon" variant="ghost" className="relative size-9" aria-label="Notifications">
