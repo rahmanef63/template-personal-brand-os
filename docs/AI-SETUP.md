@@ -43,7 +43,9 @@ Langkah yang harus kamu pandu (jangan lewat, satu per satu):
    - Pandu isi Environment Variables persis ini:
        NEXT_PUBLIC_CONVEX_URL  = (URL Convex tadi, PASTIKAN tanpa spasi/enter)
        CONVEX_DEPLOY_KEY       = (deploy key Convex tadi)
-   - Pandu ganti "Build Command" jadi:  npx convex deploy --cmd 'npm run build'
+   - Build Command JANGAN diubah — repo ini punya vercel.json yang otomatis menjalankan
+     `npm run build:auto` (deploy Convex + pasang kunci login) saat build, selama
+     CONVEX_DEPLOY_KEY terisi.
    - Suruh klik Deploy, tunggu sampai hijau, lalu kasih aku link websitenya.
 
 4. KUNCI LOGIN — OTOMATIS (tidak perlu apa-apa)
@@ -56,11 +58,14 @@ Langkah yang harus kamu pandu (jangan lewat, satu per satu):
      Kalau ini diset, owner dibuat otomatis — aku tinggal login.
 
 5. JADI ADMIN
-   - Suruh aku buka  <link-website>/admin
+   - Suruh aku buka  <link-website>/admin  (otomatis diarahkan ke /dashboard/admin).
    - Kalau aku set ADMIN_EMAIL/PASSWORD: tinggal login pakai itu.
    - Kalau tidak: klik "Daftar sebagai pemilik", isi nama + email + password. Akun
      pertama otomatis jadi pemilik, tanpa kunci.
-   - Setelah masuk dashboard, suruh aku klik "Isi konten contoh" biar website ada isinya.
+   - Setelah masuk pertama kali, akan muncul WIZARD onboarding. Ikuti langkahnya: di
+     langkah Branding kamu bisa pilih warna/tema situs (theme preset), dan di langkah
+     akhir konten contoh DIISI OTOMATIS — jadi kamu tidak perlu klik "Isi konten contoh"
+     terpisah.
 
 6. KEAMANAN
    - Jelaskan: setelah aku jadi pemilik, pendaftaran admin OTOMATIS tertutup — orang
@@ -71,6 +76,9 @@ Langkah yang harus kamu pandu (jangan lewat, satu per satu):
 7. SELESAI
    - Konfirmasi website live + aku sudah bisa login admin + ganti konten.
    - Kasih aku ringkasan: alamat website, alamat /admin, dan email yang aku pakai.
+   - Info: halaman depan sekarang tersusun dari section yang bisa diatur sendiri (hero,
+     stats, layanan, testimoni, harga, FAQ, CTA, newsletter, dll) — kamu bisa atur
+     urutan, sembunyikan/tampilkan, dan ubah isinya dari panel admin tanpa coding.
 
 Mulai dari langkah 1 sekarang. Tanya aku dulu kalau butuh info.
 ```

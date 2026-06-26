@@ -64,6 +64,8 @@ Di dashboard, kalau website masih kosong akan muncul tombol **"Isi konten contoh
 Klik → langsung terisi tulisan, portfolio, layanan, dan halaman depan. Tidak perlu
 terminal / command apa pun. (Semua bisa kamu ganti nanti.)
 
+Catatan: kalau kamu lewat **wizard onboarding** saat pertama masuk admin, langkah terakhir bisa **otomatis mengisi konten contoh** untuk kamu (seed hanya jalan kalau site masih kosong, jadi tidak akan menimpa editan kamu) — klik tombol terpisah ini opsional. Wizard juga punya langkah **Branding** untuk memilih preset warna situs (themePreset) yang tersimpan ke pengaturan. Sebelum konten terisi, halaman publik menampilkan panduan ramah ('Situs sedang disiapkan → Masuk admin'), bukan halaman kosong.
+
 Selesai. Website live, kamu admin-nya.
 
 > **Opsional — kunci undangan.** Kalau kamu mau lebih ketat ATAU mau menambah admin
@@ -131,7 +133,7 @@ npx convex env set ADMIN_PASSWORD "rahasia-kuat"
 ## 3. Pakai panel admin
 
 - `/admin` → dashboard. Kelola:
-  - **Halaman depan** (landing sections)
+  - **Halaman depan** (landing sections) — sekarang SETIAP jenis section dirender nyata dari komponen bersama (hero, stats, features, blog, changelog, portfolio, services, testimonials, pricing, FAQ, CTA, newsletter, custom). Judul/subjudul tiap section bisa kamu ubah dari admin, dan isi + perilaku tiap section (mis. item testimonial, tier harga, daftar FAQ, label & tujuan tombol CTA, placeholder newsletter) diatur lewat field config per-section. Urutan & visibilitas section sepenuhnya kamu kontrol, dan perubahan tampil live (BroadcastChannel) tanpa reload.
   - **Blog** (tulisan)
   - **Portfolio**, **Layanan**, **Resources**
   - **Leads / komentar / subscriber**
